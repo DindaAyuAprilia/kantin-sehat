@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        // Ubah nilai enum lama jadi NULL atau default boolean
+        DB::table('barangs')
+            ->whereNotIn('status_titipan', ['0', '1'])
+            ->update(['status_titipan' => null]);
+
+        // Ubah tipe kolom menjadi boolean
+        Schema::table('barangs', function (Blueprint $table) {
+            $table->boolean('status_titipan')->default(false)->nullable()->change();
+            $table->boolean('has_barcode')->default(false)->after('status_titipan');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('barangs', function (Blueprint $table) {
+            $table->enum('status_titipan', ['hasil_bagi_500', 'hasil_bagi_1000'])->nullable()->change();
+            $table->dropColumn('has_barcode');
+        });
+    }
+};

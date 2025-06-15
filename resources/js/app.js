@@ -8,11 +8,14 @@ import 'flowbite';
 window.addEventListener('load', function () {
     const loadingOverlay = document.getElementById('loadingOverlay');
     const mainContent = document.getElementById('mainContent');
-    setTimeout(() => {
-        loadingOverlay.classList.add('hidden');
-        mainContent.classList.remove('content-hidden');
-        mainContent.classList.add('content-visible');
-    }, 1000);
+
+    if (loadingOverlay && mainContent) {
+        setTimeout(() => {
+            loadingOverlay.classList.add('hidden');
+            mainContent.classList.remove('content-hidden');
+            mainContent.classList.add('content-visible');
+        }, 1000);
+    }
 });
 
 // Drawer navigasi

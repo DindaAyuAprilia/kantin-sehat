@@ -11,7 +11,7 @@ Route::get('/', function () {
     if (Auth::check()) {
         $user = Auth::user();
         if ($user->role === 'admin') {
-            return redirect()->route('admin.kas-dashboard');
+            return redirect()->route('admin.dashboard');
         }
         return redirect()->route('kasir.dashboard');
     }

@@ -4,7 +4,6 @@ import 'flowbite';
 // __________________________________________________________________ //
 // 1. Navbar
 // __________________________________________________________________ //
-// Pemuatan halaman
 window.addEventListener('load', function () {
     const loadingOverlay = document.getElementById('loadingOverlay');
     const mainContent = document.getElementById('mainContent');
@@ -34,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // __________________________________________________________________ //
 // 2. Halaman Login
 // __________________________________________________________________ //
-// SweetAlert untuk error login
 document.addEventListener('DOMContentLoaded', () => {
     const errorEmail = document.querySelector('.text-red-600');
     if (errorEmail && errorEmail.textContent.includes('These credentials do not match our records')) {
@@ -47,191 +45,201 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
 // __________________________________________________________________ //
 // 3. Halaman Transaksi (Kasir)
 // __________________________________________________________________ //
 document.addEventListener('livewire:init', function () {
-    // Fokus awal pada input
-    setTimeout(() => document.getElementById('search').focus(), 100);
-
-    // Event listener untuk fokus input
-    Livewire.on('item-added', () => {
-        setTimeout(() => document.getElementById('search').focus(), 100);
-    });
-    Livewire.on('item-removed', () => {
-        setTimeout(() => document.getElementById('search').focus(), 100);
-    });
-    Livewire.on('item-updated', () => {
-        setTimeout(() => document.getElementById('search').focus(), 100);
-    });
-    Livewire.on('focus-input', () => {
-        setTimeout(() => document.getElementById('search').focus(), 100);
-    });
-
-    // Event listener untuk alert
-    Livewire.on('show-alert', (event) => {
-        Swal.fire({
-            title: 'Peringatan!',
-            text: event.message || 'Terjadi kesalahan.',
-            icon: 'warning',
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            setTimeout(() => document.getElementById('search').focus(), 100);
-        });
-    });
-
-    // Event listener untuk input uang diberikan
-    Livewire.on('swal:inputUangDiberikan', (event) => {
-        Swal.fire({
-            title: 'Masukkan Jumlah Uang yang Diberikan',
-            html: `Total Harga: Rp ${new Intl.NumberFormat('id-ID').format(event.totalHarga)}`,
-            input: 'number',
-            inputAttributes: {
-                min: 0,
-                step: 1
-            },
-            inputPlaceholder: 'Masukkan jumlah uang',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Lanjutkan',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed && result.value !== undefined) {
-                Livewire.dispatch('handleUangDiberikan', { jumlah: result.value });
+    // Hanya jalankan logika fokus untuk halaman transaksi kasir
+    if (document.querySelector('[data-page="transaksi-kasir"]')) {
+        const focusSearchInput = () => {
+            const searchInput = document.getElementById('search');
+            if (searchInput) {
+                setTimeout(() => searchInput.focus(), 100);
             }
-        });
-    });
+        };
 
-    // Event listener untuk input opsi kembalian
-    Livewire.on('swal:inputKembalianOpsi', (event) => {
-        Swal.fire({
-            title: 'Apakah pelanggan mengambil kembalian?',
-            html: `Total Kembalian: Rp ${new Intl.NumberFormat('id-ID').format(event.kembalian)}<br>` +
-                  '<div class="swal-custom-buttons">' +
-                  '<button id="swal-sebagian-btn" class="swal2-confirm swal2-styled" style="background-color: #007bff; color: white; margin-right: 5px;">Sebagian</button>' +
-                  '</div>',
-            showDenyButton: true,
-            showCancelButton: true,
-            showConfirmButton: true,
-            confirmButtonText: 'Iya',
-            denyButtonText: 'Tidak',
-            cancelButtonText: 'Batal',
-            confirmButtonColor: '#28a745', // Hijau untuk "Iya"
-            denyButtonColor: '#dc3545',   // Merah untuk "Tidak"
-            cancelButtonColor: '#6c757d', // Abu-abu untuk "Batal"
-            didOpen: () => {
-                // Tambahkan event listener untuk tombol "Sebagian"
-                const sebagianBtn = document.getElementById('swal-sebagian-btn');
-                if (sebagianBtn) {
-                    sebagianBtn.addEventListener('click', () => {
-                        Swal.close();
-                        // Tampilkan SweetAlert untuk input jumlah sebagian
-                        Swal.fire({
-                            title: 'Masukkan Jumlah Kembalian Sebagian',
-                            html: `Total Kembalian: Rp ${new Intl.NumberFormat('id-ID').format(event.kembalian)}`,
-                            input: 'number',
-                            inputAttributes: {
-                                min: 0,
-                                max: event.kembalian,
-                                step: 500,
-                                placeholder: 'Masukkan jumlah kembalian'
-                            },
-                            inputValidator: (value) => {
-                                if (!value || value < 0) {
-                                    return 'Nominal tidak boleh minus atau kosong!';
-                                }
-                                if (value > event.kembalian) {
-                                    return 'Nominal melebihi total kembalian!';
-                                }
-                                return null;
-                            },
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Lanjutkan',
-                            cancelButtonText: 'Batal'
-                        }).then((result) => {
-                            if (result.isConfirmed && result.value !== undefined) {
-                                Livewire.dispatch('handleKembalianDiambil', { jumlah: result.value, opsi: 'sebagian' });
-                            }
-                        });
-                    });
+        // Fokus awal pada input
+        focusSearchInput();
+
+        // Event listener untuk fokus input
+        Livewire.on('item-added', focusSearchInput);
+        Livewire.on('item-removed', focusSearchInput);
+        Livewire.on('item-updated', focusSearchInput);
+        Livewire.on('focus-input', focusSearchInput);
+
+        // Event listener untuk alert
+        Livewire.on('show-alert', (event) => {
+            console.log('Show Alert:', event);
+            Swal.fire({
+                title: 'Peringatan!',
+                text: event.message || 'Terjadi kesalahan.',
+                icon: 'warning',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then(() => focusSearchInput());
+        });
+
+        // Event listener untuk input uang diberikan
+        Livewire.on('swal:inputUangDiberikan', (event) => {
+            console.log('Input Uang Diberikan:', event);
+            Swal.fire({
+                title: 'Masukkan Jumlah Uang yang Diberikan',
+                html: `Total Harga: Rp ${new Intl.NumberFormat('id-ID').format(event.totalHarga)}`,
+                input: 'number',
+                inputAttributes: {
+                    min: 0,
+                    step: 1
+                },
+                inputPlaceholder: 'Masukkan jumlah uang',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Lanjutkan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed && result.value !== undefined) {
+                    console.log('Uang Diberikan:', result.value);
+                    Livewire.dispatch('handleUangDiberikan', { jumlah: result.value });
+                } else {
+                    console.log('Input Uang Diberikan Dibatalkan');
                 }
-            },
-            preConfirm: () => {
-                return new Promise((resolve) => {
-                    resolve();
-                });
-            },
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-            },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Livewire.dispatch('handleKembalianDiambil', { jumlah: event.kembalian, opsi: 'iya' });
-            } else if (result.isDenied) {
-                Livewire.dispatch('handleKembalianDiambil', { jumlah: 0, opsi: 'tidak' });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                // Tidak ada aksi khusus untuk batal
+            });
+        });
+
+        // Event listener untuk input opsi kembalian
+        Livewire.on('swal:inputKembalianOpsi', (event) => {
+            console.log('Input Kembalian Opsi:', event);
+            Swal.fire({
+                title: 'Apakah pelanggan mengambil kembalian?',
+                html: `Total Kembalian: Rp ${new Intl.NumberFormat('id-ID').format(event.kembalian)}<br>` +
+                      '<div class="swal-custom-buttons">' +
+                      '<button id="swal-sebagian-btn" class="swal2-confirm swal2-styled" style="background-color: #007bff; color: white; margin-right: 5px;">Sebagian</button>' +
+                      '</div>',
+                showDenyButton: true,
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: 'Iya',
+                denyButtonText: 'Tidak',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#28a745',
+                denyButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                didOpen: () => {
+                    const sebagianBtn = document.getElementById('swal-sebagian-btn');
+                    if (sebagianBtn) {
+                        sebagianBtn.addEventListener('click', () => {
+                            Swal.close();
+                            Swal.fire({
+                                title: 'Masukkan Jumlah Kembalian Sebagian',
+                                html: `Total Kembalian: Rp ${new Intl.NumberFormat('id-ID').format(event.kembalian)}`,
+                                input: 'number',
+                                inputAttributes: {
+                                    min: 0,
+                                    max: event.kembalian,
+                                    step: 500,
+                                    placeholder: 'Masukkan jumlah kembalian'
+                                },
+                                inputValidator: (value) => {
+                                    if (!value || value < 0) {
+                                        return 'Nominal tidak boleh minus atau kosong!';
+                                    }
+                                    if (value > event.kembalian) {
+                                        return 'Nominal melebihi total kembalian!';
+                                    }
+                                    return null;
+                                },
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Lanjutkan',
+                                cancelButtonText: 'Batal'
+                            }).then((result) => {
+                                if (result.isConfirmed && result.value !== undefined) {
+                                    console.log('Kembalian Sebagian:', result.value);
+                                    Livewire.dispatch('handleKembalianDiambil', { jumlah: result.value, opsi: 'sebagian' });
+                                } else {
+                                    console.log('Input Kembalian Sebagian Dibatalkan');
+                                }
+                            });
+                        });
+                    }
+                },
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        resolve();
+                    });
+                },
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log('Kembalian Diambil:', event.kembalian);
+                    Livewire.dispatch('handleKembalianDiambil', { jumlah: event.kembalian, opsi: 'iya' });
+                } else if (result.isDenied) {
+                    console.log('Kembalian Tidak Diambil');
+                    Livewire.dispatch('handleKembalianDiambil', { jumlah: 0, opsi: 'tidak' });
+                } else {
+                    console.log('Input Kembalian Opsi Dibatalkan');
+                }
+            });
+        });
+
+        // Event listener untuk konfirmasi checkout
+        Livewire.on('swal:confirmCheckout', () => {
+            console.log('Confirm Checkout Triggered');
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: 'Transaksi akan disimpan.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, simpan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log('Proceed Checkout Dispatched');
+                    Livewire.dispatch('proceedCheckout');
+                } else {
+                    console.log('Checkout Dibatalkan');
+                }
+            });
+        });
+
+        // Event listener untuk notifikasi sukses
+        Livewire.on('swal:success', (event) => {
+            console.log('Success Notification:', event);
+            Swal.fire({
+                title: 'Berhasil!',
+                text: event.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(() => focusSearchInput());
+        });
+
+        // Tutup dropdown saat klik di luar
+        document.addEventListener('click', (e) => {
+            const searchInput = document.getElementById('search');
+            const dropdown = document.querySelector('.absolute.z-10');
+            if (searchInput && dropdown && !searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                console.log('Clearing Search Results');
+                window.Livewire.dispatch('clear-search-results');
             }
         });
-    });
+    }
 
-    // Event listener untuk konfirmasi checkout
-    Livewire.on('swal:confirmCheckout', () => {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: 'Transaksi akan disimpan.',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, simpan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Livewire.dispatch('proceedCheckout');
-            }
-        });
-    });
-
-    // Event listener untuk notifikasi sukses
-    Livewire.on('swal:success', (event) => {
-        Swal.fire({
-            title: 'Berhasil!',
-            text: event.message,
-            icon: 'success',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            setTimeout(() => document.getElementById('search').focus(), 100);
-        });
-    });
-
-    // Tutup dropdown saat klik di luar
-    document.addEventListener('click', (e) => {
-        const searchInput = document.getElementById('search');
-        const dropdown = document.querySelector('.absolute.z-10');
-        if (searchInput && dropdown && !searchInput.contains(e.target) && !dropdown.contains(e.target)) {
-            window.Livewire.dispatch('clear-search-results');
-        }
-    });
-});
-
-
-// __________________________________________________________________ //
-// 4. Halaman Dashboard Kas (Admin)
-// __________________________________________________________________ //
-document.addEventListener('livewire:init', () => {
+    // __________________________________________________________________ //
+    // 4. Halaman Dashboard Kas (Admin)
+    // __________________________________________________________________ //
     let lineChart, dualLineChart, topLeastBarChart, profitBarChart;
 
     function renderCharts(labels, penjualanData, pembelianData, topSellingLabels, topSellingData, highestProfitLabels, highestProfitData) {
+        console.log('Rendering Charts:', { labels, penjualanData, pembelianData, topSellingLabels, topSellingData, highestProfitLabels, highestProfitData });
         if (lineChart) lineChart.destroy();
         if (dualLineChart) dualLineChart.destroy();
         if (topLeastBarChart) topLeastBarChart.destroy();
@@ -245,7 +253,6 @@ document.addEventListener('livewire:init', () => {
         const safeHighestProfitLabels = highestProfitLabels && highestProfitLabels.length ? highestProfitLabels : ['No Data'];
         const safeHighestProfitData = highestProfitData && highestProfitData.length ? highestProfitData : [0];
 
-        // Line Chart untuk Distribusi Penjualan
         if (safePenjualanData.some(val => val > 0)) {
             lineChart = new Chart(document.getElementById('lineChart'), {
                 type: 'line',
@@ -286,7 +293,6 @@ document.addEventListener('livewire:init', () => {
             });
         }
 
-        // Dual Line Chart untuk Penjualan vs Pembelian
         if (safePenjualanData.some(val => val > 0) || safePembelianData.some(val => val > 0)) {
             dualLineChart = new Chart(document.getElementById('dualLineChart'), {
                 type: 'line',
@@ -335,7 +341,6 @@ document.addEventListener('livewire:init', () => {
             });
         }
 
-        // Horizontal Bar Chart untuk Terlaris vs Tersedikit
         if (safeTopSellingData.some(val => val > 0)) {
             topLeastBarChart = new Chart(document.getElementById('topLeastBarChart'), {
                 type: 'bar',
@@ -361,7 +366,6 @@ document.addEventListener('livewire:init', () => {
             });
         }
 
-        // Horizontal Bar Chart untuk Keuntungan
         if (safeHighestProfitData.some(val => val > 0)) {
             profitBarChart = new Chart(document.getElementById('profitBarChart'), {
                 type: 'bar',
@@ -389,53 +393,76 @@ document.addEventListener('livewire:init', () => {
     }
 
     const chartData = document.getElementById('chart-data');
-    const initialLabels = JSON.parse(chartData.getAttribute('data-labels'));
-    const initialPenjualanData = JSON.parse(chartData.getAttribute('data-penjualan'));
-    const initialPembelianData = JSON.parse(chartData.getAttribute('data-pembelian'));
-    const initialTopSellingLabels = JSON.parse(chartData.getAttribute('data-top-selling-labels'));
-    const initialTopSellingData = JSON.parse(chartData.getAttribute('data-top-selling'));
-    const initialHighestProfitLabels = JSON.parse(chartData.getAttribute('data-highest-profit-labels'));
-    const initialHighestProfitData = JSON.parse(chartData.getAttribute('data-highest-profit'));
-    renderCharts(
-        initialLabels,
-        initialPenjualanData,
-        initialPembelianData,
-        initialTopSellingLabels,
-        initialTopSellingData,
-        initialHighestProfitLabels,
-        initialHighestProfitData
-    );
-
-    Livewire.on('chart-updated', () => {
-        const updatedChartData = document.getElementById('chart-data');
-        const updatedLabels = JSON.parse(updatedChartData.getAttribute('data-labels'));
-        const updatedPenjualanData = JSON.parse(updatedChartData.getAttribute('data-penjualan'));
-        const updatedPembelianData = JSON.parse(updatedChartData.getAttribute('data-pembelian'));
-        const updatedTopSellingLabels = JSON.parse(updatedChartData.getAttribute('data-top-selling-labels'));
-        const updatedTopSellingData = JSON.parse(updatedChartData.getAttribute('data-top-selling'));
-        const updatedHighestProfitLabels = JSON.parse(updatedChartData.getAttribute('data-highest-profit-labels'));
-        const updatedHighestProfitData = JSON.parse(updatedChartData.getAttribute('data-highest-profit'));
+    if (chartData) {
+        const initialLabels = JSON.parse(chartData.getAttribute('data-labels'));
+        const initialPenjualanData = JSON.parse(chartData.getAttribute('data-penjualan'));
+        const initialPembelianData = JSON.parse(chartData.getAttribute('data-pembelian'));
+        const initialTopSellingLabels = JSON.parse(chartData.getAttribute('data-top-selling-labels'));
+        const initialTopSellingData = JSON.parse(chartData.getAttribute('data-top-selling'));
+        const initialHighestProfitLabels = JSON.parse(chartData.getAttribute('data-highest-profit-labels'));
+        const initialHighestProfitData = JSON.parse(chartData.getAttribute('data-highest-profit'));
+        console.log('Initial Chart Data:', {
+            initialLabels,
+            initialPenjualanData,
+            initialPembelianData,
+            initialTopSellingLabels,
+            initialTopSellingData,
+            initialHighestProfitLabels,
+            initialHighestProfitData
+        });
         renderCharts(
-            updatedLabels,
-            updatedPenjualanData,
-            updatedPembelianData,
-            updatedTopSellingLabels,
-            updatedTopSellingData,
-            updatedHighestProfitLabels,
-            updatedHighestProfitData
+            initialLabels,
+            initialPenjualanData,
+            initialPembelianData,
+            initialTopSellingLabels,
+            initialTopSellingData,
+            initialHighestProfitLabels,
+            initialHighestProfitData
         );
-    });
+
+        Livewire.on('chart-updated', () => {
+            const updatedChartData = document.getElementById('chart-data');
+            const updatedLabels = JSON.parse(updatedChartData.getAttribute('data-labels'));
+            const updatedPenjualanData = JSON.parse(updatedChartData.getAttribute('data-penjualan'));
+            const updatedPembelianData = JSON.parse(updatedChartData.getAttribute('data-pembelian'));
+            const updatedTopSellingLabels = JSON.parse(updatedChartData.getAttribute('data-top-selling-labels'));
+            const updatedTopSellingData = JSON.parse(updatedChartData.getAttribute('data-top-selling'));
+            const updatedHighestProfitLabels = JSON.parse(updatedChartData.getAttribute('data-highest-profit-labels'));
+            const updatedHighestProfitData = JSON.parse(updatedChartData.getAttribute('data-highest-profit'));
+            console.log('Updated Chart Data:', {
+                updatedLabels,
+                updatedPenjualanData,
+                updatedPembelianData,
+                updatedTopSellingLabels,
+                updatedTopSellingData,
+                updatedHighestProfitLabels,
+                updatedHighestProfitData
+            });
+            renderCharts(
+                updatedLabels,
+                updatedPenjualanData,
+                updatedPembelianData,
+                updatedTopSellingLabels,
+                updatedTopSellingData,
+                updatedHighestProfitLabels,
+                updatedHighestProfitData
+            );
+        });
+    }
 
     Livewire.on('open-report', (event) => {
+        console.log('Opening Report:', event);
         window.open(event.url, '_blank');
     });
 
-    // Konfirmasi Transfer Saldo Kembalian ke Keuntungan
     Livewire.on('confirmTransferKembalian', () => {
-        console.log('Event confirmTransferKembalian triggered'); // Debugging
+        console.log('Confirm Transfer Kembalian Triggered', {
+            timestamp: new Date().toISOString(),
+            saldoKembalian: document.querySelector('#chart-data')?.dataset || 'No chart data element found',
+        });
         Swal.fire({
             title: 'Konfirmasi Transfer',
-            text: 'Apakah Anda yakin ingin mentransfer saldo kembalian ke kas keuntungan?',
+            text: 'Apakah Anda yakin ingin mentransfer saldo kembalian ke kas keuntungan? Ini akan menghapus semua data kas kembalian.',
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#007022',
@@ -444,58 +471,55 @@ document.addEventListener('livewire:init', () => {
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
+                console.log('User Confirmed Transfer', {
+                    timestamp: new Date().toISOString(),
+                    user: window.Laravel ? window.Laravel.user : 'No Laravel user data available',
+                });
                 Livewire.dispatch('proceedTransferKembalian');
+                console.log('Dispatched proceedTransferKembalian event');
+            } else {
+                console.log('Transfer Kembalian Dibatalkan', {
+                    timestamp: new Date().toISOString(),
+                });
             }
         });
     });
 
-    // Notifikasi Sukses Transfer
-    Livewire.on('transferSuccess', (message) => {
+    Livewire.on('transferSuccess', (event) => {
+        console.log('Transfer Success', {
+            message: event.message,
+            timestamp: new Date().toISOString(),
+            event: event,
+        });
         Swal.fire({
             title: 'Berhasil!',
-            text: message,
+            text: event.message,
             icon: 'success',
             confirmButtonColor: '#007022',
             confirmButtonText: 'OK'
         });
     });
-});
 
-// __________________________________________________________________ //
-// 5. Halaman Manajemen Karyawan (Admin) - Pindahkan ke file terpisah jika perlu
-// (Logika ini sebaiknya dihapus dari app.js untuk Dashboard Kas)
-// Fokus Input
-// document.addEventListener('DOMContentLoaded', () => {
-//     const namaInput = document.getElementById('nama');
-//     if (namaInput) namaInput.focus();
-//     else console.warn('Elemen dengan ID "nama" tidak ditemukan.');
-// });
-
-// SweetAlert Konfirmasi
-window.addEventListener('swal:confirmUpdate', event => {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: 'Data karyawan akan diperbarui.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, perbarui!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Livewire.dispatch('proceedUpdateKaryawan');
-        }
+    Livewire.on('transferFailed', (event) => {
+        console.log('Transfer Failed', {
+            message: event.message,
+            timestamp: new Date().toISOString(),
+            event: event,
+        });
+        Swal.fire({
+            title: 'Gagal!',
+            text: event.message || 'Terjadi kesalahan saat transfer.',
+            icon: 'error',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        });
     });
-});
 
-// SweetAlert Sukses
-window.addEventListener('swal:success', event => {
-    Swal.fire({
-        title: 'Berhasil!',
-        text: event.detail.message,
-        icon: 'success',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK'
+    Livewire.on('refreshComponent', () => {
+        console.log('Refresh Component Triggered', {
+            timestamp: new Date().toISOString(),
+        });
+        Livewire.dispatch('loadAllData');
+        console.log('Dispatched loadAllData event');
     });
 });

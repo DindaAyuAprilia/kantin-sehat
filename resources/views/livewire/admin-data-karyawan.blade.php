@@ -1,7 +1,8 @@
-<div class="min-h-screen flex flex-col justify-center p-4 sm:p-[5%] overflow-hidden">
+<div class="min-h-screen flex flex-col justify-center p-4 sm:p-[2%] overflow-hidden">
 
     <!-- Main Header -->
-    <div class="mb-6 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
+    <div class="mb-4 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
+        <!-- Mengurangi jarak header dengan top -->
         <div class="flex items-center space-x-4">
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 005.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -32,7 +33,7 @@
         <div class="flex flex-col gap-4 lg:flex-row lg:gap-6 justify-center items-start">
             <!-- Form Karyawan -->
             <div id="form-karyawan" class="w-full max-w-full mx-auto lg:w-1/3 lg:max-w-lg p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary"
-                style="border-color: #007022;">
+                style="border-color: #007022; min-height: 100%;">
                 <!-- Judul Form -->
                 <h2 class="text-xl font-semibold text-theme-black mb-4 flex items-center space-x-3">
                     <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -101,14 +102,11 @@
                                     <svg x-show="!showPassword" class="h-5 w-5 text-theme-primary" 
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                        <path fill-rule="evenodd" 
-                                            d="M10 3C5.5 3 1.6 6.1 0 10c1.6 3.9 5.5 7 10 7s8.4-3.1 10-7c-1.6-3.9-5.5-7-10-temp-primary focus:ring-theme-secondary pl-10 text-base">
+                                        <path fill-rule="evenodd" d="M10 3C5.5 3 1.6 6.1 0 10c1.6 3.9 5.5 7 10 7s8.4-3.1 10-7c-1.6-3.9-5.5-7-10-7zm0 12a5 5 0 01-5-5 5 5 0 0110 0 5 5 0 01-5 5z" clip-rule="evenodd" />
                                     </svg>
                                     <svg x-show="showPassword" class="h-5 w-5 text-theme-primary" x-cloak 
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" 
-                                            d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" 
-                                            clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clip-rule="evenodd" />
                                         <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
                                     </svg>
                                 </span>
@@ -169,7 +167,7 @@
             </div>
 
             <!-- Tabel Karyawan -->
-            <div id="tabel-karyawan" class="w-full max-w-full mx-auto lg:w-2/3 lg:max-w-4xl flex flex-col p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
+            <div id="tabel-karyawan" class="w-full max-w-full mx-auto lg:w-2/3 lg:max-w-4xl flex flex-col p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022; min-height: 100%;">
                 <!-- Judul Tabel -->
                 <h2 class="text-xl font-semibold text-theme-black mb-4 flex items-center space-x-3">
                     <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -273,4 +271,13 @@
         </div>
     </div>
 
+    <!-- Include Alpine.js -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <!-- Add x-cloak CSS to hide elements until Alpine.js is loaded -->
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 </div>

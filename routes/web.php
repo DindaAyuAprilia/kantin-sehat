@@ -20,8 +20,8 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/data-karyawan', [MainController::class, 'adminDataKaryawan'])->name('admin.data-karyawan');
-    Route::get('/admin/items', [MainController::class, 'adminItems'])->name('admin.items');
-    Route::get('/admin/inventory', [MainController::class, 'adminInventory'])->name('admin.inventory');
+    Route::get('/admin/data-barang', [MainController::class, 'adminBarang'])->name('admin.barang');
+    Route::get('/admin/data-persediaan', [MainController::class, 'adminPersediaan'])->name('admin.persediaan');
     Route::get('/kasir/dashboard', [MainController::class, 'kasirTransaksi'])->name('kasir.dashboard');
     Route::get('/admin/dashboard', [MainController::class, 'adminKasDashboard'])->name('admin.dashboard');
     Route::get('/saldo-bulanan', [MainController::class, 'adminSaldoBulanan'])->name('saldo-bulanan');

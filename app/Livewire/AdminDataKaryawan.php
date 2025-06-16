@@ -116,6 +116,13 @@ class AdminDataKaryawan extends Component
         $this->resetPage();
     }
 
+    // Reset Form
+    public function resetForm()
+    {
+        $this->reset(['nama', 'email', 'password', 'status', 'role', 'tanggal_berhenti', 'isEditingKaryawan', 'selectedKaryawanId']);
+        $this->resetPage();
+    }
+
     // Render View
     public function render()
     {

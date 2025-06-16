@@ -14,6 +14,7 @@ class AdminGaji extends Component
 {
     use WithPagination;
 
+    // Deklarasi properti komponen
     public $kasirs = [];
     public $selectedKasirId;
     public $jumlah;
@@ -23,11 +24,13 @@ class AdminGaji extends Component
     public $isLoading = false;
     public $search = '';
 
+    // Mendefinisikan listener untuk event
     protected $listeners = [
         'deletePembayaran',
         'proceedUpdatePembayaran',
     ];
 
+    // Inisialisasi data saat komponen dimuat
     public function mount()
     {
         $this->isLoading = true;
@@ -36,16 +39,19 @@ class AdminGaji extends Component
         $this->isLoading = false;
     }
 
+    // Menyimpan data pembayaran gaji baru
     public function savePembayaran()
     {
         $this->isLoading = true;
 
+        // Validasi input
         $this->validate([
             'selectedKasirId' => 'required|exists:users,id',
             'jumlah' => 'required|numeric|min:1',
             'tanggal_pembayaran' => 'required|date',
         ]);
 
+        // Periksa saldo kas
         $currentKas = Kas::first() ?? new Kas(['saldo_kas' => 0]);
         if ($currentKas->saldo_kas < $this->jumlah) {
             $this->dispatch('swal:success', message: 'Pembayaran gaji gagal dicatat: Saldo kas tidak cukup.');
@@ -53,9 +59,11 @@ class AdminGaji extends Component
             return;
         }
 
+        // Kurangi saldo kas
         $currentKas->saldo_kas -= $this->jumlah;
         $currentKas->save();
 
+        // Simpan data pembayaran gaji
         GajiPembayaran::create([
             'karyawan_id' => $this->selectedKasirId,
             'admin_id' => Auth::id(),
@@ -64,11 +72,13 @@ class AdminGaji extends Component
             'periode_bulan' => Carbon::parse($this->tanggal_pembayaran)->format('F Y'),
         ]);
 
+        // Reset form setelah simpan
         $this->resetForm();
         $this->dispatch('swal:success', message: 'Pembayaran gaji berhasil dicatat.');
         $this->isLoading = false;
     }
 
+    // Mengedit data pembayaran gaji
     public function editPembayaran($id)
     {
         $this->isLoading = true;
@@ -83,15 +93,18 @@ class AdminGaji extends Component
         $this->isLoading = false;
     }
 
+    // Konfirmasi pembaruan data
     public function confirmUpdate()
     {
         $this->dispatch('swal:confirmUpdate');
     }
 
+    // Proses pembaruan data pembayaran
     public function proceedUpdatePembayaran()
     {
         $this->isLoading = true;
 
+        // Validasi input
         $this->validate([
             'selectedKasirId' => 'required|exists:users,id',
             'jumlah' => 'required|numeric|min:1',
@@ -100,19 +113,18 @@ class AdminGaji extends Component
 
         $payment = GajiPembayaran::find($this->selectedPaymentId);
         if ($payment) {
+            // Perbarui saldo kas
             $currentKas = Kas::first() ?? new Kas(['saldo_kas' => 0]);
-            // Kembalikan jumlah lama ke kas
             $currentKas->saldo_kas += $payment->jumlah;
-            // Periksa apakah saldo cukup untuk jumlah baru
             if ($currentKas->saldo_kas < $this->jumlah) {
                 $this->dispatch('swal:success', message: 'Pembayaran gaji gagal diperbarui: Saldo kas tidak cukup.');
                 $this->isLoading = false;
                 return;
             }
-            // Kurangi jumlah baru dari kas
             $currentKas->saldo_kas -= $this->jumlah;
             $currentKas->save();
 
+            // Perbarui data pembayaran
             $payment->update([
                 'karyawan_id' => $this->selectedKasirId,
                 'admin_id' => Auth::id(),
@@ -122,32 +134,37 @@ class AdminGaji extends Component
             ]);
         }
 
+        // Reset form setelah pembaruan
         $this->resetForm();
         $this->dispatch('swal:success', message: 'Pembayaran gaji berhasil diperbarui.');
         $this->isLoading = false;
     }
 
+    // Konfirmasi penghapusan data
     public function confirmDelete($id)
     {
         $this->dispatch('swal:confirmDelete', id: $id);
     }
 
+    // Menghapus data pembayaran
     public function deletePembayaran($id)
     {
         $this->isLoading = true;
         $payment = GajiPembayaran::find($id);
         if ($payment) {
+            // Kembalikan saldo kas
             $currentKas = Kas::first() ?? new Kas(['saldo_kas' => 0]);
-            // Kembalikan jumlah pembayaran ke kas
             $currentKas->saldo_kas += $payment->jumlah;
             $currentKas->save();
 
+            // Hapus data pembayaran
             $payment->delete();
             $this->dispatch('swal:success', message: 'Pembayaran gaji berhasil dihapus.');
         }
         $this->isLoading = false;
     }
 
+    // Reset input form
     public function resetForm()
     {
         $this->selectedKasirId = null;
@@ -157,11 +174,13 @@ class AdminGaji extends Component
         $this->selectedPaymentId = null;
     }
 
+    // Memperbarui pencarian
     public function updatedSearch()
     {
         $this->resetPage();
     }
 
+    // Render tampilan dengan data pembayaran
     public function render()
     {
         $query = GajiPembayaran::with(['karyawan', 'admin'])

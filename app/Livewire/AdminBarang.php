@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class AdminItems extends Component
+class AdminBarang extends Component
 {
     use WithPagination;
 
@@ -510,7 +510,7 @@ HTML;
 
         $paginator = $query->paginate(25);
 
-        return view('livewire.admin-items', [
+        return view('livewire.admin-barang', [
             'barangs' => $paginator,
         ]);
     }

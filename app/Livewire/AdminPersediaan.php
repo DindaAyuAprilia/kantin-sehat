@@ -11,7 +11,7 @@ use App\Models\KasTitipan;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 
-class AdminInventory extends Component
+class AdminPersediaan extends Component
 {
     use WithPagination;
 
@@ -466,7 +466,7 @@ class AdminInventory extends Component
 
     public function render()
     {
-        return view('livewire.admin-inventory', [
+        return view('livewire.admin-persediaan', [
             'persediaans' => $this->loadPersediaans(),
             'activityLogs' => $this->showHistory ? $this->loadActivityLogs() : collect(),
         ]);

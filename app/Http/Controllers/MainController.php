@@ -11,16 +11,16 @@ class MainController extends Controller
         return view('admin.data-karyawan');
     }
 
-    public function adminItems()
+    public function adminBarang()
     {
         $this->authorizeAdmin();
-        return view('admin.items');
+        return view('admin.barang');
     }
 
-    public function adminInventory()
+    public function adminPersediaan()
     {
         $this->authorizeAdmin();
-        return view('admin.inventory');
+        return view('admin.persediaan');
     }
 
     public function adminStockOpname()

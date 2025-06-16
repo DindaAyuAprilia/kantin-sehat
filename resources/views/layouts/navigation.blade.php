@@ -27,15 +27,15 @@
                     </svg>
                     {{ __('Data Karyawan') }}
                 </a>
-                <a href="{{ route('admin.inventory') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.inventory') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.persediaan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.persediaan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>
                     {{ __('Persediaan') }}
                 </a>
-                <a href="{{ route('admin.items') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.items') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.barang') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.barang') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M3 7h18M3 12h18m-6 5h6"></path>
                     </svg>
@@ -91,8 +91,8 @@
                     </svg>
                     {{ __('Transaksi') }}
                 </a>
-                <a href="{{ route('kasir.inventory') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('kasir.inventory') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('kasir.persediaan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('kasir.persediaan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>
@@ -170,15 +170,15 @@
                     </svg>
                     {{ __('Data Karyawan') }}
                 </a>
-                <a href="{{ route('admin.inventory') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.inventory') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.persediaan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.persediaan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>
                     {{ __('Persediaan') }}
                 </a>
-                <a href="{{ route('admin.items') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.items') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.barang') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.barang') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M3 7h18M3 12h18m-6 5h6"></path>
                     </svg>
@@ -234,8 +234,8 @@
                     </svg>
                     {{ __('Transaksi') }}
                 </a>
-                <a href="{{ route('kasir.inventory') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('kasir.inventory') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('kasir.persediaan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('kasir.persediaan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>
@@ -313,15 +313,15 @@
                     </svg>
                     {{ __('Data Karyawan') }}
                 </a>
-                <a href="{{ route('admin.inventory') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.inventory') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.persediaan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.persediaan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>
                     {{ __('Persediaan') }}
                 </a>
-                <a href="{{ route('admin.items') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.items') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.barang') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.barang') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M3 7h18M3 12h18m-6 5h6"></path>
                     </svg>
@@ -377,8 +377,8 @@
                     </svg>
                     {{ __('Transaksi') }}
                 </a>
-                <a href="{{ route('kasir.inventory') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('kasir.inventory') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('kasir.persediaan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('kasir.persediaan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>

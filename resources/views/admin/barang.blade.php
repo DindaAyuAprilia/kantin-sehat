@@ -1,3 +1,3 @@
 <x-app-layout>
-    @livewire('admin-items')
+    @livewire('admin-barang')
 </x-app-layout>

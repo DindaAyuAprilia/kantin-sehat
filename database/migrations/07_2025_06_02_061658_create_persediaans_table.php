@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('tipe');
             $table->date('tanggal');
             $table->integer('jumlah');
+            $table->decimal('sisa_stok', 10, 2)->default(0.00)->after('jumlah');
             $table->text('alasan')->nullable();
             $table->decimal('total_harga', 15, 2);
             $table->timestamps();
@@ -26,3 +27,4 @@ return new class extends Migration
         Schema::dropIfExists('persediaans');
     }
 };
+

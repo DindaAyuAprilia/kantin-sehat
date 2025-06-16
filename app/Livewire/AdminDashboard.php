@@ -20,8 +20,6 @@ use App\Models\KasKeuntungan;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class AdminDashboard extends Component
 {
@@ -192,44 +190,27 @@ class AdminDashboard extends Component
 
     public function transferKembalianToKeuntungan()
     {
-        Log::info('transferKembalianToKeuntungan triggered with saldoKembalian: ' . $this->saldoKembalian);
-        if ($this->saldoKembalian > 0) {
-            $this->dispatch('confirmTransferKembalian');
-        }
-    }
+        /** @var \Illuminate\Contracts\Auth\Guard $guard */
+        $guard = auth();
+        /** @var \App\Models\User|null $user */
+        $user = $guard->user();
+        
+        if ($this->saldoKembalian > 0 && $user) {
+            KasKeuntungan::create([
+                'user_id' => $user->id,
+                'jumlah' => $this->saldoKembalian,
+                'tanggal' => now(),
+                'keterangan' => 'Transfer dari kas kembalian pada ' . now()->format('Y-m-d H:i:s')
+            ]);
 
-    public function proceedTransferKembalian()
-    {
-        Log::info('proceedTransferKembalian triggered with saldoKembalian: ' . $this->saldoKembalian);
-        $userId = Auth::id();
-        if ($userId) {
-            Log::info('User authenticated, user_id: ' . $userId . ', proceeding with transfer');
-            if ($this->saldoKembalian > 0) {
-                // Simpan ke KasKeuntungan
-                KasKeuntungan::create([
-                    'user_id' => $userId,
-                    'jumlah' => $this->saldoKembalian,
-                    'tanggal' => now(),
-                    'keterangan' => 'Transfer dari kas kembalian pada ' . now()->format('Y-m-d H:i:s')
-                ]);
+            // Reset saldo kembalian
+            $this->saldoKembalian = 0;
 
-                // Hapus semua data di kas_kembalian untuk reset saldo kembalian
-                KasKembalian::truncate(); 
+            // Hapus semua data di tabel kas_kembalian
+            KasKembalian::query()->delete();
 
-                // Perbarui saldo kembalian ke 0
-                $this->saldoKembalian = 0;
-
-                // Update UI atau sesuaikan logika lain jika diperlukan
-                $this->dispatch('transferSuccess', 'Transaksi berhasil');
-                $this->dispatch('refreshDashboard');
-                Log::info('Transfer completed successfully, new saldoKembalian: ' . $this->saldoKembalian);
-            } else {
-                Log::info('Saldo kembalian tidak cukup (0), tidak ada transfer dilakukan');
-                $this->dispatch('transferSuccess', 'Saldo kembalian tidak cukup untuk ditransfer.');
-            }
-        } else {
-            Log::info('User not authenticated');
-            $this->dispatch('transferSuccess', 'Pengguna tidak terautentikasi. Silakan login terlebih dahulu.');
+            session()->flash('success', 'Saldo kembalian berhasil ditransfer ke keuntungan dan tabel kas kembalian direset.');
+            $this->dispatch('refreshDashboard');
         }
     }
 

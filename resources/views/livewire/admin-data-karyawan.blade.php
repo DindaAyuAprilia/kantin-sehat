@@ -1,5 +1,4 @@
 <div class="min-h-screen flex flex-col justify-center p-4 sm:p-[2%] overflow-hidden">
-
     <!-- Main Header -->
     <div class="mb-4 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
         <div class="flex items-center space-x-4">
@@ -29,9 +28,9 @@
         @endif
 
         <!-- Karyawan Content -->
-        <div class="flex flex-col gap-4 lg:flex-row lg:gap-6 justify-center items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Form Karyawan -->
-            <div id="form-karyawan" class="w-full max-w-full mx-auto lg:w-1/3 lg:max-w-lg p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022; min-height: 100%;">
+            <div id="form-karyawan" class="bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
                 <h2 class="text-xl font-semibold text-theme-black mb-4 flex items-center space-x-3">
                     <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -104,7 +103,8 @@
                                 <option value="admin">Admin</option>
                                 <option value="kasir">Kasir</option>
                             </select>
-                            @error('role') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                            @error('role') <span class="text-red-600 text-sm">{{ $message }}</span708>
+                            @enderror
                         </div>
 
                         <!-- Input Status -->
@@ -139,7 +139,7 @@
             </div>
 
             <!-- Tabel Karyawan -->
-            <div id="tabel-karyawan" class="w-full max-w-full mx-auto lg:w-2/3 lg:max-w-4xl flex flex-col p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022; min-height: 100%;">
+            <div id="tabel-karyawan" class="lg:col-span-2 bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
                 <h2 class="text-xl font-semibold text-theme-black mb-4 flex items-center space-x-3">
                     <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
@@ -163,7 +163,7 @@
                     </select>
                 </div>
 
-                <div class="overflow-x-auto flex-1">
+                <div class="overflow-x-auto">
                     <table class="min-w-full table-auto border-collapse text-sm border border-theme-primary">
                         <thead class="bg-theme-primary text-white sticky top-0">
                             <tr class="border-b border-theme-primary">

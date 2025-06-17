@@ -55,6 +55,19 @@ class SaldoBulanan extends Component
         }
     }
 
+    public function setActiveTab($tab): void
+    {
+        try {
+            Log::info('SaldoBulanan: Mengubah tab aktif', ['tab' => $tab]);
+            $this->activeTab = $tab;
+            $this->loadSaldoBulanan();
+        } catch (\Exception $e) {
+            Log::error('SaldoBulanan: Gagal mengubah tab aktif', ['error' => $e->getMessage()]);
+            session()->flash('error', 'Gagal mengubah tab: ' . $e->getMessage());
+            $this->dispatch('swal:error', message: 'Gagal mengubah tab: ' . $e->getMessage());
+        }
+    }
+
     public function updated($propertyName): void
     {
         if ($propertyName === 'selectedMonth') {

@@ -1,139 +1,176 @@
-<div class="p-6">
-    <!-- Alert Success -->
+<div class="p-6 space-y-6">
+    <!-- Success Alert -->
     @if (session('success'))
-        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded">
+        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
             {{ session('success') }}
         </div>
     @endif
 
-    <!-- Alert Error -->
+    <!-- Error Alert -->
     @if (session('error'))
-        <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+        <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded border-2 border-theme-primary">
             {{ session('error') }}
         </div>
     @endif
 
     <!-- Loading Overlay -->
     <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" wire:loading>
-        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#007022]"></div>
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-theme-primary"></div>
     </div>
 
-    <!-- Tab Navigation -->
-    <div x-data="{ activeTab: '{{ $activeTab }}' }" 
-         x-init="activeTab = '{{ $activeTab }}'" 
-         class="mb-8">
-        <div class="flex justify-center">
-            <div class="inline-flex bg-white rounded-lg shadow-md p-2 border-2 border-[#007022]">
-                <button @click="activeTab = 'kas'; $wire.set('activeTab', 'kas')" 
-                        x-bind:class="[
-                            activeTab === 'kas' ? 'bg-[#007022] text-white' : 'bg-gray-100 text-gray-800',
-                            'px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-[#007022] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#005b1c] text-sm tea'
-                        ]">
+    <!-- Main Header -->
+    <div class="mb-6 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <h2 class="text-4xl font-bold">Manajemen Saldo Bulanan</h2>
+                </div>
+            </div>
+            <!-- Tab Navigation -->
+            <div class="flex space-x-2">
+                <button wire:click="setActiveTab('kas')"
+                        class="{{ $activeTab === 'kas' ? 'bg-white text-theme-primary' : 'bg-gray-200 text-gray-600' }} px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-gray-300 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-theme-secondary">
                     Saldo Kas
                 </button>
-                <button @click="activeTab = 'barang'; $wire.set('activeTab', 'barang')" 
-                        x-bind:class="[
-                            activeTab === 'barang' ? 'bg-[#007022] text-white' : 'bg-gray-100 text-gray-800',
-                            'px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-[#007022] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#005b1c] text-sm'
-                        ]">
+                <button wire:click="setActiveTab('barang')"
+                        class="{{ $activeTab === 'barang' ? 'bg-white text-theme-primary' : 'bg-gray-200 text-gray-600' }} px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-gray-300 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-theme-secondary">
                     Saldo Barang
                 </button>
             </div>
         </div>
-        <!-- Input Bulan -->
-        <div class="mt-4 mb-6 max-w-xs mx-auto">
-            <label for="selectedMonth" class="block text-sm font-medium text-gray-800 mb-1">Pilih Bulan</label>
-            <div class="relative">
-                <input wire:model.live="selectedMonth" id="selectedMonth" type="month"
-                       class="block w-full rounded-md border-gray-800 shadow-sm focus:border-[#007022] focus:ring-[#007022] pl-10 py-2 text-sm">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <svg class="h-5 w-5 text-[#007022]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                    </svg>
-                </span>
-            </div>
-            @error('selectedMonth') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-        </div>
+    </div>
 
-        <!-- Tab Content -->
-        <div class="mt-6 max-h-[calc(100vh-14rem)]">
-            <!-- Saldo Kas Tab -->
-            <div x-show="activeTab === 'kas'" class="w-full p-6 bg-white rounded-lg shadow-lg border-2 border-[#007022]">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Daftar Saldo Kas</h2>
+    <!-- Tab Content -->
+    <div class="space-y-6">
+        <!-- Saldo Kas Tab -->
+        @if ($activeTab === 'kas')
+            <div class="bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
+                    <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Daftar Saldo Kas</span>
+                </h3>
+                <!-- Input Bulan -->
+                <div class="mb-4">
+                    <label for="selectedMonth" class="block text-sm font-medium text-theme-black mb-1">Pilih Bulan</label>
+                    <div class="relative rounded-md shadow-sm border border-gray-300">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input wire:model.live="selectedMonth" id="selectedMonth" type="month"
+                               class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 py-2 text-sm">
+                    </div>
+                    @error('selectedMonth') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                </div>
                 <div class="mb-4">
                     <button wire:click="recalculateMonthlySaldo" 
-                            class="bg-[#007022] text-white px-4 py-2 rounded-md hover:bg-[#005b1c] focus:outline-none focus:ring-2 focus:ring-[#005b1c] text-sm">
-                        Hitung Ulang Saldo Akhir Bulan
+                            class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        <span>Hitung Ulang Saldo Akhir Bulan</span>
                     </button>
                 </div>
-                <div class="overflow-y-auto max-h-96">
-                    <table class="min-w-full text-sm border border-[#007022]">
-                        <thead class="bg-[#007022] text-white sticky top-0">
-                            <tr class="divide-x divide-[#007022] border-b border-[#007022]">
-                                <th class="px-4 py-2">Periode Bulan</th>
-                                <th class="px-4 py-2">Saldo Awal</th>
-                                <th class="px-4 py-2">Saldo Akhir</th>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto border-collapse">
+                        <thead>
+                            <tr class="bg-theme-primary text-white">
+                                <th class="px-4 py-2 border border-theme-primary">Periode Bulan</th>
+                                <th class="px-4 py-2 border border-theme-primary">Saldo Awal</th>
+                                <th class="px-4 py-2 border border-theme-primary">Saldo Akhir</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-[#007022]">
+                        <tbody>
                             @if($saldoKasBulanan)
-                                <tr class="divide-x divide-[#007022] border-b border-[#007022]">
-                                    <td class="px-4 py-2 text-gray-800">{{ $saldoKasBulanan->periode_bulan }}</td>
-                                    <td class="px-4 py-2 text-gray-800">Rp. {{ number_format($saldoKasBulanan->saldo_awal, 2, ',', '.') }}</td>
-                                    <td class="px-4 py-2 text-gray-800">Rp. {{ number_format($saldoKasBulanan->saldo_akhir ?? 0, 2, ',', '.') }}</td>
+                                <tr class="hover:bg-theme-light">
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black">{{ $saldoKasBulanan->periode_bulan }}</td>
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black text-right">Rp. {{ number_format($saldoKasBulanan->saldo_awal, 2, ',', '.') }}</td>
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black text-right">Rp. {{ number_format($saldoKasBulanan->saldo_akhir ?? 0, 2, ',', '.') }}</td>
                                 </tr>
                             @else
                                 <tr>
-                                    <td colspan="3" class="text-center py-2 text-gray-800 text-sm">Data tidak ada.</td>
+                                    <td colspan="3" class="border px-4 py-2 text-center border-theme-primary text-theme-black">Data tidak ada.</td>
                                 </tr>
                             @endif
                         </tbody>
                     </table>
                 </div>
             </div>
+        @endif
 
-            <!-- Saldo Barang Tab -->
-            <div x-show="activeTab === 'barang'" class="w-full p-6 bg-white rounded-lg shadow-lg border-2 border-[#007022]">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Daftar Saldo Barang</h2>
-                <div class="relative mb-4">
-                    <input wire:model.debounce.500ms="searchBarang" id="searchBarang" type="text" placeholder="Cari nama barang..."
-                           class="mt-1 block w-full rounded-md border-gray-800 shadow-sm focus:border-[#007022] focus:ring-[#007022] pl-10 py-2 text-sm">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                        <svg class="h-5 w-5 text-[#007022]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
+        <!-- Saldo Barang Tab -->
+        @if ($activeTab === 'barang')
+            <div class="bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
+                    <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                    </svg>
+                    <span>Daftar Saldo Barang</span>
+                </h3>
+                <!-- Input Bulan dan Pencarian -->
+                <div class="mb-4 flex space-x-4">
+                    <div class="flex-1">
+                        <label for="selectedMonth" class="block text-sm font-medium text-theme-black mb-1">Pilih Bulan</label>
+                        <div class="relative rounded-md shadow-sm border border-gray-300">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input wire:model.live="selectedMonth" id="selectedMonth" type="month"
+                                   class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 py-2 text-sm">
+                        </div>
+                        @error('selectedMonth') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="flex-1">
+                        <label for="searchBarang" class="block text-sm font-medium text-theme-black mb-1">Cari Barang</label>
+                        <div class="relative rounded-md shadow-sm border border-gray-300">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input wire:model.debounce.500ms="searchBarang" id="searchBarang" type="text" placeholder="Cari nama barang..."
+                                   class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 py-2 text-sm">
+                        </div>
+                    </div>
                 </div>
-                <div class="overflow-y-auto max-h-96">
-                    <table class="min-w-full text-sm border border-[#007022]">
-                        <thead class="bg-[#007022] text-white sticky top-0">
-                            <tr class="divide-x divide-[#007022] border-b border-[#007022]">
-                                <th class="px-4 py-2">Nama Barang</th>
-                                <th class="px-4 py-2">Kuantitas Awal</th>
-                                <th class="px-4 py-2">Nilai Awal</th>
-                                <th class="px-4 py-2">Kuantitas Akhir</th>
-                                <th class="px-4 py-2">Nilai Akhir</th>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto border-collapse">
+                        <thead>
+                            <tr class="bg-theme-primary text-white">
+                                <th class="px-4 py-2 border border-theme-primary">Nama Barang</th>
+                                <th class="px-4 py-2 border border-theme-primary">Kuantitas Awal</th>
+                                <th class="px-4 py-2 border border-theme-primary">Nilai Awal</th>
+                                <th class="px-4 py-2 border border-theme-primary">Kuantitas Akhir</th>
+                                <th class="px-4 py-2 border border-theme-primary">Nilai Akhir</th>
                             </tr>
                         </thead>
-                        <tbody id="barangTable" class="divide-y divide-[#007022]">
+                        <tbody>
                             @forelse($saldoBarangBulanan as $sb)
-                                <tr class="divide-x divide-[#007022] border-b border-[#007022]">
-                                    <td class="px-4 py-2 text-gray-800">{{ $sb->barang->nama }}</td>
-                                    <td class="px-4 py-2 text-gray-800">{{ $sb->kuantitas_awal }}</td>
-                                    <td class="px-4 py-2 text-gray-800">Rp. {{ number_format($sb->nilai_kuantitas_awal, 2, ',', '.') }}</td>
-                                    <td class="px-4 py-2 text-gray-800">{{ $sb->kuantitas_akhir }}</td>
-                                    <td class="px-4 py-2 text-gray-800">Rp. {{ number_format($sb->nilai_kuantitas_akhir, 2, ',', '.') }}</td>
+                                <tr class="hover:bg-theme-light">
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black">{{ $sb->barang->nama }}</td>
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black text-center">{{ $sb->kuantitas_awal }}</td>
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black text-right">Rp. {{ number_format($sb->nilai_kuantitas_awal, 2, ',', '.') }}</td>
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black text-center">{{ $sb->kuantitas_akhir }}</td>
+                                    <td class="border px-4 py-2 border-theme-primary text-theme-black text-right">Rp. {{ number_format($sb->nilai_kuantitas_akhir, 2, ',', '.') }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-2 text-gray-800 text-sm">Data tidak ada.</td>
+                                    <td colspan="5" class="border px-4 py-2 text-center border-theme-primary text-theme-black">Data tidak ada.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 
     <!-- SweetAlert2 CDN -->
@@ -151,8 +188,7 @@
             }
 
             const searchInput = document.getElementById('searchBarang');
-            const table = document.getElementById('barangTable');
-            if (searchInput && table) {
+            if (searchInput) {
                 searchInput.addEventListener('input', () => {
                     console.log('Search input changed:', searchInput.value);
                     Livewire.dispatch('updated', { propertyName: 'searchBarang' });
@@ -165,14 +201,14 @@
                 title: 'Berhasil!',
                 text: event.detail.message,
                 icon: 'success',
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: '#007022',
                 confirmButtonText: 'OK'
             });
         });
 
         window.addEventListener('swal:error', event => {
             Swal.fire({
-                title: 'Error!',
+                title: 'Gagal!',
                 text: event.detail.message,
                 icon: 'error',
                 confirmButtonColor: '#d33',

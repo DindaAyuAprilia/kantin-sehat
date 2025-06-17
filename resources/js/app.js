@@ -48,52 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // __________________________________________________________________ //
 // 3. Halaman Manajemen Karyawan (Admin)
 // __________________________________________________________________ //
-document.addEventListener('livewire:init', function () {
-    if (document.querySelector('[data-page="manajemen-karyawan"]')) {
-        Livewire.on('swal:success', (event) => {
-            console.log('Success Notification:', event);
-            Swal.fire({
-                title: 'Berhasil!',
-                text: event.message,
-                icon: 'success',
-                confirmButtonColor: '#007022',
-                confirmButtonText: 'OK'
-            });
-        });
 
-        Livewire.on('swal:error', (event) => {
-            console.log('Error Notification:', event);
-            Swal.fire({
-                title: 'Gagal!',
-                text: event.message || 'Terjadi kesalahan.',
-                icon: 'error',
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'OK'
-            });
-        });
-
-        Livewire.on('swal:confirmUpdate', () => {
-            console.log('Confirm Update Triggered');
-            Swal.fire({
-                title: 'Konfirmasi',
-                text: 'Apakah Anda yakin ingin memperbarui data karyawan?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#007022',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Update',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    console.log('Dispatching proceedUpdateKaryawan');
-                    Livewire.dispatch('proceedUpdateKaryawan');
-                } else {
-                    console.log('Update Dibatalkan');
-                }
-            });
-        });
-    }
-});
 
 // __________________________________________________________________ //
 // 4. Halaman Transaksi (Kasir)

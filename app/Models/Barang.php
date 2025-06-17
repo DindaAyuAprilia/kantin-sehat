@@ -62,13 +62,40 @@ class Barang extends Model
 
     public function biayaPokokPenjualan($startDate, $endDate)
     {
-        return $this->detailTransaksis()
+        $details = $this->detailTransaksis()
             ->whereHas('transaksi', function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('tanggal', [$startDate, $endDate]);
             })
-            ->get()
-            ->sum(function ($detail) {
-                return $detail->jumlah * $this->harga_pokok;
-            });
+            ->get();
+
+        $totalQuantitySold = $details->sum('jumlah');
+        return $this->calculateFifoCogs($totalQuantitySold, $startDate, $endDate);
+    }
+
+    private function calculateFifoCogs($quantityNeeded, $startDate, $endDate): float
+    {
+        $persediaans = $this->persediaans()
+            ->whereIn('tipe', ['pembelian', 'penambahan_titipan'])
+            ->where('sisa_stok', '>', 0)
+            ->where('tanggal', '<=', $endDate)
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $totalBiayaPokok = 0;
+
+        foreach ($persediaans as $persediaan) {
+            if ($quantityNeeded <= 0) {
+                break;
+            }
+
+            $available = $persediaan->sisa_stok;
+            $used = min($available, $quantityNeeded);
+            $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
+            $totalBiayaPokok += $used * $biayaPokokPerUnit;
+            $quantityNeeded -= $used;
+        }
+
+        return $totalBiayaPokok;
     }
 }

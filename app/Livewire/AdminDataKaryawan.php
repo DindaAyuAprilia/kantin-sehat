@@ -22,10 +22,6 @@ class AdminDataKaryawan extends Component
     public $roleFilter = 'all';
     public $search = '';
 
-    protected $listeners = [
-        'proceedUpdateKaryawan',
-    ];
-
     // Simpan Karyawan
     public function saveKaryawan()
     {
@@ -53,6 +49,11 @@ class AdminDataKaryawan extends Component
         $this->dispatch('swal:success', message: 'Karyawan berhasil ditambahkan.');
     }
 
+    
+    protected $listeners = [
+        'proceedUpdateKaryawan',
+    ];
+    
     // Edit Karyawan
     public function edit($id)
     {
@@ -68,13 +69,11 @@ class AdminDataKaryawan extends Component
         }
     }
 
-    // Konfirmasi Update
     public function confirmUpdate()
     {
         $this->dispatch('swal:confirmUpdate');
     }
 
-    // Proses Update
     public function proceedUpdateKaryawan()
     {
         $this->validate([

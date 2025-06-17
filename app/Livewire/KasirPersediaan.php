@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Barang;
 
-class KasirInventory extends Component
+class KasirPersediaan extends Component
 {
     public $barangs;
     public $search_query = '';
@@ -32,6 +32,6 @@ class KasirInventory extends Component
 
     public function render()
     {
-        return view('livewire.kasir-inventory');
+        return view('livewire.kasir-persediaan');
     }
 }

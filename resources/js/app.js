@@ -46,7 +46,57 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // __________________________________________________________________ //
-// 3. Halaman Transaksi (Kasir)
+// 3. Halaman Manajemen Karyawan (Admin)
+// __________________________________________________________________ //
+document.addEventListener('livewire:init', function () {
+    if (document.querySelector('[data-page="manajemen-karyawan"]')) {
+        Livewire.on('swal:success', (event) => {
+            console.log('Success Notification:', event);
+            Swal.fire({
+                title: 'Berhasil!',
+                text: event.message,
+                icon: 'success',
+                confirmButtonColor: '#007022',
+                confirmButtonText: 'OK'
+            });
+        });
+
+        Livewire.on('swal:error', (event) => {
+            console.log('Error Notification:', event);
+            Swal.fire({
+                title: 'Gagal!',
+                text: event.message || 'Terjadi kesalahan.',
+                icon: 'error',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            });
+        });
+
+        Livewire.on('swal:confirmUpdate', () => {
+            console.log('Confirm Update Triggered');
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin memperbarui data karyawan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#007022',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Update',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log('Dispatching proceedUpdateKaryawan');
+                    Livewire.dispatch('proceedUpdateKaryawan');
+                } else {
+                    console.log('Update Dibatalkan');
+                }
+            });
+        });
+    }
+});
+
+// __________________________________________________________________ //
+// 4. Halaman Transaksi (Kasir)
 // __________________________________________________________________ //
 document.addEventListener('livewire:init', function () {
     // Hanya jalankan logika fokus untuk halaman transaksi kasir
@@ -234,7 +284,7 @@ document.addEventListener('livewire:init', function () {
     }
 
     // __________________________________________________________________ //
-    // 4. Halaman Dashboard Kas (Admin)
+    // 5. Halaman Dashboard Kas (Admin)
     // __________________________________________________________________ //
     let lineChart, dualLineChart, topLeastBarChart, profitBarChart;
 
@@ -247,7 +297,7 @@ document.addEventListener('livewire:init', function () {
 
         const safeLabels = labels && labels.length ? labels : ['No Data'];
         const safePenjualanData = penjualanData && penjualanData.length ? penjualanData : [0];
-        const safePembelianData = pembelianData && pembelianData.length ? pembelianData : [0];
+        const safePembelianData = pembelianData && penjualanData.length ? pembelianData : [0];
         const safeTopSellingLabels = topSellingLabels && topSellingLabels.length ? topSellingLabels : ['No Data'];
         const safeTopSellingData = topSellingData && topSellingData.length ? topSellingData : [0];
         const safeHighestProfitLabels = highestProfitLabels && highestProfitLabels.length ? highestProfitLabels : ['No Data'];

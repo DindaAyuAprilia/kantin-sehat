@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/saldo-bulanan', [MainController::class, 'adminSaldoBulanan'])->name('saldo-bulanan');
     Route::get('/admin/gaji', action: [MainController::class, 'adminGaji'])->name('admin.gaji');
     Route::get('/admin/transaksi-shift', [MainController::class, 'adminTransaksiShift'])->name('admin.transaksi-shift');
-    Route::get('/kasir/inventory', [MainController::class, 'kasirInventory'])->name('kasir.inventory');
+    Route::get('/kasir/persediaan-barang', [MainController::class, 'kasirPersediaan'])->name('kasir.persediaan');
     Route::get('/admin/stock-opname', [MainController::class, 'adminStockOpname'])->name('admin.stock-opname');
     Route::get('/admin/pengeluaran', [MainController::class, 'adminPengeluaran'])->name('admin.pengeluaran');
     Route::get('/admin/transaksi-histori', [MainController::class, 'adminTransaksiHistori'])->name('admin.transaksi-histori');

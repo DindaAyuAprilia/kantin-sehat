@@ -35,10 +35,10 @@ class MainController extends Controller
         return view('kasir.dashboard');
     }
 
-    public function kasirInventory()
+    public function kasirPersediaan()
     {
         $this->authorizeKasir();
-        return view('kasir.inventory');
+        return view('kasir.persediaan');
     }
 
     public function adminKasDashboard()

@@ -8,13 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Drop kolom tipe lama dan tambahkan tipe baru
         Schema::table('persediaans', function (Blueprint $table) {
             $table->dropColumn('tipe');
         });
 
         Schema::table('persediaans', function (Blueprint $table) {
-            $table->enum('tipe', ['penambahan', 'penghapusan'])->default('penambahan')->after('kelola_id');
+            $table->enum('tipe', ['pembelian', 'penghapusan'])->default('pembelian')->after('kelola_id');
         });
     }
 

@@ -9,6 +9,7 @@ use App\Models\DetailTransaksi;
 use App\Models\Barang;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class AdminTransaksiShift extends Component
 {
@@ -63,7 +64,6 @@ class AdminTransaksiShift extends Component
             $query->where('shift_id', $this->selectedShiftId);
         }
 
-        // Add search by unix_id
         if (!empty($this->search)) {
             $query->where('unix_id', 'like', '%' . $this->search . '%');
         }
@@ -219,8 +219,18 @@ class AdminTransaksiShift extends Component
 
             $barang = $items->first()->barang;
             $isTitipan = $barang ? $barang->status_titipan : false;
-            $hargaPokok = $barang ? $barang->harga_pokok : 0;
-            $totalHargaPokok = $totalJumlah * $hargaPokok;
+
+            // Hitung COGS menggunakan FIFO untuk jumlah terjual dalam grup ini
+            $totalHargaPokok = 0;
+            if ($barang && !$isTitipan) {
+                $totalHargaPokok = $barang->calculateFifoCogs($totalJumlah, $startDate, $endDate);
+                Log::info('COGS Calculation', [
+                    'barang_nama' => $barangNama,
+                    'total_jumlah' => $totalJumlah,
+                    'total_harga_pokok' => $totalHargaPokok,
+                ]);
+            }
+            $hargaPokokPerUnit = $totalJumlah > 0 ? $totalHargaPokok / $totalJumlah : 0;
 
             $keuntungan = 0;
             if ($isTitipan && $barang) {
@@ -236,7 +246,6 @@ class AdminTransaksiShift extends Component
             }
 
             $hargaSatuan = $totalJumlah > 0 ? $totalSubtotal / $totalJumlah : ($items->first()->harga_satuan ?? 0);
-            $hargaPokokPerUnit = $totalJumlah > 0 ? $totalHargaPokok / $totalJumlah : $hargaPokok;
             $masukKas = $isTitipan ? $keuntungan : $totalSubtotal;
             $masukKasTitipan = $isTitipan ? $totalHargaPokok : 0;
 

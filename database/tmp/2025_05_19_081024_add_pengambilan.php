@@ -16,7 +16,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('persediaans', function (Blueprint $table) {
-            $table->enum('tipe', ['penambahan', 'penghapusan'])->change();
+            $table->enum('tipe', ['pembelian', 'penghapusan'])->change();
         });
     }
 };

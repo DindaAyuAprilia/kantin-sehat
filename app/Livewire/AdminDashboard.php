@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\DB;
 class AdminDashboard extends Component
 {
     public $saldoKas;
+    public $saldoAwal;
+    public $saldoAkhir;
     public $saldoKembalian;
     public $penjualanData;
     public $pembelianData;
@@ -67,8 +69,61 @@ class AdminDashboard extends Component
     private function loadSaldoKas(): void
     {
         $periodeBulan = Carbon::parse($this->selectedMonth)->format('F Y');
-        $saldoKasBulanan = SaldoKasBulanan::where('periode_bulan', $periodeBulan)->first();
-        $this->saldoKas = $saldoKasBulanan ? ($saldoKasBulanan->saldo_akhir ?? $saldoKasBulanan->saldo_awal ?? 0) : 0;
+        $startDate = Carbon::parse($this->startDate)->startOfDay();
+        $endDate = Carbon::parse($this->endDate)->endOfDay();
+
+        // Ambil saldo awal dari bulan sebelumnya
+        $previousMonth = $startDate->copy()->subMonth();
+        $previousPeriode = $previousMonth->format('F Y');
+        $previousSaldo = SaldoKasBulanan::where('periode_bulan', $previousPeriode)->first();
+        $this->saldoAwal = $previousSaldo ? ($previousSaldo->saldo_akhir ?? $previousSaldo->saldo_awal ?? 0) : 0;
+
+        // Hitung penerimaan
+        $bagiHasilByType = [];
+        $details = DetailTransaksi::whereHas('transaksi', fn($query) => 
+            $query->whereBetween('tanggal', [$startDate, $endDate])
+        )
+            ->with(['transaksi', 'barang.hasilBagi'])
+            ->whereHas('barang', fn($query) => $query->where('status_titipan', true))
+            ->get();
+
+        foreach ($details as $detail) {
+            $barang = $detail->barang;
+            if ($barang && $barang->status_titipan && $barang->hasilBagi) {
+                $tipe = (int)$barang->hasilBagi->tipe;
+                $bagiHasilByType[$tipe] = ($bagiHasilByType[$tipe] ?? 0) + ($tipe * $detail->jumlah);
+            }
+        }
+
+        $pendapatanBagiHasil = array_sum($bagiHasilByType);
+        $penjualanBarang = KasirTransaksi::whereBetween('tanggal', [$startDate, $endDate])
+            ->whereHas('details.barang', fn($query) => $query->where('status_titipan', false))
+            ->sum('total_harga');
+        $keuntunganKas = KasKeuntungan::whereBetween('tanggal', [$startDate, $endDate])
+            ->sum('jumlah');
+        $totalPenerimaan = $pendapatanBagiHasil + $penjualanBarang + $keuntunganKas;
+
+        // Hitung pengeluaran
+        $biayaGaji = GajiPembayaran::whereBetween('tanggal_pembayaran', [$startDate, $endDate])
+            ->sum('jumlah');
+        $kerugianPenjualan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+            ->where('tipe', 'penghapusan')
+            ->whereHas('barang', fn($query) => $query->where('status_titipan', false))
+            ->sum('total_harga');
+        $persediaanDiTangan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+            ->where('tipe', 'pembelian')
+            ->whereHas('barang', fn($query) => $query->where('status_titipan', false))
+            ->sum('total_harga');
+        $kerugianKas = KasKerugian::whereBetween('tanggal', [$startDate, $endDate])
+            ->sum('jumlah');
+        $pengeluaran = Pengeluaran::whereBetween('tanggal', [$startDate, $endDate])
+            ->sum('jumlah');
+        $totalPembayaran = $biayaGaji + $kerugianPenjualan + $persediaanDiTangan + $kerugianKas + $pengeluaran;
+
+        // Hitung saldo akhir
+        $tambahanBersih = $totalPenerimaan - $totalPembayaran;
+        $this->saldoAkhir = $this->saldoAwal + $tambahanBersih;
+        $this->saldoKas = $this->saldoAkhir;
     }
 
     private function loadSaldoKembalian(): void
@@ -101,7 +156,7 @@ class AdminDashboard extends Component
             ->get();
 
         $persediaans = Persediaan::select(DB::raw('DATE(tanggal) as date'), DB::raw('SUM(total_harga) as total'))
-            ->where('tipe', 'penambahan')
+            ->where('tipe', 'pembelian')
             ->whereBetween('tanggal', [$start, $end])
             ->whereHas('barang', function ($query) {
                 $query->where('status_titipan', false);
@@ -158,11 +213,12 @@ class AdminDashboard extends Component
             ->with('barang')
             ->get()
             ->map(function ($item) use ($start, $end) {
-                $penjualan = $item->total_jumlah * $item->barang->harga_jual;
-                $biayaPokok = $this->calculateFifoCogs($item->barang_id, $item->total_jumlah, $start, $end);
+                $barang = $item->barang;
+                $penjualan = $item->total_jumlah * $barang->harga_jual;
+                $biayaPokok = $barang->calculateFifoCogs($item->total_jumlah, $start->format('Y-m-d'), $end->format('Y-m-d'));
                 $laba = $penjualan - $biayaPokok;
                 return [
-                    'barang' => $item->barang,
+                    'barang' => $barang,
                     'total_jumlah' => $item->total_jumlah,
                     'laba' => $laba,
                 ];
@@ -212,33 +268,6 @@ class AdminDashboard extends Component
             session()->flash('success', 'Saldo kembalian berhasil ditransfer ke keuntungan dan tabel kas kembalian direset.');
             $this->dispatch('refreshDashboard');
         }
-    }
-
-    private function calculateFifoCogs($barangId, $quantityNeeded, $startDate, $endDate): float
-    {
-        $persediaans = Persediaan::where('barang_id', $barangId)
-            ->where('tipe', 'penambahan')
-            ->where('sisa_stok', '>', 0)
-            ->whereBetween('tanggal', [$startDate, $endDate])
-            ->orderBy('tanggal', 'asc')
-            ->orderBy('id', 'asc')
-            ->get();
-
-        $totalBiayaPokok = 0;
-
-        foreach ($persediaans as $persediaan) {
-            if ($quantityNeeded <= 0) {
-                break;
-            }
-
-            $available = $persediaan->sisa_stok;
-            $used = min($available, $quantityNeeded);
-            $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
-            $totalBiayaPokok += $used * $biayaPokokPerUnit;
-            $quantityNeeded -= $used;
-        }
-
-        return $totalBiayaPokok;
     }
 
     public function checkPeriod()
@@ -431,7 +460,7 @@ HTML;
             })
             ->sum('total_harga');
         $persediaanDiTangan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
-            ->where('tipe', 'penambahan')
+            ->where('tipe', 'pembelian')
             ->whereHas('barang', function ($query) {
                 $query->where('status_titipan', false);
             })
@@ -542,7 +571,7 @@ HTML;
             $saldoAwal = $saldo->nilai_kuantitas_awal ?? 0;
 
             $pembelian = Persediaan::where('barang_id', $barang->id)
-                ->where('tipe', 'penambahan')
+                ->where('tipe', 'pembelian')
                 ->whereBetween('tanggal', [$startDate, $endDate])
                 ->sum('total_harga');
 
@@ -551,7 +580,7 @@ HTML;
                     $query->whereBetween('tanggal', [$startDate, $endDate]);
                 })
                 ->sum('jumlah');
-            $penjualan = $this->calculateFifoCogs($barang->id, $jumlahTerjual, $startDate, $endDate);
+            $penjualan = $barang->calculateFifoCogs($jumlahTerjual, $startDate, $endDate);
 
             $penghapusan = Persediaan::where('barang_id', $barang->id)
                 ->where('tipe', 'penghapusan')
@@ -647,7 +676,7 @@ HTML;
             $nama = $barang->nama ?? 'N/A';
             $saldoAwal = $saldo->kuantitas_awal ?? 0;
             $pembelian = Persediaan::where('barang_id', $barang->id)
-                ->where('tipe', 'penambahan')
+                ->where('tipe', 'pembelian')
                 ->whereBetween('tanggal', [$startDate, $endDate])
                 ->sum('jumlah');
             $penjualan = DetailTransaksi::where('barang_id', $barang->id)
@@ -741,7 +770,7 @@ HTML;
                 })
                 ->sum('jumlah');
             $penjualan = $jumlahTerjual * $barang->harga_jual;
-            $biayaPokok = $this->calculateFifoCogs($barang->id, $jumlahTerjual, $startDate, $endDate);
+            $biayaPokok = $barang->calculateFifoCogs($jumlahTerjual, $startDate, $endDate);
             $laba = $penjualan - $biayaPokok;
             $margin = $penjualan > 0 ? ($laba / $penjualan) * 100 : 0;
 
@@ -830,7 +859,10 @@ HTML;
 
         $totalBiayaPokok = 0;
         foreach ($jumlahTerjualTotal as $item) {
-            $totalBiayaPokok += $this->calculateFifoCogs($item->barang_id, $item->total_jumlah, $startDate, $endDate);
+            $barang = Barang::find($item->barang_id);
+            if ($barang) {
+                $totalBiayaPokok += $barang->calculateFifoCogs($item->total_jumlah, $startDate, $endDate);
+            }
         }
 
         $biayaGaji = GajiPembayaran::whereBetween('tanggal_pembayaran', [$startDate, $endDate])

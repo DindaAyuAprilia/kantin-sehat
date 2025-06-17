@@ -210,7 +210,7 @@ class AdminStockOpname extends Component
         }
 
         $selisih = $barang->stok - $physicalStock;
-        $tipe = $physicalStock > $barang->stok ? 'penambahan' : 'penghapusan';
+        $tipe = $physicalStock > $barang->stok ? 'pembelian' : 'penghapusan';
         $keterangan = $physicalStock > $barang->stok ? 'Penambahan selisih stok opname' : 'Penghapusan selisih stok opname';
 
         Persediaan::create([

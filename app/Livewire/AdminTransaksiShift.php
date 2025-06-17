@@ -49,9 +49,20 @@ class AdminTransaksiShift extends Component
         $this->isLoading = false;
     }
 
+    public function setActiveTab($tab)
+    {
+        $this->activeTab = $tab;
+    }
+
     public function applyFilter()
     {
         $this->updateTransaksis();
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['nama_shift', 'jam_mulai', 'jam_selesai', 'isEditing', 'selectedId']);
+        $this->dispatch('resetForm');
     }
 
     public function updateTransaksis()

@@ -27,6 +27,7 @@
                 </svg>
                 <div>
                     <h2 class="text-3xl font-bold">Manajemen Barang</h2>
+                    <p class="text-sm mt-1">{{ now()->format('l, F d, Y') }}</p>
                 </div>
             </div>
             <!-- Tab Navigation -->

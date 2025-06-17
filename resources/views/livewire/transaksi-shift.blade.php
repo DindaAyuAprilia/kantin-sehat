@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col justify-center p-4 sm:p-6 overflow-hidden">
+<div class="min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
     <!-- Success Alert -->
     @if (session('success'))
         <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
@@ -27,6 +27,7 @@
                 </svg>
                 <div>
                     <h2 class="text-3xl font-bold">Manajemen Shift</h2>
+                <p class="text-sm mt-1">{{ now()->format('l, F d, Y') }}</p>
                 </div>
             </div>
             <!-- Tab Navigation -->
@@ -77,7 +78,7 @@
                                 <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                     </div>
                                     <input wire:model.debounce.500ms="jam_mulai" id="jam_mulai" type="time"
@@ -91,7 +92,7 @@
                                 <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                     </div>
                                     <input wire:model.debounce.500ms="jam_selesai" id="jam_selesai" type="time"
@@ -144,12 +145,6 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
                                                     <span>Edit</span>
-                                                </button>
-                                                <button wire:click="confirmDelete({{ $shift->id }})" class="bg-red-400 hover:bg-red-500 text-white py-1 px-2 rounded flex items-center space-x-1 text-xs">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                    </svg>
-                                                    <span>Hapus</span>
                                                 </button>
                                             </div>
                                         </td>
@@ -398,3 +393,4 @@
             });
         });
     </script>
+</div>

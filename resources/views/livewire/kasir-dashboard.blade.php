@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <section class="min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row gap-8 justify-center transition-all duration-500">
+        <section class="min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row gap-8 justify-center transition-all duration-500" data-page="transaksi-kasir">
             <!-- Area Transaksi -->
             <div class="w-full lg:w-1/2 max-w-2xl p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
                 <h2 class="text-xl font-semibold text-theme-black mb-4">Transaksi Kasir</h2>
@@ -179,4 +179,193 @@
             </div>
         </section>
     </div>
+
+    <!-- Integrasi JavaScript untuk Transaksi Kasir -->
+    <script>
+        document.addEventListener('livewire:init', function () {
+            // Hanya jalankan logika fokus untuk halaman transaksi kasir
+            if (document.querySelector('[data-page="transaksi-kasir"]')) {
+                const focusSearchInput = () => {
+                    const searchInput = document.getElementById('search');
+                    if (searchInput) {
+                        setTimeout(() => searchInput.focus(), 100);
+                    }
+                };
+
+                // Fokus awal pada input
+                focusSearchInput();
+
+                // Event listener untuk fokus input
+                Livewire.on('item-added', focusSearchInput);
+                Livewire.on('item-removed', focusSearchInput);
+                Livewire.on('item-updated', focusSearchInput);
+                Livewire.on('focus-input', focusSearchInput);
+
+                // Event listener untuk alert
+                Livewire.on('show-alert', (event) => {
+                    console.log('Show Alert:', event);
+                    Swal.fire({
+                        title: 'Peringatan!',
+                        text: event.message || 'Terjadi kesalahan.',
+                        icon: 'warning',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                    }).then(() => focusSearchInput());
+                });
+
+                // Event listener untuk input uang diberikan
+                Livewire.on('swal:inputUangDiberikan', (event) => {
+                    console.log('Input Uang Diberikan:', event);
+                    Swal.fire({
+                        title: 'Masukkan Jumlah Uang yang Diberikan',
+                        html: `Total Harga: Rp ${new Intl.NumberFormat('id-ID').format(event.totalHarga)}`,
+                        input: 'number',
+                        inputAttributes: {
+                            min: 0,
+                            step: 1
+                        },
+                        inputPlaceholder: 'Masukkan jumlah uang',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Lanjutkan',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed && result.value !== undefined) {
+                            console.log('Uang Diberikan:', result.value);
+                            Livewire.dispatch('handleUangDiberikan', { jumlah: result.value });
+                        } else {
+                            console.log('Input Uang Diberikan Dibatalkan');
+                        }
+                    });
+                });
+
+                // Event listener untuk input opsi kembalian
+                Livewire.on('swal:inputKembalianOpsi', (event) => {
+                    console.log('Input Kembalian Opsi:', event);
+                    Swal.fire({
+                        title: 'Apakah pelanggan mengambil kembalian?',
+                        html: `Total Kembalian: Rp ${new Intl.NumberFormat('id-ID').format(event.kembalian)}<br>` +
+                              '<div class="swal-custom-buttons">' +
+                              '<button id="swal-sebagian-btn" class="swal2-confirm swal2-styled" style="background-color: #007bff; color: white; margin-right: 5px;">Sebagian</button>' +
+                              '</div>',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Iya',
+                        denyButtonText: 'Tidak',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#28a745',
+                        denyButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d',
+                        didOpen: () => {
+                            const sebagianBtn = document.getElementById('swal-sebagian-btn');
+                            if (sebagianBtn) {
+                                sebagianBtn.addEventListener('click', () => {
+                                    Swal.close();
+                                    Swal.fire({
+                                        title: 'Masukkan Jumlah Kembalian Sebagian',
+                                        html: `Total Kembalian: Rp ${new Intl.NumberFormat('id-ID').format(event.kembalian)}`,
+                                        input: 'number',
+                                        inputAttributes: {
+                                            min: 0,
+                                            max: event.kembalian,
+                                            step: 500,
+                                            placeholder: 'Masukkan jumlah kembalian'
+                                        },
+                                        inputValidator: (value) => {
+                                            if (!value || value < 0) {
+                                                return 'Nominal tidak boleh minus atau kosong!';
+                                            }
+                                            if (value > event.kembalian) {
+                                                return 'Nominal melebihi total kembalian!';
+                                            }
+                                            return null;
+                                        },
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Lanjutkan',
+                                        cancelButtonText: 'Batal'
+                                    }).then((result) => {
+                                        if (result.isConfirmed && result.value !== undefined) {
+                                            console.log('Kembalian Sebagian:', result.value);
+                                            Livewire.dispatch('handleKembalianDiambil', { jumlah: result.value, opsi: 'sebagian' });
+                                        } else {
+                                            console.log('Input Kembalian Sebagian Dibatalkan');
+                                        }
+                                    });
+                                });
+                            }
+                        },
+                        preConfirm: () => {
+                            return new Promise((resolve) => {
+                                resolve();
+                            });
+                        },
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log('Kembalian Diambil:', event.kembalian);
+                            Livewire.dispatch('handleKembalianDiambil', { jumlah: event.kembalian, opsi: 'iya' });
+                        } else if (result.isDenied) {
+                            console.log('Kembalian Tidak Diambil');
+                            Livewire.dispatch('handleKembalianDiambil', { jumlah: 0, opsi: 'tidak' });
+                        } else {
+                            console.log('Input Kembalian Opsi Dibatalkan');
+                        }
+                    });
+                });
+
+                // Event listener untuk konfirmasi checkout
+                Livewire.on('swal:confirmCheckout', () => {
+                    console.log('Confirm Checkout Triggered');
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Transaksi akan disimpan.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, simpan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log('Proceed Checkout Dispatched');
+                            Livewire.dispatch('proceedCheckout');
+                        } else {
+                            console.log('Checkout Dibatalkan');
+                        }
+                    });
+                });
+
+                // Event listener untuk notifikasi sukses
+                Livewire.on('swal:success', (event) => {
+                    console.log('Success Notification:', event);
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: event.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(() => focusSearchInput());
+                });
+
+                // Tutup dropdown saat klik di luar
+                document.addEventListener('click', (e) => {
+                    const searchInput = document.getElementById('search');
+                    const dropdown = document.querySelector('.absolute.z-10');
+                    if (searchInput && dropdown && !searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                        console.log('Clearing Search Results');
+                        window.Livewire.dispatch('clear-search-results');
+                    }
+                });
+            }
+        });
+    </script>
 </div>

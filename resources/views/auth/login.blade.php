@@ -82,10 +82,40 @@
     <!-- Include Alpine.js -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
+    <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Add x-cloak CSS to hide elements until Alpine.js is loaded -->
     <style>
         [x-cloak] {
             display: none !important;
         }
     </style>
+
+    <!-- SweetAlert2 for Success and Errors -->
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: "Login berhasil! Selamat datang!",
+                    confirmButtonText: 'OK'
+                });
+            });
+    </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal',
+                    text: '{{ $errors->first() }}',
+                    confirmButtonText: 'OK',
+                });
+            });
+        </script>
+    @endif
 </x-guest-layout>

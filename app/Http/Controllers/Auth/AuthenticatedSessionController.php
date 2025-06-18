@@ -42,6 +42,9 @@ class AuthenticatedSessionController extends Controller
         // Regenerasi session jika status bukan 'berhenti'
         $request->session()->regenerate();
 
+        // Tambahkan session flash message untuk login berhasil
+        $request->session()->flash('success', 'Login berhasil! Selamat datang, ' . $user->nama . '!');
+
         // Redirect berdasarkan role
         return $user->role === 'admin'
             ? redirect()->route('admin.dashboard')
@@ -54,6 +57,9 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Tambahkan session flash message untuk logout berhasil
+        $request->session()->flash('success', 'Logout berhasil! Sampai jumpa lagi.');
 
         return redirect('/');
     }

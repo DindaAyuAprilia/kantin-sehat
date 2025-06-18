@@ -1,3 +1,3 @@
 <x-app-layout>
-    @livewire('saldo-bulanan')
+    @livewire('admin-saldo-bulanan')
 </x-app-layout>

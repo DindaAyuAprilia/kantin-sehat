@@ -19,12 +19,12 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/data-karyawan', [MainController::class, 'adminDataKaryawan'])->name('admin.data-karyawan');
+    Route::get('admin/data-karyawan', [MainController::class, 'adminDataKaryawan'])->name('admin.data-karyawan');
     Route::get('/admin/data-barang', [MainController::class, 'adminBarang'])->name('admin.barang');
     Route::get('/admin/data-persediaan', [MainController::class, 'adminPersediaan'])->name('admin.persediaan');
     Route::get('/kasir/dashboard', [MainController::class, 'kasirTransaksi'])->name('kasir.dashboard');
     Route::get('/admin/dashboard', [MainController::class, 'adminKasDashboard'])->name('admin.dashboard');
-    Route::get('/saldo-bulanan', [MainController::class, 'adminSaldoBulanan'])->name('saldo-bulanan');
+    Route::get('/admin/saldo-bulanan', [MainController::class, 'adminSaldoBulanan'])->name('admin.saldo-bulanan');
     Route::get('/admin/gaji', action: [MainController::class, 'adminGaji'])->name('admin.gaji');
     Route::get('/admin/transaksi-shift', [MainController::class, 'adminTransaksiShift'])->name('admin.transaksi-shift');
     Route::get('/kasir/persediaan-barang', [MainController::class, 'kasirPersediaan'])->name('kasir.persediaan');

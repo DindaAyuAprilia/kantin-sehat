@@ -494,6 +494,6 @@ HTML;
 
     public function render()
     {
-        return view('livewire.transaksi-shift');
+        return view('livewire.admin-transaksi-shift');
     }
 }

@@ -1,4 +1,4 @@
-<div class="p-6 space-y-6">
+<div class="space-y-6 min-h-screen flex flex-col p-6 sm:p-[2%] overflow-hidden">
     <!-- Success Alert -->
     @if (session('success'))
         <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
@@ -13,13 +13,8 @@
         </div>
     @endif
 
-    <!-- Loading Overlay -->
-    <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" wire:loading>
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-theme-primary"></div>
-    </div>
-
     <!-- Main Header -->
-    <div class="mb-6 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
+    <div class="bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

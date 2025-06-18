@@ -48,8 +48,8 @@
                     </svg>
                     {{ __('Stock Opname') }}
                 </a>
-                <a href="{{ route('saldo-bulanan') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('saldo-bulanan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.saldo-bulanan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.saldo-bulanan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -58,7 +58,7 @@
                 <a href="{{ route('admin.gaji') }}"
                     class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.gaji') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.33-2-2-2-2s-2 .67-2 2c0 1.33 2 2 2 2s2-.67 2-2zm0 2c-1.11 0-2-.89-2-2s.89-2 2-2 2 .89 2 2-1.11 2-2 2zm0 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm6-10H6c0-2.21 1.79-4 4-4h4c2.21 0 4 1.79 4 4z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                     </svg>
                     {{ __('Gaji Karyawan') }}
                 </a>
@@ -191,8 +191,8 @@
                     </svg>
                     {{ __('Stock Opname') }}
                 </a>
-                <a href="{{ route('saldo-bulanan') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('saldo-bulanan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.saldo-bulanan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.saldo-bulanan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -201,7 +201,7 @@
                 <a href="{{ route('admin.gaji') }}"
                     class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.gaji') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.33-2-2-2-2s-2 .67-2 2c0 1.33 2 2 2 2s2-.67 2-2zm0 2c-1.11 0-2-.89-2-2s.89-2 2-2 2 .89 2 2-1.11 2-2 2zm0 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm6-10H6c0-2.21 1.79-4 4-4h4c2.21 0 4 1.79 4 4z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                     </svg>
                     {{ __('Gaji Karyawan') }}
                 </a>
@@ -334,8 +334,8 @@
                     </svg>
                     {{ __('Stock Opname') }}
                 </a>
-                <a href="{{ route('saldo-bulanan') }}"
-                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('saldo-bulanan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
+                <a href="{{ route('admin.saldo-bulanan') }}"
+                    class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.saldo-bulanan') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -344,7 +344,7 @@
                 <a href="{{ route('admin.gaji') }}"
                     class="flex items-center px-4 py-2 text-theme-black hover:bg-theme-light hover:text-theme-secondary focus:bg-theme-light focus:text-theme-primary transition duration-150 {{ request()->routeIs('admin.gaji') ? 'bg-theme-light' : '' }} border-b border-gray-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.33-2-2-2-2s-2 .67-2 2c0 1.33 2 2 2 2s2-.67 2-2zm0 2c-1.11 0-2-.89-2-2s.89-2 2-2 2 .89 2 2-1.11 2-2 2zm0 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm6-10H6c0-2.21 1.79-4 4-4h4c2.21 0 4 1.79 4 4z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                     </svg>
                     {{ __('Gaji Karyawan') }}
                 </a>

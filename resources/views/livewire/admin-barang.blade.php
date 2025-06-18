@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col justify-center p-4 sm:p-6 overflow-hidden">
+<div class="min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
     <!-- Success Alert -->
     @if (session('success'))
         <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
@@ -23,7 +23,7 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M3 7h18M3 12h18m-6 5h6"></path>
                 </svg>
                 <div>
                     <h2 class="text-3xl font-bold">Manajemen Barang</h2>

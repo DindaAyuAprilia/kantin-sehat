@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col justify-center p-4 sm:p-[2%] overflow-hidden">
+<div class="min-h-screen flex flex-col p-4 sm:p-[2%] overflow-hidden">
     <!-- Main Header -->
     <div class="mb-4 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
         <div class="flex items-center space-x-4">

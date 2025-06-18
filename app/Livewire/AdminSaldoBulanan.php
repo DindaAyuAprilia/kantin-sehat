@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 
-class SaldoBulanan extends Component
+class AdminSaldoBulanan extends Component
 {
     public $selectedMonth;
     public $saldoKasBulanan;
@@ -189,7 +189,7 @@ class SaldoBulanan extends Component
             'activeTab' => $this->activeTab
         ]);
 
-        return view('livewire.saldo-bulanan')->with([
+        return view('livewire.admin-saldo-bulanan')->with([
             'saldoKasBulanan' => $this->saldoKasBulanan,
             'saldoBarangBulanan' => $this->saldoBarangBulanan,
             'activeTab' => $this->activeTab,

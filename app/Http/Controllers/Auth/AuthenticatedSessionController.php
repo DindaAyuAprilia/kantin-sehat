@@ -20,9 +20,27 @@ class AuthenticatedSessionController extends Controller
     // Proses login
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Coba autentikasi
         $request->authenticate();
-        $request->session()->regenerate();
+        
+        // Ambil data user yang sedang login
         $user = Auth::user();
+
+        // Cek apakah status user 'berhenti'
+        if ($user->status === 'berhenti') {
+            // Logout user dan invalidate session
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            // Redirect kembali ke login dengan pesan error
+            return redirect()->route('login')->withErrors([
+                'email' => 'Akun Anda telah dinonaktifkan. Silakan hubungi administrator.'
+            ]);
+        }
+
+        // Regenerasi session jika status bukan 'berhenti'
+        $request->session()->regenerate();
 
         // Redirect berdasarkan role
         return $user->role === 'admin'

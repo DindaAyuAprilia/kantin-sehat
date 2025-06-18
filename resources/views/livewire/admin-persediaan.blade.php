@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col justify-center p-4 sm:p-6 overflow-hidden">
+<div class="min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
     <!-- Success Alert -->
     @if (session('success'))
         <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">

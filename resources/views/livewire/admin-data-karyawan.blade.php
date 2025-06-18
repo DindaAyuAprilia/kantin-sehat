@@ -104,8 +104,7 @@
                                 <option value="admin">Admin</option>
                                 <option value="kasir">Kasir</option>
                             </select>
-                            @error('role') <span class="text-red-600 text-sm">{{ $message }}</span708>
-                            @enderror
+                            @error('role') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Input Status -->
@@ -128,8 +127,8 @@
 
                     <!-- Tombol Submit -->
                     <div class="mt-4 flex justify-end space-x-2">
-                        <button type="button" wire:click="resetForm" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Reset</button>
-                        <button type="submit" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 w-full sm:w-auto">
+                        <button type="button" wire:click="resetForm" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">Reset</button>
+                        <button type="submit" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 text-sm w-full sm:w-auto">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
@@ -164,32 +163,32 @@
                     </select>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto border-collapse text-sm border border-theme-primary">
-                        <thead class="bg-theme-primary text-white sticky top-0">
-                            <tr class="border-b border-theme-primary">
-                                <th class="px-4 py-2 border-r border-theme-primary">Nama</th>
-                                <th class="px-4 py-2 border-r border-theme-primary">Email</th>
-                                <th class="px-4 py-2 border-r border-theme-primary">Role</th>
-                                <th class="px-4 py-2 border-r border-theme-primary">Status</th>
-                                <th class="px-4 py-2 border-r border-theme-primary">Tanggal Berhenti</th>
-                                <th class="px-4 py-2">Aksi</th>
+                <div class="relative overflow-y-auto max-h-[calc(100vh-400px)] scrollbar-thin scrollbar-thumb-theme-primary scrollbar-track-theme-surface">
+                    <table class="w-full table-auto border-collapse text-xs">
+                        <thead class="sticky top-0 bg-theme-primary text-white z-10">
+                            <tr>
+                                <th class="px-2 py-2 border border-theme-primary text-left">Nama</th>
+                                <th class="px-2 py-2 border border-theme-primary text-left">Email</th>
+                                <th class="px-2 py-2 border border-theme-primary text-left">Role</th>
+                                <th class="px-2 py-2 border border-theme-primary text-left">Status</th>
+                                <th class="px-2 py-2 border border-theme-primary text-left">Tanggal Berhenti</th>
+                                <th class="px-2 py-2 border border-theme-primary text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="karyawanTable">
                             @forelse($karyawan as $k)
-                                <tr class="border-b border-theme-primary hover:bg-theme-light">
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $k->nama }}</td>
-                                    <td class="px-4 py-2 text-theme-dark border-r border-theme-primary">{{ $k->email }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ ucfirst($k->role) }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ ucfirst($k->status) }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">
+                                <tr class="border border-theme-primary hover:bg-theme-light">
+                                    <td class="px-2 py-2 text-theme-black border border-theme-primary">{{ $k->nama }}</td>
+                                    <td class="px-2 py-2 text-theme-dark border border-theme-primary">{{ $k->email }}</td>
+                                    <td class="px-2 py-2 text-theme-black border border-theme-primary">{{ ucfirst($k->role) }}</td>
+                                    <td class="px-2 py-2 text-theme-black border border-theme-primary">{{ ucfirst($k->status) }}</td>
+                                    <td class="px-2 py-2 text-theme-black border border-theme-primary">
                                         {{ $k->tanggal_berhenti ? \Carbon\Carbon::parse($k->tanggal_berhenti)->format('d/m/Y') : '-' }}
                                     </td>
-                                    <td class="px-4 py-2 text-theme-black">
-                                        <div class="flex justify-center space-x-2">
-                                            <button wire:click="edit({{ $k->id }})" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1.5 px-4 rounded flex items-center space-x-1">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <td class="px-2 py-2 text-theme-black border border-theme-primary text-center">
+                                        <div class="flex justify-center space-x-1">
+                                            <button wire:click="edit({{ $k->id }})" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-2 rounded flex items-center space-x-1 text-xs">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                                 <span>Edit</span>
@@ -199,7 +198,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-theme-black">Data tidak ada.</td>
+                                    <td colspan="6" class="text-center py-2 text-theme-black border border-theme-primary">Data tidak ada.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -208,13 +207,13 @@
 
                 <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                     <div class="flex space-x-2">
-                        <button wire:click="previousPage" {{ $karyawan->onFirstPage() ? 'disabled' : '' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300"><</button>
+                        <button wire:click="previousPage" {{ $karyawan->onFirstPage() ? 'disabled' : '' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300 text-xs"><</button>
                         @foreach ($karyawan->getUrlRange(1, $karyawan->lastPage()) as $page => $url)
-                            <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 {{ $karyawan->currentPage() === $page ? 'bg-theme-primary text-white' : 'bg-gray-200 text-theme-black' }} rounded hover:bg-theme-secondary hover:text-white">{{ $page }}</button>
+                            <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 {{ $karyawan->currentPage() === $page ? 'bg-theme-primary text-white' : 'bg-theme-light text-theme-black' }} rounded hover:bg-theme-secondary hover:text-white text-xs">{{ $page }}</button>
                         @endforeach
-                        <button wire:click="nextPage" {{ $karyawan->hasMorePages() ? '' : 'disabled' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300">></button>
+                        <button wire:click="nextPage" {{ $karyawan->hasMorePages() ? '' : 'disabled' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300 text-xs">></button>
                     </div>
-                    <span class="text-sm text-theme-black">
+                    <span class="text-xs text-theme-black">
                         Menampilkan {{ $karyawan->firstItem() ?: 0 }} - {{ $karyawan->lastItem() ?: 0 }} dari {{ $karyawan->total() }} data
                     </span>
                 </div>
@@ -226,6 +225,22 @@
     <style>
         [x-cloak] {
             display: none !important;
+        }
+        .scrollbar-thin {
+            scrollbar-width: thin;
+        }
+        .scrollbar-thumb-theme-primary {
+            scrollbar-color: #007022 #f1f5f9;
+        }
+        .scrollbar-track-theme-surface {
+            background: #f1f5f9;
+        }
+        thead.sticky th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #007022; /* Matches bg-theme-primary */
+            color: white; /* Matches text-white */
         }
     </style>
 

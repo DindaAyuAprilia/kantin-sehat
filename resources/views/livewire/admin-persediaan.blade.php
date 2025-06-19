@@ -1,16 +1,10 @@
-<div class="space-y-6 min-h-screen flex flex-col p-4 sm:p-[2%] overflow-hidden">
+<div class=" min-h-screen flex flex-col p-4 sm:p-[2%] overflow-hidden">
+
     <!-- Main Header -->
-    <div class="bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
-        <div class="flex items-center space-x-4">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
-            </svg>
-            <div>
-                <h2 class="text-4xl font-bold">Manajemen Persediaan</h2>
-                <p class="text-sm mt-1">{{ now()->format('l, F d, Y H:i A') }}</p>
-            </div>
-        </div>
-    </div>
+    <x-header-container 
+        title="Manajemen Persediaan" 
+        icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+    />
 
     <!-- Konten Utama -->
     <div class="space-y-6 flex-1">

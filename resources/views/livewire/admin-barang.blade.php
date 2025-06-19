@@ -13,36 +13,16 @@
         </div>
     @endif
 
-    <!-- Loading Overlay -->
-    <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" x-show="$wire.isLoading" x-cloak>
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-theme-primary"></div>
-    </div>
-
     <!-- Main Header -->
-    <div class="mb-6 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M3 7h18M3 12h18m-6 5h6"></path>
-                </svg>
-                <div>
-                    <h2 class="text-3xl font-bold">Manajemen Barang</h2>
-                    <p class="text-sm mt-1">{{ now()->format('l, F d, Y') }}</p>
-                </div>
-            </div>
-            <!-- Tab Navigation -->
-            <div class="flex space-x-2">
-                <button wire:click="setActiveTab('barang')"
-                        class="{{ $activeTab === 'barang' ? 'bg-white text-theme-primary' : 'bg-gray-200 text-gray-600' }} px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-gray-300 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-theme-secondary">
-                    Barang
-                </button>
-                <button wire:click="setActiveTab('hasil_bagi')"
-                        class="{{ $activeTab === 'hasil_bagi' ? 'bg-white text-theme-primary' : 'bg-gray-200 text-gray-600' }} px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-gray-300 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-theme-secondary">
-                    Hasil Bagi
-                </button>
-            </div>
-        </div>
-    </div>
+    <x-header-container 
+    title="Manajemen Barang"
+        icon="M3 3h18M3 7h18M3 12h18m-6 5h6"
+        :active-tab="$activeTab"
+        :tabs="[
+            ['key' => 'barang', 'label' => 'Barang'],
+            ['key' => 'hasil_bagi', 'label' => 'Hasil Bagi']
+        ]"
+    />
 
     <!-- Tab Content -->
     <div class="space-y-6" x-data="{ statusTitipan: {{ $status_titipan ? 'true' : 'false' }} }">
@@ -399,9 +379,6 @@
             </div>
         @endif
     </div>
-
-    <!-- SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

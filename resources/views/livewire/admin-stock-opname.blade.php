@@ -13,25 +13,11 @@
         </div>
     @endif
 
-    <!-- Loading Overlay -->
-    <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" x-show="$wire.isLoading" x-cloak>
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-theme-primary"></div>
-    </div>
-
     <!-- Main Header -->
-    <div class="mb-6 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                </svg>
-                <div>
-                    <h2 class="text-4xl font-bold">Stock Opname</h2>
-                    <p class="text-sm mt-1">{{ now()->format('l, F d, Y') }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-header-container 
+        title="Manajemen Stock Opname" 
+        icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+    />
 
     <!-- Cash Comparison Section -->
     <div class=" mb-6 bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">

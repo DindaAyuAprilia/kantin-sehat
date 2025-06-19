@@ -1,17 +1,10 @@
 <div>
     <div class="p-6">
         <!-- Main Header -->
-        <div class="mb-6 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border border-theme-primary snap-start">
-            <div class="flex items-center space-x-4">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                </svg>
-                <div>
-                    <h2 class="text-4xl font-bold">Transaksi Kasir</h2>
-                    <p class="text-sm mt-1">{{ now()->format('l, F d, Y') }}</p>
-                </div>
-            </div>
-        </div>
+        <x-header-container 
+            title="Transaksi Kasir" 
+            icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        />
 
         <section class="min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row gap-8 justify-center transition-all duration-500" data-page="transaksi-kasir">
             <!-- Area Transaksi -->

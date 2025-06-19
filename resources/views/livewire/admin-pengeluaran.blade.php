@@ -1,16 +1,10 @@
 <div class="min-h-screen flex flex-col p-4 sm:p-[2%] overflow-hidden">
+
     <!-- Main Header -->
-    <div class="mb-4 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
-        <div class="flex items-center space-x-4">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-            <div>
-                <h2 class="text-4xl font-bold">Manajemen Pengeluaran</h2>
-                <p class="text-sm mt-1">{{ now()->format('l, F d, Y') }}</p>
-            </div>
-        </div>
-    </div>
+    <x-header-container 
+        title="Manajemen Pengeluaran" 
+        icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+    />
 
     <!-- Konten Utama -->
     <div class="space-y-6 flex-1">
@@ -27,11 +21,6 @@
                 {{ session('error') }}
             </div>
         @endif
-
-        <!-- Loading Overlay -->
-        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" x-show="$wire.isLoading" x-cloak>
-            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-theme-primary"></div>
-        </div>
 
         <!-- Form dan Tabel Pengeluaran -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

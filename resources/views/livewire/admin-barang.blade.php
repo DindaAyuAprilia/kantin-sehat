@@ -1,17 +1,4 @@
 <div class="min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
-    <!-- Success Alert -->
-    @if (session('success'))
-        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <!-- Error Alert -->
-    @if (session('error'))
-        <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded border-2 border-theme-primary">
-            {{ session('error') }}
-        </div>
-    @endif
 
     <!-- Main Header -->
     <x-header-container 
@@ -22,6 +9,17 @@
             ['key' => 'barang', 'label' => 'Barang'],
             ['key' => 'hasil_bagi', 'label' => 'Hasil Bagi']
         ]"
+    />
+
+    <!-- Alert -->
+    <x-alert-container 
+        type="success" 
+        :message="session('success')"
+    />
+
+    <x-alert-container 
+        type="error" 
+        :message="session('error')"
     />
 
     <!-- Tab Content -->

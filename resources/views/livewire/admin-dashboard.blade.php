@@ -1,16 +1,16 @@
 
 <div class="space-y-6 p-4 sm:p-[2%] overflow-y-auto max-h-screen">
-    <!-- Success Alert -->
-    @if (session('success'))
-        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border border-theme-primary">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <!-- Main Header -->
     <x-header-container 
         title="Dashboard Kas" 
         icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+    />
+
+    <!-- Alert -->
+    <x-alert-container 
+        type="success" 
+        :message="session('success')"
     />
 
     <!-- Saldo Kas Utama -->

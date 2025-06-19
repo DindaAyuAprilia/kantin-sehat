@@ -6,21 +6,19 @@
         icon="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
     />
 
+    <!-- Alert -->
+    <x-alert-container 
+        type="success" 
+        :message="session('success')"
+    />
+
+    <x-alert-container 
+        type="error" 
+        :message="session('error')"
+    />
+
     <!-- Konten Utama -->
     <div class="space-y-6 flex-1">
-        <!-- Alert Success -->
-        @if (session('success'))
-            <div class="p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <!-- Alert Error -->
-        @if (session('error'))
-            <div class="p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded border-2 border-theme-primary">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- Gaji Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

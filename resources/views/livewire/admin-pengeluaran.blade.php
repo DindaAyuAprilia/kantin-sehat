@@ -6,21 +6,19 @@
         icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
     />
 
+    <!-- Alert -->
+    <x-alert-container 
+        type="success" 
+        :message="session('success')"
+    />
+
+    <x-alert-container 
+        type="error" 
+        :message="session('error')"
+    />
+
     <!-- Konten Utama -->
     <div class="space-y-6 flex-1">
-        <!-- Success Alert -->
-        @if (session('success'))
-            <div class="p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <!-- Error Alert -->
-        @if (session('error'))
-            <div class="p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded border-2 border-theme-primary">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- Form dan Tabel Pengeluaran -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

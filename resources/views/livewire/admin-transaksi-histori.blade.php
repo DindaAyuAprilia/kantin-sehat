@@ -1,22 +1,20 @@
 <div class="min-h-screen flex flex-col p-4 sm:p-[2%] overflow-hidden">
-    <!-- Success Alert -->
-    @if (session('success'))
-        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <!-- Error Alert -->
-    @if (session('error'))
-        <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded border-2 border-theme-primary">
-            {{ session('error') }}
-        </div>
-    @endif
 
     <!-- Main Header -->
     <x-header-container 
         title="Manajemen Histori Transaksi" 
         icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+    />
+
+    <!-- Alert -->
+    <x-alert-container 
+        type="success" 
+        :message="session('success')"
+    />
+
+    <x-alert-container 
+        type="error" 
+        :message="session('error')"
     />
 
     <!-- Tabel Transaksi -->

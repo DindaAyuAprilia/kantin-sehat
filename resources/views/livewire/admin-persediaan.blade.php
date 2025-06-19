@@ -6,21 +6,19 @@
         icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
     />
 
+    <!-- Alert -->
+    <x-alert-container 
+        type="success" 
+        :message="session('success')"
+    />
+
+    <x-alert-container 
+        type="error" 
+        :message="session('error')"
+    />
+
     <!-- Konten Utama -->
     <div class="space-y-6 flex-1">
-        <!-- Success Alert -->
-        @if (session('success'))
-            <div class="p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded border-2 border-theme-primary">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <!-- Error Alert -->
-        @if (session('error'))
-            <div class="p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded border-2 border-theme-primary">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- Persediaan Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">

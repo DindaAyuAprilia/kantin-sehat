@@ -192,6 +192,7 @@
                                     class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm">
                             </div>
                         </div>
+
                         <div>
                             <div class="relative rounded-md shadow-sm border border-gray-300">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -210,77 +211,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto max-h-[calc(100vh-300px)]">
-                        <table class="w-full table-auto border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-theme-primary text-white">
-                                    <th class="px-2 py-2 border border-theme-primary text-left">Kode Barang</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-left">Nama</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-right">Harga Pokok</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-right">Harga Jual</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Stok</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Tipe Barang</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Status Titipan</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Tipe Hasil Bagi</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Status</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($barangs as $b)
-                                    <tr class="hover:bg-theme-light">
-                                        <td class="border px-2 py-2 border-theme-primary whitespace-nowrap">{{ $b->kode_barang }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary whitespace-normal break-words">{{ $b->nama }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-right">Rp {{ number_format($b->harga_pokok, 0, ',', '.') }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-right">Rp {{ number_format($b->harga_jual, 0, ',', '.') }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">{{ $b->stok }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">{{ ucfirst($b->tipe_barang) }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">{{ $b->status_titipan ? 'Ya' : 'Tidak' }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">{{ $b->hasilBagi ? $b->hasilBagi->tipe : '-' }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">
-                                            <span class="{{ $b->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} px-2 py-1 rounded">
-                                                {{ $b->is_active ? 'Aktif' : 'Tidak Aktif' }}
-                                            </span>
-                                        </td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">
-                                            <div class="flex justify-center space-x-1">
-                                                <button wire:click="editBarang({{ $b->id }})" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-2 rounded flex items-center space-x-1 text-xs">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                    </svg>
-                                                    <span>Edit</span>
-                                                </button>
-                                                <button wire:click="confirmToggleActive({{ $b->id }})" class="{{ $b->is_active ? 'bg-red-400 hover:bg-red-500' : 'bg-green-400 hover:bg-green-500' }} text-white py-1 px-2 rounded flex items-center space-x-1 text-xs">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $b->is_active ? 'M6 18L18 6M6 6l12 12' : 'M5 13l4 4L19 7' }}"></path>
-                                                    </svg>
-                                                    <span>{{ $b->is_active ? 'Nonaktifkan' : 'Aktifkan' }}</span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="10" class="border px-2 py-2 text-center border-theme-primary text-xs">Tidak ada data barang.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="mt-4 flex justify-between items-center">
-                        <div class="flex space-x-2">
-                            <button wire:click="previousPage" {{ $barangs->onFirstPage() ? 'disabled' : '' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300 text-xs"> < </button>
-                            @foreach ($barangs->getUrlRange(1, $barangs->lastPage()) as $page => $url)
-                                <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 {{ $barangs->currentPage() === $page ? 'bg-theme-primary text-white' : 'bg-theme-light text-theme-black' }} rounded hover:bg-theme-secondary hover:text-white text-xs">
-                                    {{ $page }}
-                                </button>
-                            @endforeach
-                            <button wire:click="nextPage" {{ $barangs->hasMorePages() ? '' : 'disabled' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300 text-xs"> > </button>
-                        </div>
-                        <span class="text-xs text-theme-black">
-                            Menampilkan {{ $barangs->firstItem() ?: 0 }} - {{ $barangs->lastItem() ?: 0 }} dari {{ $barangs->total() }} data
-                        </span>
-                    </div>
+
+                    <!-- Tabel Barang -->
+                    <x-table-container 
+                        :headers="[
+                            ['key' => 'kode_barang', 'label' => 'Kode Barang'],
+                            ['key' => 'nama', 'label' => 'Nama'],
+                            ['key' => 'harga_pokok', 'label' => 'Harga Pokok', 'format' => 'currency'],
+                            ['key' => 'harga_jual', 'label' => 'Harga Jual', 'format' => 'currency'],
+                            ['key' => 'stok', 'label' => 'Stok', 'align' => 'center'],
+                            ['key' => 'tipe_barang', 'label' => 'Tipe Barang', 'format' => 'ucfirst', 'align' => 'center'],
+                            ['key' => 'status_titipan', 'label' => 'Status Titipan', 'format' => 'boolean', 'align' => 'center'],
+                            ['key' => 'hasil_bagi', 'label' => 'Tipe Hasil Bagi', 'format' => 'relation', 'align' => 'center'],
+                            ['key' => 'is_active', 'label' => 'Status', 'format' => 'status', 'align' => 'center'],
+                        ]"
+                        :data="$barangs"
+                        :actions="[
+                            ['label' => 'Edit', 'wire:click' => 'editBarang', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
+                            ['label' => 'is_active ? \'Nonaktifkan\' : \'Aktifkan\'', 'wire:click' => 'confirmToggleActive', 'class' => 'is_active ? \'bg-red-400 hover:bg-red-500 text-white\' : \'bg-green-400 hover:bg-green-500 text-white\'', 'icon' => 'is_active ? \'M6 18L18 6M6 6l12 12\' : \'M5 13l4 4L19 7\''],
+                        ]"
+                        per-page="25"
+                        table-id="barangTable"
+                    />
+                    
                     <div class="mt-4 text-right">
                         <button wire:click="printAllTitipanBarcodes" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -340,39 +293,20 @@
                         </svg>
                         <span>Daftar Hasil Bagi</span>
                     </h3>
-                    <div class="overflow-x-auto max-h-[calc(100vh-300px)]">
-                        <table class="w-full table-auto border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-theme-primary text-white">
-                                    <th class="px-2 py-2 border border-theme-primary text-left">Tipe Hasil Bagi</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Jumlah Barang</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($hasilBagis as $hasilBagi)
-                                    <tr class="hover:bg-theme-light">
-                                        <td class="border px-2 py-2 border-theme-primary whitespace-normal break-words">{{ $hasilBagi->tipe }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">{{ $hasilBagi->barangs->count() }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">
-                                            <div class="flex justify-center space-x-1">
-                                                <button wire:click="editHasilBagi({{ $hasilBagi->id }})" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1 px-2 rounded flex items-center space-x-1 text-xs">
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                    </svg>
-                                                    <span>Edit</span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3" class="border px-2 py-2 text-center border-theme-primary text-xs">Tidak ada data hasil bagi.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+
+                    <!-- Komponen Tabel Hasil Bagi -->
+                    <x-table-container 
+                        :headers="[
+                            ['key' => 'tipe', 'label' => 'Tipe Hasil Bagi'],
+                            ['key' => 'barangs_count', 'label' => 'Jumlah Barang', 'format' => 'count', 'align' => 'center'],
+                        ]"
+                        :data="$hasilBagis"
+                        :actions="[
+                            ['label' => 'Edit', 'wire:click' => 'editHasilBagi', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
+                        ]"
+                        table-id="hasilBagiTable"
+                    />
+
                 </div>
             </div>
         @endif

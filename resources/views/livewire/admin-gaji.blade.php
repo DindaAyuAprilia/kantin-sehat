@@ -170,6 +170,7 @@
                         Menampilkan {{ $paymentHistory->firstItem() ?: 0 }} - {{ $paymentHistory->lastItem() ?: 0 }} dari {{ $paymentHistory->total() }} data
                     </span>
                 </div>
+                
             </div>
         </div>
     </div>

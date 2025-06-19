@@ -223,41 +223,19 @@
                                 class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm">
                         </div>
                     </div>
-                    <div class="overflow-x-auto max-h-[calc(100vh-300px)]">
-                        <table class="w-full table-auto border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-theme-primary text-white">
-                                    <th class="px-2 py-2 border border-theme-primary text-left">Unix ID</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Tanggal & Jam</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-right">Total Harga</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Metode Pembayaran</th>
-                                    <th class="px-2 py-2 border border-theme-primary text-center">Detail Titipan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($transaksis as $transaksi)
-                                    <tr class="hover:bg-theme-light">
-                                        <td class="border px-2 py-2 border-theme-primary whitespace-nowrap">{{ $transaksi->unix_id }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">{{ \Carbon\Carbon::parse($transaksi->created_at)->format('d/m/Y H:i') }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-right">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">{{ ucfirst($transaksi->metode_pembayaran) }}</td>
-                                        <td class="border px-2 py-2 border-theme-primary text-center">
-                                            @php
-                                                $hasTitipan = $transaksi->details->contains(function ($detail) {
-                                                    return $detail->barang && $detail->barang->status_titipan;
-                                                });
-                                            @endphp
-                                            {{ $hasTitipan ? 'Ya' : 'Tidak' }}
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="border px-2 py-2 text-center border-theme-primary text-xs">Tidak ada transaksi.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                    <x-table-container 
+                        :headers="[
+                            ['key' => 'unix_id', 'label' => 'Unix ID', 'align' => 'left'],
+                            ['key' => 'created_at', 'label' => 'Tanggal & Jam', 'format' => 'datetime', 'align' => 'center'],
+                            ['key' => 'total_harga', 'label' => 'Total Harga', 'format' => 'currency', 'align' => 'right'],
+                            ['key' => 'metode_pembayaran', 'label' => 'Metode Pembayaran', 'format' => 'ucfirst', 'align' => 'center'],
+                            ['key' => 'details', 'label' => 'Detail Titipan', 'format' => 'boolean_titipan', 'align' => 'center'],
+                        ]"
+                        :data="$transaksis"
+                        :actions="[]"
+                        per-page="10"
+                        table-id="transaksiTable"
+                    />
                     <div class="mt-4 flex justify-end">
                         <button wire:click="viewShiftReport" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md flex items-center space-x-2 text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

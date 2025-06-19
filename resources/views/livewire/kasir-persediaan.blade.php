@@ -6,7 +6,7 @@
             title="Daftar Persediaan" 
             icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
         />
-        <section class="py-12 min-h-[calc(100vh-4rem)] flex flex-col transition-all duration-500">
+        <section class="min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
             <!-- Tabel Persediaan -->
             <div id="tabel-persediaan" class="w-full max-w-4xl p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
                 <h2 class="text-xl font-semibold text-theme-black mb-4">Daftar Persediaan Barang</h2>
@@ -19,30 +19,19 @@
                         </svg>
                     </span>
                 </div>
+
                 <div class="overflow-y-auto max-h-[calc(100vh-20rem)]">
-                    <table class="min-w-full text-sm border-collapse border-2 border-theme-primary">
-                        <thead class="bg-theme-primary text-theme-white sticky top-0">
-                            <tr class="border-b-2 border-theme-primary">
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Kode Barang</th>
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Nama Barang</th>
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Stok</th>
-                            </tr>
-                        </thead>
-                        <tbody id="barangTable">
-                            @foreach($barangs as $barang)
-                                <tr class="border-b border-theme-primary">
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $barang->kode_barang }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $barang->nama }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $barang->stok }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    @if($barangs->isEmpty())
-                        <div class="text-center py-4 text-theme-black">
-                            Tidak ada data barang yang ditemukan.
-                        </div>
-                    @endif
+                    <x-table-container
+                        :headers="[
+                            ['key' => 'kode_barang', 'label' => 'Kode Barang', 'align' => 'left'],
+                            ['key' => 'nama', 'label' => 'Nama Barang', 'align' => 'left'],
+                            ['key' => 'stok', 'label' => 'Stok', 'align' => 'right'],
+                        ]"
+                        :data="$barangs"
+                        :actions="[]"
+                        :perPage="10"
+                        :tableId="'persediaan-table'"
+                    />
                 </div>
             </div>
         </section>

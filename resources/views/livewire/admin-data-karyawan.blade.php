@@ -158,11 +158,11 @@
                 <!-- Tabel Karyawan -->
                 <x-table-container 
                     :headers="[
-                        ['key' => 'nama', 'label' => 'Nama'],
-                        ['key' => 'email', 'label' => 'Email'],
-                        ['key' => 'role', 'label' => 'Role'],
-                        ['key' => 'status', 'label' => 'Status'],
-                        ['key' => 'tanggal_berhenti', 'label' => 'Tanggal Berhenti'],
+                        ['key' => 'nama', 'label' => 'Nama', 'align' => 'left'],
+                        ['key' => 'email', 'label' => 'Email', 'align' => 'left'],
+                        ['key' => 'role', 'label' => 'Role', 'format' => 'ucfirst', 'align' => 'center'],
+                        ['key' => 'status', 'label' => 'Status', 'format' => 'ucfirst', 'align' => 'center'],
+                        ['key' => 'tanggal_berhenti', 'label' => 'Tanggal Berhenti', 'format' => 'tanggal', 'align' => 'center'],
                     ]"
                     :data="$karyawan"
                     :actions="[
@@ -193,8 +193,8 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            background-color: #007022; /* Matches bg-theme-primary */
-            color: white; /* Matches text-white */
+            background-color: #007022;
+            color: white;
         }
     </style>
 

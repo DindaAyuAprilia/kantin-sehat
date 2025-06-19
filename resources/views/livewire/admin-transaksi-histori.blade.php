@@ -52,79 +52,26 @@
                 </div>
             </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full table-auto border-collapse">
-                <thead>
-                    <tr class="bg-theme-primary text-white">
-                        <th class="px-4 py-2 border border-theme-primary">Unix ID</th>
-                        <th class="px-4 py-2 border border-theme-primary">Tanggal</th>
-                        <th class="px-4 py-2 border border-theme-primary">Admin</th>
-                        <th class="px-4 py-2 border border-theme-primary">Total Harga</th>
-                        <th class="px-4 py-2 border border-theme-primary">Metode Pembayaran</th>
-                        <th class="px-4 py-2 border border-theme-primary">Detail</th>
-                        <th class="px-4 py-2 border border-theme-primary">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($transactions as $transaction)
-                        <tr class="hover:bg-theme-light">
-                            <td class="border px-4 py-2 border-theme-primary">{{ $transaction->unix_id }}</td>
-                            <td class="border px-4 py-2 border-theme-primary">{{ \Carbon\Carbon::parse($transaction->tanggal)->translatedFormat('d F Y') }}</td>
-                            <td class="border px-4 py-2 border-theme-primary">{{ $transaction->user->nama }}</td>
-                            <td class="border px-4 py-2 border-theme-primary text-right">Rp {{ number_format($transaction->total_harga, 0, ',', '.') }}</td>
-                            <td class="border px-4 py-2 border-theme-primary text-center">{{ ucfirst($transaction->metode_pembayaran) }}</td>
-                            <td class="border px-4 py-2 border-theme-primary">
-                                <ul class="list-disc pl-5">
-                                    @foreach($transaction->details as $detail)
-                                        <li>
-                                            @if($detail->barang_id)
-                                                {{ $detail->barang ? $detail->barang->nama : 'Barang Tidak Ditemukan' }} ({{ $detail->jumlah }} x Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }})
-                                            @else
-                                                {{ $detail->keterangan }}: Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
-                                            @endif
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                            <td class="border px-4 py-2 border-theme-primary text-center">
-                                <div class="flex justify-center space-x-2">
-                                    <button wire:click="editTransaction({{ $transaction->id }})" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1.5 px-4 rounded flex items-center space-x-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                        <span>Edit</span>
-                                    </button>
-                                    <button wire:click="confirmDelete({{ $transaction->id }})" class="bg-red-400 hover:bg-red-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                        <span>Hapus</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="border px-4 py-2 text-center border-theme-primary">Tidak ada data transaksi.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="mt-4 flex justify-between items-center">
-            <div class="flex space-x-2">
-                <button wire:click="previousPage" {{ $transactions->onFirstPage() ? 'disabled' : '' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300"> < </button>
-                @foreach ($transactions->getUrlRange(1, $transactions->lastPage()) as $page => $url)
-                    <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 {{ $transactions->currentPage() === $page ? 'bg-theme-primary text-white' : 'bg-theme-light text-theme-black' }} rounded hover:bg-theme-secondary hover:text-white">
-                        {{ $page }}
-                    </button>
-                @endforeach
-                <button wire:click="nextPage" {{ $transactions->hasMorePages() ? '' : 'disabled' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300"> > </button>
-            </div>
-            <span class="text-sm text-theme-black">
-                Menampilkan {{ $transactions->firstItem() ?: 0 }} - {{ $transactions->lastItem() ?: 0 }} dari {{ $transactions->total() }} data
-            </span>
-        </div>
+
+        <!-- Komponen Tabel -->
+        <x-table-container 
+            :headers="[
+                ['key' => 'unix_id', 'label' => 'Unix ID', 'align' => 'left'],
+                ['key' => 'tanggal', 'label' => 'Tanggal', 'format' => 'tanggal_transaksi', 'align' => 'center'],
+                ['key' => 'user', 'label' => 'Admin', 'format' => 'relation', 'align' => 'left'],
+                ['key' => 'total_harga', 'label' => 'Total Harga', 'format' => 'currency', 'align' => 'right'],
+                ['key' => 'metode_pembayaran', 'label' => 'Metode Pembayaran', 'format' => 'ucfirst', 'align' => 'center'],
+                ['key' => 'details', 'label' => 'Detail', 'format' => 'transaction_details', 'align' => 'left'],
+            ]"
+            :data="$transactions"
+            :actions="[
+                ['label' => 'Edit', 'wire:click' => 'editTransaction', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
+                ['label' => 'Hapus', 'wire:click' => 'confirmDelete', 'class' => 'bg-red-400 hover:bg-red-500 text-white', 'icon' => 'M6 18L18 6M6 6l12 12'],
+            ]"
+            per-page="10"
+            table-id="transaksiTable"
+        />
+
     </div>
 
     <!-- Modal Edit Transaksi -->
@@ -156,7 +103,7 @@
                                     <label class="block text-sm font-medium text-theme-black">{{ $detail['nama'] }}</label>
                                     <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 -webkit-transform: rotate(90deg); transform: rotate(90deg);24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                                             </svg>
                                         </div>

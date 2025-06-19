@@ -111,61 +111,24 @@
                         </span>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full table-auto border-collapse text-sm border border-theme-primary">
-                        <thead class="bg-theme-primary text-white sticky top-0">
-                            <tr class="border-b border-theme-primary">
-                                <th class="px-4 py-2 border-r border-theme-primary">Tanggal</th>
-                                <th class="px-4 py-2 border-r border-theme-primary">Deskripsi</th>
-                                <th class="px-4 py-2 border-r border-theme-primary">Jumlah</th>
-                                <th class="px-4 py-2 border-r border-theme-primary">Dibuat Oleh</th>
-                                <th class="px-4 py-2">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pengeluaranTable">
-                            @forelse($pengeluarans as $pengeluaran)
-                                <tr class="border-b border-theme-primary hover:bg-theme-light">
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ \Carbon\Carbon::parse($pengeluaran->tanggal)->format('d/m/Y') }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $pengeluaran->deskripsi }}</td>
-                                    <td class="px-4 py-2 text-right text-theme-black border-r border-theme-primary">Rp {{ number_format($pengeluaran->jumlah, 2, ',', '.') }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $pengeluaran->user->nama ?? 'Unknown' }}</td>
-                                    <td class="px-4 py-2 text-theme-black">
-                                        <div class="flex justify-center space-x-2">
-                                            <button wire:click="editPengeluaran({{ $pengeluaran->id }})" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1.5 px-4 rounded flex items-center space-x-1">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                </svg>
-                                                <span>Edit</span>
-                                            </button>
-                                            <button wire:click="confirmDelete({{ $pengeluaran->id }})" class="bg-red-400 hover:bg-red-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                </svg>
-                                                <span>Hapus</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-4 text-theme-black">Tidak ada data pengeluaran.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                    <div class="flex space-x-2">
-                        <button wire:click="previousPage" {{ $pengeluarans->onFirstPage() ? 'disabled' : '' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300"><</button>
-                        @foreach ($pengeluarans->getUrlRange(1, $pengeluarans->lastPage()) as $page => $url)
-                            <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 {{ $pengeluarans->currentPage() === $page ? 'bg-theme-primary text-white' : 'bg-gray-200 text-theme-black' }} rounded hover:bg-theme-secondary hover:text-white">{{ $page }}</button>
-                        @endforeach
-                        <button wire:click="nextPage" {{ $pengeluarans->hasMorePages() ? '' : 'disabled' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300">></button>
-                    </div>
-                    <span class="text-sm text-theme-black">
-                        Menampilkan {{ $pengeluarans->firstItem() ?: 0 }} - {{ $pengeluarans->lastItem() ?: 0 }} dari {{ $pengeluarans->total() }} data
-                    </span>
-                </div>
+
+                <!-- Komponen Tabel -->
+                <x-table-container 
+                    :headers="[
+                        ['key' => 'tanggal', 'label' => 'Tanggal', 'format' => 'tanggal', 'align' => 'center'],
+                        ['key' => 'deskripsi', 'label' => 'Deskripsi', 'align' => 'left'],
+                        ['key' => 'jumlah', 'label' => 'Jumlah', 'format' => 'currency', 'align' => 'right'],
+                        ['key' => 'user', 'label' => 'Dibuat Oleh', 'format' => 'relation', 'align' => 'left'],
+                    ]"
+                    :data="$pengeluarans"
+                    :actions="[
+                        ['label' => 'Edit', 'wire:click' => 'editPengeluaran', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
+                        ['label' => 'Hapus', 'wire:click' => 'confirmDelete', 'class' => 'bg-red-400 hover:bg-red-500 text-white', 'icon' => 'M6 18L18 6M6 6l12 12'],
+                    ]"
+                    per-page="10"
+                    table-id="pengeluaranTable"
+                />
+
             </div>
         </div>
     </div>

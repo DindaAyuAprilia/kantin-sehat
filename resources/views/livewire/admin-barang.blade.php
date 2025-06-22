@@ -1,9 +1,9 @@
 <div class="min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
 
     <!-- Main Header -->
-    <x-header-container 
+    <x-header 
     title="Manajemen Barang"
-        icon="M3 3h18M3 7h18M3 12h18m-6 5h6"
+        icon="m7.875 14.25 1.214 1.942a2.25 2.25 0 0 0 1.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 0 1 1.872 1.002l.164.246a2.25 2.25 0 0 0 1.872 1.002h2.092a2.25 2.25 0 0 0 1.872-1.002l.164-.246A2.25 2.25 0 0 1 16.954 9h4.636M2.41 9a2.25 2.25 0 0 0-.16.832V12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 0 1 .382-.632l3.285-3.832a2.25 2.25 0 0 1 1.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0 0 21.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 0 0 2.25 2.25Z"
         :active-tab="$activeTab"
         :tabs="[
             ['key' => 'barang', 'label' => 'Barang'],
@@ -11,157 +11,183 @@
         ]"
     />
 
-    <!-- Alert -->
-    <x-alert-container 
+    <!-- Alert Sukses-->
+    <x-alert 
         type="success" 
         :message="session('success')"
     />
 
-    <x-alert-container 
+    <!-- Alert Error-->
+    <x-alert 
         type="error" 
         :message="session('error')"
     />
 
     <!-- Tab Content -->
     <div class="space-y-6" x-data="{ statusTitipan: {{ $status_titipan ? 'true' : 'false' }} }">
+
         <!-- Barang Tab -->
         @if ($activeTab === 'barang')
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Form Barang -->
-                <div class="bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
-                    <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
-                        <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        <span>{{ $isEditing ? 'Edit Barang' : 'Tambah Barang' }}</span>
-                    </h3>
+                
+                <!-- Card Form Barang -->
+                <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                    <x-card-header 
+                        title="{{ $isEditing ? 'Edit Barang' : 'Tambah Barang' }}" 
+                        icon="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" 
+                    />
                     <form wire:submit.prevent="{{ $isEditing ? 'confirmUpdate' : 'save' }}" x-data="{ formSubmitted: false }">
-                        <div class="space-y-4">
+                        <div class="space-y-4 px-6">
+
+                            <!-- Input Kode Barang -->
                             <div>
                                 <label for="kode_barang" class="block text-sm font-medium text-theme-black">Kode Barang</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
+                                <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h3m6 0h3m6 0h3M3 18h6m6 0h6"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
                                         </svg>
                                     </div>
                                     <input wire:model.debounce.500ms="kode_barang" id="kode_barang" type="text" placeholder="Kode barang otomatis"
-                                        class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                                         x-on:change="formSubmitted = false" required readonly>
                                 </div>
                                 <div x-show="$wire.get('errors').has('kode_barang')" x-text="$wire.get('errors').first('kode_barang')" class="text-red-500 text-sm mt-1"></div>
                             </div>
+                            
+                            <!-- Input Nama Barang -->
                             <div>
                                 <label for="nama" class="block text-sm font-medium text-theme-black">Nama Barang</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
+                                <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                                         </svg>
                                     </div>
                                     <input wire:model.debounce.500ms="nama" id="nama" type="text" placeholder="Masukkan nama barang"
-                                        class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                                         x-on:change="formSubmitted = false" required>
                                 </div>
                                 <div x-show="$wire.get('errors').has('nama')" x-text="$wire.get('errors').first('nama')" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
+                            <!-- Input Harga Pokok Barang -->
                             <div>
                                 <label for="harga_pokok" class="block text-sm font-medium text-theme-black">Harga Pokok</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
+                                <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2m-2 0h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2zm2 3h2m4 0h2"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"></path>
                                         </svg>
                                     </div>
                                     <input wire:model.debounce.500ms="harga_pokok" id="harga_pokok" type="number" step="0.01" placeholder="Masukkan harga pokok"
-                                        class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                                         x-on:change="formSubmitted = false" required>
                                 </div>
                                 <div x-show="$wire.get('errors').has('harga_pokok')" x-text="$wire.get('errors').first('harga_pokok')" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
+                            <!-- Input Harga Jual Barang -->
                             <div>
                                 <label for="harga_jual" class="block text-sm font-medium text-theme-black">Harga Jual</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
+                                <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2m-2 0h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2zm2 3h2m4 0h2"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"></path>
                                         </svg>
                                     </div>
                                     <input wire:model.debounce.500ms="harga_jual" id="harga_jual" type="number" step="0.01" placeholder="Masukkan harga jual"
-                                        class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                                         x-on:change="formSubmitted = false" required>
                                 </div>
                                 <div x-show="$wire.get('errors').has('harga_jual')" x-text="$wire.get('errors').first('harga_jual')" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
+                            <!-- Input Stok Barang -->
                             <div>
                                 <label for="stok" class="block text-sm font-medium text-theme-black">Stok</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
+                                <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                                         </svg>
                                     </div>
                                     <input wire:model.debounce.500ms="stok" id="stok" type="number" min="0" placeholder="Masukkan stok"
-                                        class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} text-sm"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} text-sm"
                                         x-on:change="formSubmitted = false" required {{ $isEditing ? 'readonly' : '' }}>
                                 </div>
                                 <div x-show="$wire.get('errors').has('stok')" x-text="$wire.get('errors').first('stok')" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
+                            <!-- Input Satus Barang -->
                             <div>
                                 <label class="block text-sm font-medium text-theme-black">Status Titipan</label>
                                 <div class="mt-1 space-x-6">
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="status_titipan" value="1" class="form-radio text-theme-primary focus:ring-theme-secondary"
-                                            x-on:change="$wire.set('status_titipan', true); statusTitipan = true; formSubmitted = false; $wire.set('tipe_barang', 'titipan')">
+                                        <input type="radio" wire:model="status_titipan" value="1" class="form-radio text-theme-primary border border-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
+                                            x-on:change="statusTitipan = true; formSubmitted = false; $wire.set('tipe_barang', 'titipan');"
+                                            {{ $isEditing ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Ya</span>
                                     </label>
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="status_titipan" value="0" class="form-radio text-theme-primary focus:ring-theme-secondary"
-                                            x-on:change="$wire.set('status_titipan', false); statusTitipan = false; formSubmitted = false; $wire.set('hasil_bagi_id', null)">
+                                        <input type="radio" wire:model="status_titipan" value="0" class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
+                                            x-on:change="statusTitipan = false; formSubmitted = false; $wire.set('tipe_barang', 'lainya');"
+                                            {{ $isEditing ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Tidak</span>
                                     </label>
                                 </div>
-                                <div x-show="$wire.get('errors').has('status_titipan')" x-text="$wire.get('errors').first('status_titipan')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.status_titipan" x-text="$wire.errors.status_titipan" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
+                            <!-- Input Tpe Titipan Barang -->
                             <div x-show="statusTitipan">
                                 <label for="hasil_bagi_id" class="block text-sm font-medium text-theme-black">Tipe Hasil Bagi</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
+                                <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m8-8v16"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="hasil_bagi_id" id="hasil_bagi_id" class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm">
+                                    <select wire:model="hasil_bagi_id" id="hasil_bagi_id" class="focus:ring-opacity-30 border-theme-primary pl-10 block w-full rounded-md shadow-sm focus:border-theme-primary focus:ring-theme-primary text-sm">
                                         <option value="">Pilih Tipe Hasil Bagi</option>
                                         @foreach($hasilBagis as $hasilBagi)
                                             <option value="{{ $hasilBagi->id }}">{{ $hasilBagi->tipe }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div x-show="$wire.get('errors').has('hasil_bagi_id')" x-text="$wire.get('errors').first('hasil_bagi_id')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.hasil_bagi_id" x-text="$wire.errors.hasil_bagi_id" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
+                            <!-- Input Tipe Barang -->
                             <div>
                                 <label for="tipe_barang" class="block text-sm font-medium text-theme-black">Tipe Barang</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
+                                <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="tipe_barang" id="tipe_barang" class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm"
+                                    <select wire:model="tipe_barang" id="tipe_barang" class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring-theme-primary focus:ring-opacity-30 border-theme-primary text-sm"
                                         x-bind:disabled="statusTitipan" x-bind:class="{ 'bg-gray-200 cursor-not-allowed': statusTitipan }">
-                                        <option value="snack">Snack</option>
-                                        <option value="minuman">Minuman</option>
-                                        <option value="kebutuhan">Kebutuhan</option>
-                                        <option value="lainnya">Lainnya</option>
-                                        <option value="titipan" x-show="statusTitipan">Titipan</option>
+                                        <option value="snack" x-show="!statusTitipan">Snack</option>
+                                        <option value="minuman" x-show="!statusTitipan">Minuman</option>
+                                        <option value="kebutuhan" x-show="!statusTitipan">Kebutuhan</option>
+                                        <option value="lainnya" x-show="!statusTitipan">Lainnya</option>
+                                        <option value="titipan" x-show="statusTitipan" selected>Titipan</option>
                                     </select>
                                 </div>
-                                <div x-show="$wire.get('errors').has('tipe_barang')" x-text="$wire.get('errors').first('tipe_barang')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.tipe_barang" x-text="$wire.errors.tipe_barang" class="text-red-500 text-sm mt-1"></div>
                             </div>
                         </div>
-                        <div class="mt-4 flex justify-end space-x-2">
-                            <button type="button" wire:click="resetForm" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">Reset</button>
+
+                        <div class="mt-4 flex justify-end space-x-2 px-6">
+                            <button type="button" 
+                                    wire:click="resetForm" 
+                                    @click="$refs.barangForm.reset(); formSubmitted = false; statusTitipan = false; $wire.set('status_titipan', false); $wire.set('hasil_bagi_id', null); $wire.set('tipe_barang', 'lainnya')"
+                                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">
+                                Reset
+                            </button>
                             <button type="submit" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 text-sm">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -172,15 +198,15 @@
                     </form>
                 </div>
 
-                <!-- Tabel Barang -->
-                <div class="lg:col-span-2 bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
-                    <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
-                        <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                        </svg>
-                        <span>Daftar Barang</span>
-                    </h3>
-                    <div class="mb-4 flex space-x-4">
+                <!-- Card Tabel Barang -->
+                <div class="lg:col-span-2 bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                    <x-card-header 
+                        title="Daftar Barang" 
+                        icon="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" 
+                    />
+                    
+                    <!-- Search -->
+                    <div class="mb-4 flex space-x-4 px-6">
                         <div class="flex-1">
                             <div class="relative rounded-md shadow-sm border border-gray-300">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -189,10 +215,11 @@
                                     </svg>
                                 </div>
                                 <input type="text" wire:model.live.debounce.500ms="search" id="search" placeholder="Cari kode atau nama barang..."
-                                    class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm">
+                                    class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10">
                             </div>
                         </div>
 
+                        <!-- Dropdown filter -->
                         <div>
                             <div class="relative rounded-md shadow-sm border border-gray-300">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -200,7 +227,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                                     </svg>
                                 </div>
-                                <select wire:model.live="filter_tipe_barang" id="filter_tipe_barang" class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm">
+                                <select wire:model.live="filter_tipe_barang" id="filter_tipe_barang" class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10">
                                     <option value="">Semua</option>
                                     <option value="snack">Snack</option>
                                     <option value="minuman">Minuman</option>
@@ -213,28 +240,32 @@
                     </div>
 
                     <!-- Tabel Barang -->
-                    <x-table-container 
-                        :headers="[
-                            ['key' => 'kode_barang', 'label' => 'Kode Barang'],
-                            ['key' => 'nama', 'label' => 'Nama'],
-                            ['key' => 'harga_pokok', 'label' => 'Harga Pokok', 'format' => 'currency'],
-                            ['key' => 'harga_jual', 'label' => 'Harga Jual', 'format' => 'currency'],
-                            ['key' => 'stok', 'label' => 'Stok', 'align' => 'center'],
-                            ['key' => 'tipe_barang', 'label' => 'Tipe Barang', 'format' => 'ucfirst', 'align' => 'center'],
-                            ['key' => 'status_titipan', 'label' => 'Status Titipan', 'format' => 'boolean', 'align' => 'center'],
-                            ['key' => 'hasil_bagi', 'label' => 'Tipe Hasil Bagi', 'format' => 'relation', 'align' => 'center'],
-                            ['key' => 'is_active', 'label' => 'Status', 'format' => 'status', 'align' => 'center'],
-                        ]"
-                        :data="$barangs"
-                        :actions="[
-                            ['label' => 'Edit', 'wire:click' => 'editBarang', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
-                            ['label' => 'is_active ? \'Nonaktifkan\' : \'Aktifkan\'', 'wire:click' => 'confirmToggleActive', 'class' => 'is_active ? \'bg-red-400 hover:bg-red-500 text-white\' : \'bg-green-400 hover:bg-green-500 text-white\'', 'icon' => 'is_active ? \'M6 18L18 6M6 6l12 12\' : \'M5 13l4 4L19 7\''],
-                        ]"
-                        per-page="25"
-                        table-id="barangTable"
-                    />
+                    <div class="px-6">
+                        <x-table 
+                            :headers="[
+                                ['key' => 'kode_barang', 'label' => 'Kode Barang'],
+                                ['key' => 'nama', 'label' => 'Nama'],
+                                ['key' => 'harga_pokok', 'label' => 'Harga Pokok', 'format' => 'currency'],
+                                ['key' => 'harga_jual', 'label' => 'Harga Jual', 'format' => 'currency'],
+                                ['key' => 'stok', 'label' => 'Stok', 'align' => 'center'],
+                                ['key' => 'tipe_barang', 'label' => 'Tipe Barang', 'format' => 'ucfirst', 'align' => 'center'],
+                                ['key' => 'status_titipan', 'label' => 'Status Titipan', 'format' => 'boolean', 'align' => 'center'],
+                                ['key' => 'hasil_bagi', 'label' => 'Tipe Hasil Bagi', 'format' => 'relation', 'align' => 'center'],
+                                ['key' => 'is_active', 'label' => 'Status', 'format' => 'status', 'align' => 'center'],
+                            ]"
+                            :data="$barangs"
+                            :actions="[
+                                ['label' => 'Edit', 'wire:click' => 'editBarang', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
+                                ['label' => 'is_active ? \'Nonaktifkan\' : \'Aktifkan\'', 'wire:click' => 'confirmToggleActive', 'class' => 'is_active ? \'bg-red-400 hover:bg-red-500 text-white\' : \'bg-green-400 hover:bg-green-500 text-white\'', 'icon' => 'is_active ? \'M6 18L18 6M6 6l12 12\' : \'M5 13l4 4L19 7\''],
+                            ]"
+                            per-page="25"
+                            table-id="barangTable"
+                        />
+
+                    </div>
                     
-                    <div class="mt-4 text-right">
+                    <!-- Cetak Barcode -->
+                    <div class="mt-4 text-right px-6">
                         <button wire:click="printAllTitipanBarcodes" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
@@ -249,32 +280,34 @@
         <!-- Hasil Bagi Tab -->
         @if ($activeTab === 'hasil_bagi')
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Form Hasil Bagi -->
-                <div class="bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
-                    <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
-                        <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        <span>{{ $isEditingHasilBagi ? 'Edit Hasil Bagi' : 'Tambah Hasil Bagi' }}</span>
-                    </h3>
-                    <form wire:submit.prevent="{{ $isEditingHasilBagi ? 'confirmUpdateHasilBagi' : 'saveHasilBagi' }}">
-                        <div class="space-y-4">
-                            <div>
-                                <label for="tipe_hasil_bagi" class="block text-sm font-medium text-theme-black">Tipe Hasil Bagi</label>
-                                <div class="mt-1 relative rounded-md shadow-sm border border-gray-300">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m8-8v16"></path>
-                                        </svg>
-                                    </div>
-                                    <input wire:model.debounce.500ms="tipe_hasil_bagi" id="tipe_hasil_bagi" type="number" step="100" min="100" placeholder="Masukkan tipe hasil bagi (contoh: 500)"
-                                        class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50 text-sm">
+                
+                <!-- Card Form Hasil Bagi -->
+                <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                    <x-card-header 
+                        title="{{ $isEditingHasilBagi ? 'Edit Hasil Bagi' : 'Tambah Hasil Bagi' }}" 
+                        icon="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
+                    />
+                    <form wire:submit.prevent="{{ $isEditingHasilBagi ? 'confirmUpdateHasilBagi' : 'saveHasilBagi' }}" x-ref="hasilBagiForm">
+                        <div class="space-y-4 px-6">
+                            <label for="tipe_hasil_bagi" class="block text-sm font-medium text-theme-black">Tipe Hasil Bagi</label>
+                            <div class="relative rounded-md shadow-sm border border-gray-300">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"></path>
+                                    </svg>
                                 </div>
-                                <div x-show="$wire.get('errors').has('tipe_hasil_bagi')" x-text="$wire.get('errors').first('tipe_hasil_bagi')" class="text-red-500 text-sm mt-1"></div>
+                                <input wire:model.debounce.500ms="tipe_hasil_bagi" id="tipe_hasil_bagi" type="number" step="100" min="100" placeholder="Masukkan tipe hasil bagi (contoh: 500)"
+                                    class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10">
                             </div>
+                            <div x-show="$wire.get('errors').has('tipe_hasil_bagi')" x-text="$wire.get('errors').first('tipe_hasil_bagi')" class="text-red-500 text-sm mt-1"></div>
                         </div>
-                        <div class="mt-4 flex justify-end space-x-2">
-                            <button type="button" wire:click="resetForm" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">Reset</button>
+                        <div class="mt-4 flex justify-end space-x-2 px-6">
+                            <button type="button" 
+                                    wire:click="resetForm" 
+                                    @click="$refs.hasilBagiForm.reset()"
+                                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">
+                                Reset
+                            </button>
                             <button type="submit" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 text-sm">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -285,28 +318,27 @@
                     </form>
                 </div>
 
-                <!-- Tabel Hasil Bagi -->
-                <div class="lg:col-span-2 bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
-                    <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
-                        <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                        </svg>
-                        <span>Daftar Hasil Bagi</span>
-                    </h3>
-
-                    <!-- Komponen Tabel Hasil Bagi -->
-                    <x-table-container 
-                        :headers="[
-                            ['key' => 'tipe', 'label' => 'Tipe Hasil Bagi'],
-                            ['key' => 'barangs_count', 'label' => 'Jumlah Barang', 'format' => 'count', 'align' => 'center'],
-                        ]"
-                        :data="$hasilBagis"
-                        :actions="[
-                            ['label' => 'Edit', 'wire:click' => 'editHasilBagi', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
-                        ]"
-                        table-id="hasilBagiTable"
+                <!-- Card Tabel Hasil Bagi -->
+                <div class="lg:col-span-2 bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                    <x-card-header 
+                        title="Daftar Hasil Bagi" 
+                        icon="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" 
                     />
-
+                    
+                    <!-- Komponen Tabel Hasil Bagi -->
+                    <div class="px-6">
+                        <x-table 
+                            :headers="[
+                                ['key' => 'tipe', 'label' => 'Tipe Hasil Bagi'],
+                                ['key' => 'barangs_count', 'label' => 'Jumlah Barang', 'format' => 'count', 'align' => 'center'],
+                            ]"
+                            :data="$hasilBagis"
+                            :actions="[
+                                ['label' => 'Edit', 'wire:click' => 'editHasilBagi', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
+                            ]"
+                            table-id="hasilBagiTable"
+                        />
+                    </div>
                 </div>
             </div>
         @endif

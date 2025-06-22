@@ -1,31 +1,30 @@
 <div class="min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
 
-    <!-- Main Header -->
-    <x-header-container 
-        title="Manajemen Stock Opname" 
-        icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-    />
-
     <!-- Alert -->
-    <x-alert-container 
+    <x-alert 
         type="success" 
         :message="session('success')"
     />
 
-    <x-alert-container 
+    <x-alert 
         type="error" 
         :message="session('error')"
     />
 
+    <!-- Main Header -->
+    <x-header 
+        title="Manajemen Stock Opname" 
+        icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+    />
+
     <!-- Cash Comparison Section -->
-    <div class=" mb-6 bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
-        <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
-            <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2m-2 0h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2zm2 3h2m4 0h2"></path>
-            </svg>
-            <span>Perbandingan Kas</span>
-        </h3>
-        <div class="mb-4 flex space-x-4">
+    <div class=" mb-6 bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+        <x-card-header 
+            title="Perbandingan Kas"
+            icon="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" 
+        />
+
+        <div class="mb-4 flex space-x-4 px-6">
             <div>
                 <label for="month" class="block text-sm font-medium text-theme-black">Bulan</label>
                 <select wire:model.live="month" id="month" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50">
@@ -48,7 +47,7 @@
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50">
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto px-6 scrollbar-thin scrollbar-thumb-theme-primary scrollbar-track-theme-surface">
             <table class="w-full table-auto border-collapse">
                 <thead>
                     <tr class="bg-theme-primary text-white">
@@ -80,14 +79,13 @@
     </div>
 
     <!-- Stock Table -->
-    <div class="bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary">
-        <h3 class="text-xl font-medium text-theme-black mb-4 flex items-center space-x-3">
-            <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-            </svg>
-            <span>Daftar Barang</span>
-        </h3>
-        <div class="mb-4 flex space-x-4">
+    <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+        <x-card-header 
+            title="Daftar Barang"
+            icon="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" 
+        />
+
+        <div class="mb-4 flex space-x-4 px-6">
             <div class="flex-1">
                 <div class="relative rounded-md shadow-sm border border-gray-300">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -96,96 +94,100 @@
                         </svg>
                     </div>
                     <input type="text" wire:model.live.debounce.500ms="search" id="search" placeholder="Cari kode atau nama barang..."
-                        class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50">
+                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10">
                 </div>
             </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full table-auto border-collapse">
-                <thead>
-                    <tr class="bg-theme-primary text-white">
-                        <th class="px-4 py-2 border border-theme-primary">Barcode</th>
-                        <th class="px-4 py-2 border border-theme-primary">Nama Barang</th>
-                        <th class="px-4 py-2 border border-theme-primary">Stok Sistem</th>
-                        <th class="px-4 py-2 border border-theme-primary">Stok Fisik</th>
-                        <th class="px-4 py-2 border border-theme-primary">Harga Jual Satuan</th>
-                        <th class="px-4 py-2 border border-theme-primary">Selisih Harga</th>
-                        <th class="px-4 py-2 border border-theme-primary">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($barangs as $barang)
-                        <tr class="hover:bg-theme-light">
-                            <td class="border px-4 py-2 border-theme-primary">{{ $barang->kode_barang }}</td>
-                            <td class="border px-4 py-2 border-theme-primary">{{ $barang->nama }}</td>
-                            <td class="border px-4 py-2 border-theme-primary text-center">{{ $barang->stok }}</td>
-                            <td class="border px-4 py-2 border-theme-primary text-center">
-                                <input wire:model.live="physicalStocks.{{ $barang->id }}" type="number" min="0"
-                                    class="w-20 text-center rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50">
-                            </td>
-                            <td class="border px-4 py-2 border-theme-primary text-right">Rp {{ number_format($barang->harga_jual, 0, ',', '.') }}</td>
-                            <td class="border px-4 py-2 border-theme-primary text-right">
-                                @if (isset($physicalStocks[$barang->id]) && is_numeric($physicalStocks[$barang->id]))
-                                    Rp {{ number_format(($barang->stok - $physicalStocks[$barang->id]) * $barang->harga_jual, 0, ',', '.') }}
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td class="border px-4 py-2 border-theme-primary text-center">
-                                @if (isset($physicalStocks[$barang->id]) && is_numeric($physicalStocks[$barang->id]) && $physicalStocks[$barang->id] != $barang->stok)
-                                    @if ($physicalStocks[$barang->id] < $barang->stok)
-                                        <div class="flex justify-center space-x-2">
-                                            <div class="relative" x-data="{ showDatePicker: false }">
-                                                <button x-on:click="showDatePicker = !showDatePicker" class="bg-blue-400 hover:bg-blue-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+        <div class="px-6">
+            <div class="overflow-x-auto scrollbar-track-theme-surface scrollbar-thin scrollbar-thumb-theme-primary">
+                <table class="w-full table-auto border-collapse">
+                    <thead>
+                        <tr class="bg-theme-primary text-white">
+                            <th class="px-4 py-2 border border-theme-primary">Barcode</th>
+                            <th class="px-4 py-2 border border-theme-primary">Nama Barang</th>
+                            <th class="px-4 py-2 border border-theme-primary">Stok Sistem</th>
+                            <th class="px-4 py-2 border border-theme-primary">Stok Fisik</th>
+                            <th class="px-4 py-2 border border-theme-primary">Harga Jual Satuan</th>
+                            <th class="px-4 py-2 border border-theme-primary">Selisih Harga</th>
+                            <th class="px-4 py-2 border border-theme-primary">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($barangs as $barang)
+                            <tr class="hover:bg-theme-light">
+                                <td class="border px-4 py-2 border-theme-primary">{{ $barang->kode_barang }}</td>
+                                <td class="border px-4 py-2 border-theme-primary">{{ $barang->nama }}</td>
+                                <td class="border px-4 py-2 border-theme-primary text-center">{{ $barang->stok }}</td>
+                                <td class="border px-4 py-2 border-theme-primary text-center">
+                                    <input wire:model.live="physicalStocks.{{ $barang->id }}" type="number" min="0"
+                                        class="w-20 text-center rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50">
+                                </td>
+                                <td class="border px-4 py-2 border-theme-primary text-right">Rp {{ number_format($barang->harga_jual, 0, ',', '.') }}</td>
+                                <td class="border px-4 py-2 border-theme-primary text-right">
+                                    @if (isset($physicalStocks[$barang->id]) && is_numeric($physicalStocks[$barang->id]))
+                                        Rp {{ number_format(($barang->stok - $physicalStocks[$barang->id]) * $barang->harga_jual, 0, ',', '.') }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td class="border px-4 py-2 border-theme-primary text-center">
+                                    @if (isset($physicalStocks[$barang->id]) && is_numeric($physicalStocks[$barang->id]) && $physicalStocks[$barang->id] != $barang->stok)
+                                        @if ($physicalStocks[$barang->id] < $barang->stok)
+                                            <div class="flex justify-center space-x-2">
+                                                <div class="relative" x-data="{ showDatePicker: false }">
+                                                    <button x-on:click="showDatePicker = !showDatePicker" class="bg-blue-400 hover:bg-blue-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        <span>Sesuaikan dengan Transaksi</span>
+                                                    </button>
+                                                    <div x-show="showDatePicker" class="absolute z-10 mt-2 bg-white border rounded shadow-lg p-4">
+                                                        <input wire:model="selectedDate" type="date" class="mb-2 rounded-md border-gray-300 shadow-sm">
+                                                        <button wire:click="$dispatch('confirmAdjustStockWithTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
+                                                            class="bg-blue-400 hover:bg-blue-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+                                                            <span>Konfirmasi</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
+                                                    class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                     </svg>
-                                                    <span>Sesuaikan dengan Transaksi</span>
+                                                    <span>Sesuaikan Tanpa Transaksi</span>
                                                 </button>
-                                                <div x-show="showDatePicker" class="absolute z-10 mt-2 bg-white border rounded shadow-lg p-4">
-                                                    <input wire:model="selectedDate" type="date" class="mb-2 rounded-md border-gray-300 shadow-sm">
-                                                    <button wire:click="$dispatch('confirmAdjustStockWithTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
-                                                        class="bg-blue-400 hover:bg-blue-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
-                                                        <span>Konfirmasi</span>
-                                                    </button>
-                                                </div>
                                             </div>
-                                            <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
-                                                class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                                <span>Sesuaikan Tanpa Transaksi</span>
-                                            </button>
-                                        </div>
-                                    @else
-                                        <div class="flex justify-center space-x-2">
-                                            <a href="{{ route('admin.transaksi-histori') }}" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1.5 px-4 rounded flex items-center space-x-1">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                                </svg>
-                                                <span>Histori Transaksi</span>
-                                            </a>
-                                            <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
-                                                class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                                <span>Sesuaikan Stok</span>
-                                            </button>
-                                        </div>
+                                        @else
+                                            <div class="flex justify-center space-x-2">
+                                                <a href="{{ route('admin.transaksi-histori') }}" class="bg-yellow-400 hover:bg-yellow-500 text-black py-1.5 px-4 rounded flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                                    </svg>
+                                                    <span>Histori Transaksi</span>
+                                                </a>
+                                                <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
+                                                    class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    <span>Sesuaikan Stok</span>
+                                                </button>
+                                            </div>
+                                        @endif
                                     @endif
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="border px-4 py-2 text-center border-theme-primary">Tidak ada data barang.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="border px-4 py-2 text-center border-theme-primary">Tidak ada data barang.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
+        
+
         <div class="mt-4 flex justify-between items-center">
             <div class="flex space-x-2">
                 <button wire:click="previousPage" {{ $barangs->onFirstPage() ? 'disabled' : '' }} class="px-3 py-1 bg-theme-primary text-white rounded hover:bg-theme-secondary disabled:bg-gray-300"> < </button>
@@ -202,8 +204,25 @@
         </div>
     </div>
 
-    <!-- SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+        .scrollbar-thin {
+            scrollbar-width: thin;
+        }
+        .scrollbar-thumb-theme-primary {
+            scrollbar-color: #007022 #f1f5f9;
+        }
+        .scrollbar-track-theme-surface {
+            background: rgb(249, 243, 241);
+        }
+        thead.sticky th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+    </style>
 
     <script>
         window.addEventListener('swal:success', event => {

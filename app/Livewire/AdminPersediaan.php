@@ -19,7 +19,7 @@ class AdminPersediaan extends Component
     public $search_query_form = '';
     public $search_query_table = '';
     public $search_results;
-    public $tipe = 'pembelian';
+    public $tipe = '';
     public $tanggal = '';
     public $jumlah = '';
     public $alasan = '';
@@ -31,6 +31,7 @@ class AdminPersediaan extends Component
     public $harga_beli = 0;
     public $showHistory = false;
     public $isDataChanged = false;
+    public $tipe_filter = 'all';
 
     protected $paginationTheme = 'bootstrap';
 
@@ -47,7 +48,13 @@ class AdminPersediaan extends Component
         $this->barangs = Barang::all();
         $this->tanggal = date('Y-m-d');
         $this->search_results = collect();
+        $this->tipe = '';
         $this->isLoading = false;
+    }
+
+    public function updatedTipeFilter()
+    {
+        $this->resetPage();
     }
 
     public function updatedSearchQueryForm($value)
@@ -78,6 +85,7 @@ class AdminPersediaan extends Component
             $this->search_query_form = $barang->nama;
             $this->search_results = collect();
             $this->harga_beli = $barang->harga_pokok;
+            $this->tipe = $barang->status_titipan ? 'penambahan_titipan' : 'pembelian';
             $this->calculateTotalHarga();
             $this->dispatch('barangSelected');
             if ($this->isEditing) {
@@ -151,6 +159,15 @@ class AdminPersediaan extends Component
 
         $barang = Barang::find($this->barang_id);
         $kasTitipan = KasTitipan::where('barang_id', $barang->id)->first();
+
+        // Validasi stok untuk penghapusan dan pengambilan titipan
+        if (in_array($this->tipe, ['penghapusan', 'pengambilan_titipan'])) {
+            if ($this->jumlah > $barang->stok) {
+                $this->isLoading = false;
+                $this->dispatch('swal:error', message: 'Maaf, stok tidak cukup. Stok saat ini: ' . $barang->stok);
+                return;
+            }
+        }
 
         $total_harga = $this->jumlah * $this->harga_beli;
 
@@ -268,6 +285,16 @@ class AdminPersediaan extends Component
                 $barang->stok -= $persediaan->jumlah;
             } elseif ($persediaan->tipe === 'pengambilan_titipan') {
                 $barang->stok += $persediaan->jumlah;
+            }
+
+            // Validasi stok untuk tipe baru
+            if (in_array($this->tipe, ['penghapusan', 'pengambilan_titipan'])) {
+                if ($this->jumlah > $barang->stok) {
+                    $this->isLoading = false;
+                    $this->dispatch('swal:error', message: 'Maaf, stok tidak cukup. Stok saat ini: ' . $barang->stok);
+                    $barang->save(); // Kembalikan stok jika validasi gagal
+                    return;
+                }
             }
 
             $total_harga = $this->jumlah * $this->harga_beli;
@@ -424,18 +451,6 @@ class AdminPersediaan extends Component
         $this->resetPage();
     }
 
-    public function loadPersediaans()
-    {
-        return Persediaan::with('barang', 'kelola')
-            ->when($this->search_query_table, function ($q) {
-                return $q->whereHas('barang', function ($query) {
-                    $query->where('nama', 'like', '%' . $this->search_query_table . '%')
-                        ->orWhere('kode_barang', 'like', '%' . $this->search_query_table . '%');
-                })->orWhere('tanggal', 'like', '%' . $this->search_query_table . '%');
-            })
-            ->paginate(25);
-    }
-
     public function loadActivityLogs()
     {
         return Activity::where('log_name', 'persediaan')
@@ -466,9 +481,32 @@ class AdminPersediaan extends Component
 
     public function render()
     {
+        $query = Persediaan::query()
+            ->with(['barang', 'kelola'])
+            ->when($this->search_query_table, function ($q) {
+                return $q->whereHas('barang', function ($query) {
+                    $query->where('nama', 'like', '%' . $this->search_query_table . '%')
+                          ->orWhere('kode_barang', 'like', '%' . $this->search_query_table . '%');
+                })->orWhere('tanggal', 'like', '%' . $this->search_query_table . '%');
+            })
+            ->when($this->tipe_filter !== 'all', function ($q) {
+                return $q->where('tipe', $this->tipe_filter);
+            })
+            ->orderBy('created_at', 'desc');
+
+        $persediaans = $query->paginate(25);
+
+        $activityLogs = $this->showHistory
+            ? Activity::where('log_name', 'persediaan')
+                ->with('causer', 'subject.barang')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10, ['*'], 'history_page')
+            : collect();
+
         return view('livewire.admin-persediaan', [
-            'persediaans' => $this->loadPersediaans(),
-            'activityLogs' => $this->showHistory ? $this->loadActivityLogs() : collect(),
+            'persediaans' => $persediaans,
+            'activityLogs' => $activityLogs,
+            'search_results' => $this->search_results
         ]);
     }
 }

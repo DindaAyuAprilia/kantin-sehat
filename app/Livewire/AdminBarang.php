@@ -483,6 +483,7 @@ HTML;
         $this->reset(['kode_barang', 'nama', 'harga_pokok', 'harga_jual', 'stok', 'is_active', 'status_titipan', 'tipe_barang', 'hasil_bagi_id', 'isEditing', 'selectedId']);
         $this->kode_barang = $this->generateUniqueBarcode();
         $this->tipe_barang = 'lainnya';
+        $this->status_titipan = 0; // Set status_titipan ke 'Tidak'
         $this->is_active = true;
         $this->dispatch('resetForm');
     }

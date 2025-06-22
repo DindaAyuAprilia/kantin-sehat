@@ -26,7 +26,7 @@
                     <div class="relative">
                         <input id="email" type="email" name="email" required autofocus
                             placeholder="Masukkan email"
-                            class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
+                            class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                             autocomplete="username">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -46,7 +46,7 @@
                     <div class="relative" x-data="{ showPassword: false }" x-cloak>
                         <input id="password" x-bind:type="showPassword ? 'text' : 'password'" name="password" required
                             placeholder="Masukkan password"
-                            class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 pr-10"
+                            class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                             autocomplete="off">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -82,9 +82,6 @@
     <!-- Include Alpine.js -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-    <!-- Include SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <!-- Add x-cloak CSS to hide elements until Alpine.js is loaded -->
     <style>
         [x-cloak] {
@@ -93,19 +90,6 @@
     </style>
 
     <!-- SweetAlert2 for Success and Errors -->
-    @if (session('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: "Login berhasil! Selamat datang!",
-                    confirmButtonText: 'OK'
-                });
-            });
-    </script>
-    @endif
-
     @if ($errors->any())
         <script>
             document.addEventListener('DOMContentLoaded', function () {

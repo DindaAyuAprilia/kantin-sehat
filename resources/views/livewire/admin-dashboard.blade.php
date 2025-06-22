@@ -1,31 +1,29 @@
 
 <div class="space-y-6 p-4 sm:p-[2%] overflow-y-auto max-h-screen">
 
-    <!-- Main Header -->
-    <x-header-container 
-        title="Dashboard Kas" 
-        icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-    />
-
     <!-- Alert -->
-    <x-alert-container 
+    <x-alert 
         type="success" 
         :message="session('success')"
     />
 
+    <!-- Main Header -->
+    <x-header 
+        title="Dashboard Kas" 
+        icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+    />
+
     <!-- Saldo Kas Utama -->
-    <div class="bg-theme-surface p-6 rounded-lg shadow-lg border border-theme-primary">
-        <div class="flex items-center space-x-3">
-            <svg class="w-6 h-6 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-            <h3 class="text-xl font-medium text-theme-black">Saldo Kas Utama: Rp {{ number_format($saldoKas ?? 0, 2, ',', '.') }}</h3>
-        </div>
-        <div class="flex items-center space-x-3 mt-2">
+    <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border border-theme-primary">
+        <x-card-header 
+            title="Saldo Kas Utama: Rp {{ number_format($saldoKas ?? 0, 2, ',', '.') }}" 
+            icon="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"
+        />
+        <div class="flex items-center space-x-3 mt-2 px-6">
             <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"></path>
             </svg>
-            <p class="text-sm text-theme-black">Kas Kembalian: Rp {{ number_format($saldoKembalian ?? 0, 2, ',', '.') }}</p>
+            <p class="text-m text-theme-black">Kas Kembalian: Rp {{ number_format($saldoKembalian ?? 0, 2, ',', '.') }}</p>
             @if($saldoKembalian > 0)
                 <button wire:click="transferKembalianToKeuntungan" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded ml-4 flex items-center space-x-2 border border-theme-primary">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -39,13 +37,10 @@
 
     <!-- Saldo Kas Titipan -->
     <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
-        <h3 class="text-xl font-medium text-theme-black bg-theme-light rounded-t-lg px-4 py-3 flex items-center space-x-3 border-b border-theme-primary">
-            <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a4 4 0 00-4 4 4 4 0 008 0 4 4 0 00-4-4z"></path>
-            </svg>
-            <span>Saldo Kas Titipan</span>
-        </h3>
+        <x-card-header 
+            title="Saldo Kas Titipan" 
+            icon="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+        />
         <div class="p-6 rounded-b-lg">
             @if($kasTitipans->isEmpty())
                 <p class="text-center text-gray-500">Tidak ada barang titipan.</p>
@@ -91,14 +86,12 @@
     </div>
 
     <!-- Period Selection for Charts -->
-    <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
-        <h3 class="text-2xl font-semibold text-theme-black bg-theme-light rounded-t-lg px-4 py-3 flex items-center space-x-3 border-b border-theme-primary">
-            <svg class="w-6 h-6 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-            <span>Statistik Penjualan dan Pembelian</span>
-        </h3>
-        <div class="p-6 rounded-b-lg">
+    <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border border-theme-primary">
+        <x-card-header 
+            title="Statistik Penjualan dan Pembelian" 
+            icon="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
+        />
+        <div class="px-6 rounded-b-lg">
             <h4 class="text-xl font-medium mb-4 text-theme-black flex items-center space-x-2 border-b border-theme-primary pb-2">
                 <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -136,27 +129,10 @@
     <!-- Charts -->
     <div class="space-y-6">
         <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
-            <h3 class="text-2xl font-medium text-theme-black bg-theme-light rounded-t-lg px-6 py-4 flex items-center space-x-4 border-b border-theme-primary">
-                <svg class="w-6 h-6 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                </svg>
-                <span>Distribusi Penjualan (Line)</span>
-            </h3>
-            <div class="p-6 h-96">
-                @if(empty($penjualanData) || array_sum($penjualanData) == 0)
-                    <p class="text-center text-gray-500">Tidak ada data penjualan untuk periode ini.</p>
-                @else
-                    <canvas id="lineChart" class="w-full h-full"></canvas>
-                @endif
-            </div>
-        </div>
-        <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
-            <h3 class="text-2xl font-medium text-theme-black bg-theme-light rounded-t-lg px-6 py-4 flex items-center space-x-4 border-b border-theme-primary">
-                <svg class="w-6 h-6 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                </svg>
-                <span>Penjualan vs Pembelian (Line)</span>
-            </h3>
+            <x-card-header 
+                title="Penjualan vs Pembelian (Line)" 
+                icon="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
+            />
             <div class="p-6 h-96">
                 @if((empty($penjualanData) || array_sum($penjualanData) == 0) && (empty($pembelianData) || array_sum($pembelianData) == 0))
                     <p class="text-center text-gray-500">Tidak ada data penjualan atau pembelian untuk periode ini.</p>
@@ -170,12 +146,10 @@
     <!-- Item Statistics Charts -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary w-full">
-            <h3 class="text-2xl font-medium text-theme-black bg-theme-light rounded-t-lg px-6 py-4 flex items-center space-x-4 border-b border-theme-primary">
-                <svg class="w-6 h-6 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M3 10h18M3 14h18M3 18h18"></path>
-                </svg>
-                <span>Barang Terlaris</span>
-            </h3>
+            <x-card-header 
+                title="Barang Terlaris" 
+                icon="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"
+            />
             <div class="p-6 h-96">
                 @if(empty($topSellingData) || array_sum($topSellingData) == 0 || empty($leastSellingData) || array_sum($leastSellingData) == 0)
                     <p class="text-center text-gray-500">Tidak ada data item terjual untuk periode ini.</p>
@@ -185,12 +159,10 @@
             </div>
         </div>
         <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary w-full">
-            <h3 class="text-2xl font-medium text-theme-black bg-theme-light rounded-t-lg px-6 py-4 flex items-center space-x-4 border-b border-theme-primary">
-                <svg class="w-6 h-6 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M3 10h18M3 14h18M3 18h18"></path>
-                </svg>
-                <span>Barang Keuntungan Tertinggi</span>
-            </h3>
+            <x-card-header 
+                title="Barang Keuntungan Tertinggi" 
+                icon="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"
+            />
             <div class="p-6 h-96">
                 @if(empty($highestProfitData) || array_sum($highestProfitData) == 0)
                     <p class="text-center text-gray-500">Tidak ada data laba item untuk periode ini.</p>
@@ -203,12 +175,10 @@
 
     <!-- Available Reports -->
     <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
-        <h3 class="text-xl font-medium text-theme-black bg-theme-light rounded-t-lg px-4 py-3 flex items-center space-x-3 border-b border-theme-primary">
-            <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            <span>Laporan Tersedia</span>
-        </h3>
+        <x-card-header 
+            title="Laporan Tersedia" 
+            icon="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        />
         <div class="p-6 rounded-b-lg">
             <h4 class="text-lg font-medium mb-4 text-theme-black flex items-center space-x-2 border-b border-theme-primary pb-2">
                 <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

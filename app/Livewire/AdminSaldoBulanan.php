@@ -7,9 +7,13 @@ use App\Models\SaldoKasBulanan;
 use App\Models\SaldoBarangBulanan;
 use App\Models\Pengeluaran;
 use App\Models\KasKeuntungan;
+use App\Models\Persediaan;
+use App\Models\KasirTransaksi;
+use App\Models\DetailTransaksi;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class AdminSaldoBulanan extends Component
 {
@@ -97,9 +101,11 @@ class AdminSaldoBulanan extends Component
             $year = Carbon::parse($this->selectedMonth)->year;
             $startDate = Carbon::create($year, $month, 1)->startOfMonth();
             $endDate = Carbon::create($year, $month, 1)->endOfMonth();
+            $periodeBulan = Carbon::parse($this->selectedMonth)->format('F Y');
 
+            // Perhitungan Saldo Kas
             $bagiHasilByType = [];
-            $details = \App\Models\DetailTransaksi::whereHas('transaksi', function ($query) use ($startDate, $endDate) {
+            $details = DetailTransaksi::whereHas('transaksi', function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('tanggal', [$startDate, $endDate]);
             })
             ->with(['transaksi', 'barang.hasilBagi'])
@@ -117,7 +123,7 @@ class AdminSaldoBulanan extends Component
             }
 
             $pendapatanBagiHasil = array_sum($bagiHasilByType);
-            $penjualanBarang = \App\Models\KasirTransaksi::whereBetween('tanggal', [$startDate, $endDate])
+            $penjualanBarang = KasirTransaksi::whereBetween('tanggal', [$startDate, $endDate])
                 ->whereHas('details.barang', function ($query) {
                     $query->where('status_titipan', false);
                 })
@@ -128,13 +134,13 @@ class AdminSaldoBulanan extends Component
 
             $biayaGaji = \App\Models\GajiPembayaran::whereBetween('tanggal_pembayaran', [$startDate, $endDate])
                 ->sum('jumlah');
-            $kerugianPenjualan = \App\Models\Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+            $kerugianPenjualan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
                 ->where('tipe', 'penghapusan')
                 ->whereHas('barang', function ($query) {
                     $query->where('status_titipan', false);
                 })
                 ->sum('total_harga');
-            $persediaanDiTangan = \App\Models\Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+            $persediaanDiTangan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
                 ->where('tipe', 'pembelian')
                 ->whereHas('barang', function ($query) {
                     $query->where('status_titipan', false);
@@ -171,11 +177,119 @@ class AdminSaldoBulanan extends Component
                 ]
             );
 
+            // Perhitungan Saldo Barang (hanya untuk barang dengan status_titipan = false)
+            $barangList = \App\Models\Barang::where('status_titipan', false)->get();
+            foreach ($barangList as $barang) {
+                // Ambil saldo bulan sebelumnya
+                $previousSaldoBarang = SaldoBarangBulanan::where('periode_bulan', $previousPeriode)
+                    ->where('barang_id', $barang->id)
+                    ->first();
+
+                $kuantitasAwal = $previousSaldoBarang ? ($previousSaldoBarang->kuantitas_akhir ?? 0) : 0;
+                $nilaiKuantitasAwal = $previousSaldoBarang ? ($previousSaldoBarang->nilai_kuantitas_akhir ?? 0) : 0;
+
+                // Hitung transaksi pembelian
+                $pembelian = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+                    ->where('barang_id', $barang->id)
+                    ->where('tipe', 'pembelian')
+                    ->sum('jumlah') ?? 0;
+
+                $nilaiPembelian = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+                    ->where('barang_id', $barang->id)
+                    ->where('tipe', 'pembelian')
+                    ->sum('total_harga') ?? 0;
+
+                // Hitung transaksi penjualan
+                $penjualan = DetailTransaksi::whereHas('transaksi', function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('tanggal', [$startDate, $endDate]);
+                })
+                ->where('barang_id', $barang->id)
+                ->sum('jumlah') ?? 0;
+
+                $nilaiPenjualan = DetailTransaksi::whereHas('transaksi', function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('tanggal', [$startDate, $endDate]);
+                })
+                ->where('barang_id', $barang->id)
+                ->sum('subtotal') ?? 0;
+
+                // Hitung penghapusan
+                $penghapusan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+                    ->where('barang_id', $barang->id)
+                    ->where('tipe', 'penghapusan')
+                    ->sum('jumlah') ?? 0;
+
+                $nilaiPenghapusan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
+                    ->where('barang_id', $barang->id)
+                    ->where('tipe', 'penghapusan')
+                    ->sum('total_harga') ?? 0;
+
+                // Hitung kuantitas dan nilai akhir
+                $kuantitasAkhir = max(0, $kuantitasAwal + $pembelian - $penjualan - $penghapusan);
+                $nilaiKuantitasAkhir = max(0, $nilaiKuantitasAwal + $nilaiPembelian - $nilaiPenjualan - $nilaiPenghapusan);
+
+                // Logging untuk debugging
+                Log::info('SaldoBulanan: Perhitungan saldo barang', [
+                    'barang_id' => $barang->id,
+                    'periode_bulan' => $periodeBulan,
+                    'kuantitas_awal' => $kuantitasAwal,
+                    'kuantitas_akhir' => $kuantitasAkhir,
+                    'nilai_kuantitas_awal' => $nilaiKuantitasAwal,
+                    'nilai_kuantitas_akhir' => $nilaiKuantitasAkhir,
+                    'pembelian' => $pembelian,
+                    'nilai_pembelian' => $nilaiPembelian,
+                    'penjualan' => $penjualan,
+                    'nilai_penjualan' => $nilaiPenjualan,
+                    'penghapusan' => $penghapusan,
+                    'nilai_penghapusan' => $nilaiPenghapusan,
+                    'status_titipan' => $barang->status_titipan,
+                ]);
+
+                // Validasi sebelum menyimpan
+                $kuantitasAkhir = is_null($kuantitasAkhir) ? 0 : (int)$kuantitasAkhir;
+                $nilaiKuantitasAkhir = is_null($nilaiKuantitasAkhir) ? 0.0 : (float)$nilaiKuantitasAkhir;
+
+                if ($kuantitasAkhir === 0 && $nilaiKuantitasAkhir === 0.0 && $pembelian === 0 && $penjualan === 0 && $penghapusan === 0) {
+                    Log::info('SaldoBulanan: Barang tidak memiliki transaksi, menggunakan nilai default', [
+                        'barang_id' => $barang->id,
+                        'periode_bulan' => $periodeBulan,
+                    ]);
+                }
+
+                // Simpan Saldo Barang
+                SaldoBarangBulanan::updateOrCreate(
+                    [
+                        'periode_bulan' => $periodeBulan,
+                        'barang_id' => $barang->id,
+                    ],
+                    [
+                        'kuantitas_awal' => (int)$kuantitasAwal,
+                        'kuantitas_akhir' => (int)$kuantitasAkhir,
+                        'nilai_kuantitas_awal' => (float)$nilaiKuantitasAwal,
+                        'nilai_kuantitas_akhir' => (float)$nilaiKuantitasAkhir,
+                    ]
+                );
+
+                // Update saldo awal untuk bulan berikutnya
+                SaldoBarangBulanan::updateOrCreate(
+                    [
+                        'periode_bulan' => $nextPeriode,
+                        'barang_id' => $barang->id,
+                    ],
+                    [
+                        'kuantitas_awal' => (int)$kuantitasAkhir,
+                        'nilai_kuantitas_awal' => (float)$nilaiKuantitasAkhir,
+                    ]
+                );
+            }
+
             $this->loadSaldoBulanan();
-            session()->flash('success', 'Saldo akhir bulan berhasil dihitung ulang dan diperbarui.');
-            $this->dispatch('swal:success', message: 'Saldo berhasil dihitung ulang!');
+            session()->flash('success', 'Saldo kas dan barang bulan berhasil dihitung ulang dan diperbarui.');
+            $this->dispatch('swal:success', message: 'Saldo kas dan barang berhasil dihitung ulang!');
         } catch (\Exception $e) {
-            Log::error('SaldoBulanan: Gagal menghitung ulang saldo', ['error' => $e->getMessage()]);
+            Log::error('SaldoBulanan: Gagal menghitung ulang saldo', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             session()->flash('error', 'Gagal menghitung ulang saldo: ' . $e->getMessage());
             $this->dispatch('swal:error', message: 'Gagal menghitung ulang saldo: ' . $e->getMessage());
         }

@@ -5,12 +5,13 @@
     'activeTab' => null // Menyimpan tab aktif
 ])
 
-<div class="mb-6 bg-theme-primary text-theme-white rounded-lg p-6 shadow-lg border-2 border-theme-primary">
+<div class="mb-6 bg-theme-surface text-theme-primary rounded-lg p-6 shadow-lg border-2 border-theme-primary">
     <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $icon }}"/>
             </svg>
+
             <div>
                 <h2 class="text-3xl font-bold">{{ $title }}</h2>
                 <p class="text-sm mt-1">{{ now()->format('l, F d, Y') }}</p>
@@ -21,7 +22,7 @@
             <div class="flex space-x-2">
                 @foreach ($tabs as $tab)
                     <button wire:click="setActiveTab('{{ $tab['key'] }}')"
-                            class="{{ $activeTab === $tab['key'] ? 'bg-white text-theme-primary' : 'bg-gray-200 text-gray-600' }} px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-gray-300 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-theme-secondary">
+                            class="{{ $activeTab === $tab['key'] ? 'bg-theme-primary text-theme-white' : 'bg-gray-200 text-theme-primary' }} px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:bg-gray-100 hover:text-theme-primary focus:outline-none focus:ring-2 focus:ring-theme-secondary border border-theme-primary border-2">
                         {{ $tab['label'] }}
                     </button>
                 @endforeach

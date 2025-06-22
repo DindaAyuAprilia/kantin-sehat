@@ -20,6 +20,7 @@ export default {
                 'theme-primary': '#007022',
                 'theme-secondary': '#54D17A',
                 'theme-light': '#D7FFEA',
+                'theme-dark': '#009022',
                 'theme-surface': '#EBFFF3',  // latar konten seperti form, tabel
                 'theme-white': '#FFFFFF',   // latar utama
                 'theme-black': '#000000',   // teks utama

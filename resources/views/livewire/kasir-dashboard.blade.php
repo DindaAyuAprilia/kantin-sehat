@@ -1,29 +1,31 @@
 <div>
     <div class="p-6">
         <!-- Main Header -->
-        <x-header-container 
+        <x-header 
             title="Transaksi Kasir" 
-            icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            icon="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
         />
 
         <!-- Alert -->
-        <x-alert-container 
+        <x-alert 
             type="success" 
             :message="session('success')"
         />
 
-        <x-alert-container 
+        <x-alert 
             type="error" 
             :message="session('error')"
         />
 
         <section class="min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row gap-8 justify-center transition-all duration-500" data-page="transaksi-kasir">
             <!-- Area Transaksi -->
-            <div class="w-full lg:w-1/2 max-w-2xl p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
-                <h2 class="text-xl font-semibold text-theme-black mb-4">Transaksi Kasir</h2>
-
+            <div class="w-full lg:w-1/2 max-w-2xl pb-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
+                <x-card-header 
+                    title="Transaksi Kasir"
+                    icon="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" 
+                />
                 <!-- Area Scan Barcode -->
-                <div class="mb-6">
+                <div class="mb-6 px-6">
                     <label for="search" class="block text-sm font-medium text-theme-black">Scan Barcode atau Cari Barang</label>
                     <div class="relative">
                         <input wire:model.live="search" wire:keydown.enter="addItem" id="search" type="text" placeholder="Scan barcode atau ketik nama barang"
@@ -31,7 +33,7 @@
                                x-ref="search_input" x-on:keydown.escape="$wire.searchResults = []" autocomplete="off">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" clip-rule="evenodd" />
                             </svg>
                         </span>
                     </div>
@@ -61,7 +63,7 @@
                 @endif
 
                 <!-- Daftar Keranjang -->
-                <div class="mb-6">
+                <div class="mb-6 px-6">
                     <h3 class="text-lg font-semibold mb-2 text-theme-black">Keranjang</h3>
                     <div class="overflow-x-auto">
                         <table class="min-w-full text-sm border-collapse border-2 border-theme-primary">
@@ -136,9 +138,12 @@
             </div>
 
             <!-- Riwayat Transaksi -->
-            <div class="w-full lg:w-1/2 max-w-2xl p-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
-                <h2 class="text-xl font-semibold text-theme-black mb-4">Riwayat Transaksi</h2>
-                <div class="flex justify-between items-center mb-4">
+            <div class="w-full lg:w-1/2 max-w-2xl pb-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
+                <x-card-header 
+                    title="Riwayat Transaksi"
+                    icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" 
+                />
+                <div class="flex justify-between items-center mb-4 px-6">
                     <button wire:click="previousDay" class="px-4 py-2 bg-theme-primary text-theme-white rounded-md hover:bg-theme-secondary">
                         ← Sebelumnya
                     </button>
@@ -147,7 +152,7 @@
                         Berikutnya →
                     </button>
                 </div>
-                <div class="overflow-y-auto max-h-[calc(100vh-20rem)]">
+                <div class="overflow-y-auto max-h-[calc(100vh-20rem)] px-6">
                     <table class="min-w-full text-sm border-collapse border-2 border-theme-primary">
                         <thead class="bg-theme-primary text-theme-white sticky top-0">
                             <tr class="border-b-2 border-theme-primary">

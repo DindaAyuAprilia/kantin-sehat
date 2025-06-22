@@ -1,20 +1,20 @@
 <div class="min-h-screen flex flex-col p-4 sm:p-[2%] overflow-hidden">
 
-    <!-- Main Header -->
-    <x-header-container 
-        title="Manajemen Karyawan" 
-        icon="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 005.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-    />
-
     <!-- Alert -->
-    <x-alert-container 
+    <x-alert 
         type="success" 
         :message="session('success')"
     />
 
-    <x-alert-container 
+    <x-alert 
         type="error" 
         :message="session('error')"
+    />
+
+    <!-- Main Header -->
+    <x-header 
+        title="Manajemen Karyawan" 
+        icon="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 005.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
     />
 
     <!-- Konten Utama -->
@@ -22,25 +22,25 @@
 
         <!-- Karyawan Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
             <!-- Form Karyawan -->
-            <div id="form-karyawan" class="bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
-                <h2 class="text-xl font-semibold text-theme-black mb-4 flex items-center space-x-3">
-                    <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    <span>{{ $isEditingKaryawan ? 'Edit Karyawan' : 'Tambah Karyawan' }}</span>
-                </h2>
+            <div id="form-karyawan" class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
+                <x-card-header 
+                    title="{{ $isEditingKaryawan ? 'Edit Karyawan' : 'Tambah Karyawan' }}" 
+                    icon="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" 
+                />
 
                 <form wire:submit.prevent="{{ $isEditingKaryawan ? 'confirmUpdate' : 'saveKaryawan' }}" x-data="{ showPassword: false }">
-                    <div class="space-y-4">
+                    <div class="space-y-4 px-6">
+                        
                         <!-- Input Nama -->
                         <div>
                             <label for="nama" class="block text-sm font-medium text-theme-black">Nama</label>
                             <div class="relative">
                                 <input wire:model="nama" id="nama" type="text" x-ref="nama" placeholder="Masukkan nama" class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                    <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                    <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"  />
                                     </svg>
                                 </span>
                             </div>
@@ -118,7 +118,7 @@
                     </div>
 
                     <!-- Tombol Submit -->
-                    <div class="mt-4 flex justify-end space-x-2">
+                    <div class="mt-4 flex justify-end space-x-2 px-6">
                         <button type="button" wire:click="resetForm" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">Reset</button>
                         <button type="submit" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 text-sm w-full sm:w-auto">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -130,21 +130,20 @@
                 </form>
             </div>
 
-            <!-- Tabel Karyawan -->
-            <div id="tabel-karyawan" class="lg:col-span-2 bg-theme-surface p-6 rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
-                <h2 class="text-xl font-semibold text-theme-black mb-4 flex items-center space-x-3">
-                    <svg class="w-5 h-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
-                    </svg>
-                    <span>Daftar Karyawan</span>
-                </h2>
+            <!-- Card Tabel Karyawan -->
+            <div id="tabel-karyawan" class="lg:col-span-2 bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
+                <x-card-header 
+                    title="Daftar Karyawan" 
+                    icon="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" 
+                />
 
-                <div class="mb-4 flex flex-col gap-4 sm:flex-row sm:space-x-4">
+                <!-- Dropdown Filter -->
+                <div class="mb-4 px-6 flex flex-col gap-4 sm:flex-row sm:space-x-4">
                     <div class="relative flex-1">
                         <input type="text" wire:model.live.debounce.500ms="search" id="search" placeholder="Cari nama, email, role, status, atau tanggal berhenti..." class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 pr-4 py-2 text-base">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <svg class="h-5 w-5 text-theme-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"  />
                             </svg>
                         </span>
                     </div>
@@ -156,50 +155,27 @@
                 </div>
 
                 <!-- Tabel Karyawan -->
-                <x-table-container 
-                    :headers="[
-                        ['key' => 'nama', 'label' => 'Nama', 'align' => 'left'],
-                        ['key' => 'email', 'label' => 'Email', 'align' => 'left'],
-                        ['key' => 'role', 'label' => 'Role', 'format' => 'ucfirst', 'align' => 'center'],
-                        ['key' => 'status', 'label' => 'Status', 'format' => 'ucfirst', 'align' => 'center'],
-                        ['key' => 'tanggal_berhenti', 'label' => 'Tanggal Berhenti', 'format' => 'tanggal', 'align' => 'center'],
-                    ]"
-                    :data="$karyawan"
-                    :actions="[
-                        ['label' => 'Edit', 'wire:click' => 'edit', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
-                    ]"
-                    per-page="10"
-                    table-id="karyawanTable"
-                />
+                <div class="px-6">
+                    <x-table 
+                        :headers="[
+                            ['key' => 'nama', 'label' => 'Nama', 'align' => 'left'],
+                            ['key' => 'email', 'label' => 'Email', 'align' => 'left'],
+                            ['key' => 'role', 'label' => 'Role', 'format' => 'ucfirst', 'align' => 'center'],
+                            ['key' => 'status', 'label' => 'Status', 'format' => 'ucfirst', 'align' => 'center'],
+                            ['key' => 'tanggal_berhenti', 'label' => 'Tanggal Berhenti', 'format' => 'tanggal', 'align' => 'center'],
+                        ]"
+                        :data="$karyawan"
+                        :actions="[
+                            ['label' => 'Edit', 'wire:click' => 'edit', 'class' => 'bg-yellow-400 hover:bg-yellow-500 text-black', 'icon' => 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'],
+                        ]"
+                        per-page="10"
+                        table-id="karyawanTable"
+                    />
+                </div>
+                
             </div>
         </div>
     </div>
-
-    <!-- Add x-cloak CSS to hide elements until Alpine.js is loaded -->
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-        .scrollbar-thin {
-            scrollbar-width: thin;
-        }
-        .scrollbar-thumb-theme-primary {
-            scrollbar-color: #007022 #f1f5f9;
-        }
-        .scrollbar-track-theme-surface {
-            background: #f1f5f9;
-        }
-        thead.sticky th {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: #007022;
-            color: white;
-        }
-    </style>
-
-    <!-- SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- JavaScript untuk menangani SweetAlert -->
     <script>

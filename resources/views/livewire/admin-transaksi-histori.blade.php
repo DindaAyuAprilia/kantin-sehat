@@ -17,6 +17,144 @@
         icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
     />
 
+    <!-- Form Transaksi Baru -->
+    <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary mb-6">
+        <x-card-header 
+            title="Transaksi Baru"
+            icon="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" 
+        />
+        <div class="mb-6 px-6">
+            <label for="new_transaction_search" class="block text-sm font-medium text-theme-black">Scan Barcode atau Cari Barang</label>
+            <div class="relative">
+                <input wire:model.live="new_transaction_search" wire:keydown.enter="addItem" id="new_transaction_search" type="text" placeholder="Scan barcode atau ketik nama barang"
+                       class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 pr-4 py-2"
+                       x-ref="new_transaction_search_input" x-on:keydown.escape="$wire.searchResults = []" autocomplete="off">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                    </svg>
+                </span>
+            </div>
+            <!-- Dropdown Hasil Pencarian -->
+            <div x-show="$wire.new_transaction_search && ($wire.searchResults || []).length !== undefined" class="absolute z-10 mt-1 bg-white border border-theme-black rounded-md shadow-lg max-h-60 overflow-auto">
+                <ul>
+                    @if(empty($searchResults) && !empty($new_transaction_search))
+                        <li class="px-4 py-2 text-theme-black">Tidak Ada Barang Ditemukan</li>
+                    @else
+                        @foreach($searchResults as $result)
+                            <li wire:click="selectBarang({{ $result->id }})"
+                                class="px-4 py-2 hover:bg-theme-primary hover:text-theme-white cursor-pointer">
+                                {{ $result->kode_barang }} - {{ $result->nama }}
+                            </li>
+                        @endforeach
+                    @endif
+                </ul>
+            </div>
+        </div>
+
+        <!-- Daftar Keranjang -->
+        <div class="mb-6 px-6">
+            <h3 class="text-lg font-semibold mb-2 text-theme-black">Keranjang</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm border-collapse border-2 border-theme-primary">
+                    <thead class="bg-theme-primary text-theme-white">
+                        <tr class="border-b-2 border-theme-primary">
+                            <th class="px-4 py-2 border-r-2 border-theme-primary">Barcode</th>
+                            <th class="px-4 py-2 border-r-2 border-theme-primary">Nama Produk</th>
+                            <th class="px-4 py-2 border-r-2 border-theme-primary">Harga Satuan</th>
+                            <th class="px-4 py-2 border-r-2 border-theme-primary">Jumlah</th>
+                            <th class="px-4 py-2 border-r-2 border-theme-primary">Subtotal</th>
+                            <th class="px-4 py-2">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($cart as $index => $item)
+                            <tr class="border-b border-theme-primary">
+                                <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $item['barcode'] }}</td>
+                                <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $item['name'] }}</td>
+                                <td class="px-4 py-2 text-theme-black border-r border-theme-primary">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
+                                <td class="px-4 py-2 text-theme-black border-r border-theme-primary">
+                                    <div class="flex items-center space-x-2">
+                                        <button wire:click="decrementQuantity({{ $index }})" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                                        <input wire:model.live="cart.{{ $index }}.quantity" type="number" min="1"
+                                               class="w-16 text-center border rounded py-1"
+                                               wire:change="updateQuantity({{ $index }}, $event.target.value)">
+                                        <button wire:click="incrementQuantity({{ $index }})" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 text-theme-black border-r border-theme-primary">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
+                                <td class="px-4 py-2 text-theme-black">
+                                    <button wire:click="removeFromCart({{ $index }})" class="text-red-600 hover:text-red-800">
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-4 py-2 text-theme-black text-center">Keranjang kosong.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr class="border-t-2 border-theme-primary">
+                            <td colspan="-Musliman4" class="px-4 py-2 text-theme-black font-semibold">Total Harga</td>
+                            <td class="px-4 py-2 text-theme-black">Rp {{ number_format($totalHarga, 0, ',', '.') }}</td>
+                            <td class="px-4 py-2"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            @if(!empty($cart))
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-theme-black mb-2">Metode Pembayaran</label>
+                    <div class="flex items-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" wire:model="paymentMethod" value="tunai" class="form-radio text-theme-primary focus:ring-theme-secondary">
+                            <span class="ml-2 text-theme-black">Tunai</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" wire:model="paymentMethod" value="non_tunai" class="form-radio text-theme-primary focus:ring-theme-secondary">
+                            <span class="ml-2 text-theme-black">Non Tunai</span>
+                        </label>
+                    </div>
+                    <div class="mt-4">
+                        <label for="transactionDate" class="block text-sm font-medium text-theme-black">Tanggal Transaksi</label>
+                        <div class="relative rounded-md shadow-sm border border-gray-300">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <input wire:model="transactionDate" id="transactionDate" type="date" class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10" required>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label for="shift_id" class="block text-sm font-medium text-theme-black">Pilih Shift</label>
+                        <div class="relative rounded-md shadow-sm border border-gray-300">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <select wire:model="shift_id" id="shift_id" class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10" required>
+                                <option value="">Pilih Shift</option>
+                                @foreach($shifts as $shift)
+                                    <option value="{{ $shift->id }}">{{ $shift->nama_shift }} ({{ $shift->jam_mulai->format('H:i') }} - {{ $shift->jam_selesai->format('H:i') }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <button wire:click="createTransaction" class="mt-4 px-4 py-2 bg-theme-primary text-theme-white rounded-md hover:bg-theme-secondary focus:outline-none focus:ring-2 focus:ring-theme-secondary">
+                        Simpan Transaksi
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+
     <!-- Tabel Transaksi -->
     <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
         <x-card-header 
@@ -149,10 +287,18 @@
         </div>
     @endif
 
-    <!-- SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('livewire:init', function () {
+            // Fokus input pencarian transaksi baru
+            const focusSearchInput = () => {
+                const searchInput = document.getElementById('new_transaction_search');
+                if (searchInput) {
+                    setTimeout(() => searchInput.focus(), 100);
+                }
+            };
+
+            Livewire.on('focus-transaction-input', focusSearchInput);
+
             Livewire.on('swal:confirmAction', (event) => {
                 Swal.fire({
                     title: 'Apakah Anda yakin?',
@@ -177,7 +323,7 @@
                     icon: 'success',
                     confirmButtonColor: '#007022',
                     confirmButtonText: 'OK'
-                });
+                }).then(() => focusSearchInput());
             });
 
             Livewire.on('swal:error', (event) => {
@@ -187,7 +333,16 @@
                     icon: 'error',
                     confirmButtonColor: '#d33',
                     confirmButtonText: 'OK'
-                });
+                }).then(() => focusSearchInput());
+            });
+
+            // Tutup dropdown saat klik di luar
+            document.addEventListener('click', (e) => {
+                const searchInput = document.getElementById('new_transaction_search');
+                const dropdown = document.querySelector('.absolute.z-10');
+                if (searchInput && dropdown && !searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    Livewire.dispatch('clear-search-results');
+                }
             });
         });
     </script>

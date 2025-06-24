@@ -161,12 +161,12 @@
                                             min="0" 
                                             step="0.01" 
                                             placeholder="Masukkan total harga pembelian" 
-                                            @blur="updateOriginalTotalPrice"
+                                            @input="calculate"
                                             class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
                                         >
                                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                             <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.99 14.993 6-6m6 3.001c0 1.268-.627 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                             </svg>
                                         </span>
                                     </div>
@@ -196,7 +196,7 @@
                                                 min="0" 
                                                 step="0.01" 
                                                 placeholder="Masukkan jumlah potongan" 
-                                                @blur="applyDiscount" 
+                                                @input="calculate" 
                                                 class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
                                             >
                                             <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -207,15 +207,6 @@
                                         </div>
                                         @error('discount_amount') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                                     </div>
-                                    <button 
-                                        type="button" 
-                                        @click="applyDiscount" 
-                                        class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary text-sm"
-                                        x-bind:disabled="!$wire.discount_amount || $wire.discount_amount <= 0"
-                                        x-bind:class="{ 'cursor-not-allowed opacity-50': !$wire.discount_amount || $wire.discount_amount <= 0 }"
-                                    >
-                                        Hitung
-                                    </button>
                                 </div>
 
                                 <!-- Harga Beli (Readonly) -->
@@ -611,19 +602,19 @@
         function calculate() {
             const packAmount = parseInt(document.getElementById('pack_amount').value) || 0;
             const itemsPerPack = parseInt(document.getElementById('items_per_pack').value) || 0;
-            const totalPrice = parseFloat(document.getElementById('total_harga').value) || 0;
+            const totalPrice = originalTotalPrice; // Gunakan originalTotalPrice sebagai dasar
             const useDiscount = document.getElementById('use_discount').checked;
             const discountAmount = useDiscount ? parseFloat(document.getElementById('discount_amount').value) || 0 : 0;
 
             const totalStock = packAmount * itemsPerPack;
-            const adjustedTotalPrice = max(0, totalPrice - discountAmount); // Hitung total harga setelah diskon
+            const adjustedTotalPrice = Math.max(0, totalPrice - discountAmount);
             const unitPrice = totalStock > 0 ? (adjustedTotalPrice / totalStock).toFixed(2) : 0;
 
             document.getElementById('jumlah').value = totalStock;
             document.getElementById('harga_beli_calc').value = unitPrice;
-            document.getElementById('total_harga').value = adjustedTotalPrice; // Update input total_harga dengan nilai setelah diskon
+            document.getElementById('total_harga').value = adjustedTotalPrice; // Update UI dengan harga setelah potongan
 
-            // Kirim nilai yang sudah dikurangi diskon ke server
+            // Kirim nilai ke server
             Livewire.dispatch('set', { 
                 jumlah: totalStock,
                 harga_beli: unitPrice,
@@ -631,20 +622,21 @@
             });
         }
 
-        function applyDiscount() {
-            calculate(); // Panggil calculate untuk menerapkan diskon
-        }
-
-        document.addEventListener('change', (e) => {
-            if (e.target.id === 'use_discount' && !e.target.checked) {
+        function resetDiscount() {
+            if (!document.getElementById('use_discount').checked) {
                 document.getElementById('discount_amount').value = 0;
-                document.getElementById('total_harga').value = originalTotalPrice; // Kembalikan total_harga ke nilai asli
-                calculate();
             }
-        });
-
-        function max(a, b) {
-            return a > b ? a : b;
+            document.getElementById('total_harga').value = originalTotalPrice; // Kembalikan ke originalTotalPrice
+            calculate();
         }
+
+        document.getElementById('pack_amount')?.addEventListener('input', calculate);
+        document.getElementById('items_per_pack')?.addEventListener('input', calculate);
+        document.getElementById('total_harga')?.addEventListener('input', () => {
+            updateOriginalTotalPrice();
+            calculate();
+        });
+        document.getElementById('use_discount')?.addEventListener('change', resetDiscount);
+        document.getElementById('discount_amount')?.addEventListener('input', calculate);
     </script>
 </div>

@@ -77,13 +77,17 @@
                                 <label class="block text-sm font-medium text-theme-black">Input Satuan Manual</label>
                                 <div class="mt-1 space-x-6">
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="use_unit_calculator" value="1" id="use_unit_calculator_yes" class="form-radio text-theme-primary border border-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
-                                            x-on:change="statusTitipan ? null : $wire.set('use_unit_calculator', 1); $wire.set('stok', ''); $wire.set('harga_pokok', ''); packAmount = ''; itemsPerPack = ''; totalPurchasePrice = '';" {{ $isEditing ? 'disabled' : '' }}>
+                                        <input type="radio" wire:model="use_unit_calculator" value="1" id="use_unit_calculator_yes" 
+                                            class="form-radio text-theme-primary border border-theme-primary focus:ring-theme-secondary {{ $isEditing || $status_titipan ? 'bg-gray-200 cursor-not-allowed' : '' }}"
+                                            x-on:change="document.getElementById('status_titipan_1').checked ? null : ($wire.set('use_unit_calculator', 1), $wire.set('status_titipan', 0)); $wire.set('stok', ''); $wire.set('harga_pokok', ''); packAmount = ''; itemsPerPack = ''; totalPurchasePrice = '';"
+                                            {{ $isEditing || $status_titipan ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Ya</span>
                                     </label>
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="use_unit_calculator" value="0" id="use_unit_calculator_no" class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
-                                            x-on:change="statusTitipan ? null : $wire.set('use_unit_calculator', 0);" {{ $isEditing ? 'disabled' : '' }}>
+                                        <input type="radio" wire:model="use_unit_calculator" value="0" id="use_unit_calculator_no" 
+                                            class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing || $status_titipan ? 'bg-gray-200 cursor-not-allowed' : '' }}"
+                                            x-on:change="document.getElementById('status_titipan_1').checked ? null : ($wire.set('use_unit_calculator', 0), $wire.set('status_titipan', 0));"
+                                            {{ $isEditing || $status_titipan ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Tidak</span>
                                     </label>
                                 </div>
@@ -196,15 +200,6 @@
                                             </div>
                                             @error('discount_amount') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                                         </div>
-                                        <button 
-                                            type="button" 
-                                            @click="calculateUnitPrice" 
-                                            class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary text-sm"
-                                            x-bind:disabled="!$wire.discount_amount || $wire.discount_amount <= 0"
-                                            x-bind:class="{ 'cursor-not-allowed opacity-50': !$wire.discount_amount || $wire.discount_amount <= 0 }"
-                                        >
-                                            Hitung
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -276,19 +271,21 @@
                                 <div x-show="$wire.errors.stok" x-text="$wire.errors.stok" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
-                            <!-- Input Status Barang -->
+                            <!-- Input status titipan -->
                             <div>
                                 <label class="block text-sm font-medium text-theme-black">Status Titipan</label>
                                 <div class="mt-1 space-x-6">
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="status_titipan" value="1" class="form-radio text-theme-primary border border-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
-                                            x-on:change="statusTitipan = true; formSubmitted = false; $wire.set('tipe_barang', 'titipan');"
-                                            {{ $isEditing ? 'disabled' : '' }}>
+                                        <input type="radio" wire:model="status_titipan" value="1" id="status_titipan_1"
+                                            class="form-radio text-theme-primary border border-theme-primary focus:ring-theme-secondary {{ $isEditing || !$use_unit_calculator ? 'bg-gray-200 cursor-not-allowed' : '' }}"
+                                            x-on:change="document.getElementById('use_unit_calculator_no').checked ? null : ($wire.set('use_unit_calculator', 1), $wire.set('tipe_barang', 'titipan'), formSubmitted = false);"
+                                            {{ $isEditing || !$use_unit_calculator ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Ya</span>
                                     </label>
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="status_titipan" value="0" class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
-                                            x-on:change="statusTitipan = false; formSubmitted = false; $wire.set('tipe_barang', 'lainnya');"
+                                        <input type="radio" wire:model="status_titipan" value="0" id="status_titipan_0"
+                                            class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }}"
+                                            x-on:change="$wire.set('tipe_barang', 'lainnya'); formSubmitted = false;"
                                             {{ $isEditing ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Tidak</span>
                                     </label>
@@ -602,13 +599,30 @@
             });
         });
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form[wire\\:submit\\.prevent]');
+            form.addEventListener('submit', function (event) {
+                const hargaPokok = parseFloat(document.getElementById('harga_pokok').value) || 0;
+                const hargaJual = parseFloat(document.getElementById('harga_jual').value) || 0;
+
+                if (hargaJual < hargaPokok) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Harga jual tidak boleh kurang dari harga pokok!',
+                        icon: 'error',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+
         // Fungsi kalkulator harga pokok satuan
         let originalTotalPrice = 0;
 
         function updateOriginalTotalPrice() {
             originalTotalPrice = parseFloat(document.getElementById('total_purchase_price').value) || 0;
-            // Dispatch original_total_price ke Livewire
-            window.Livewire.dispatch('set', { original_total_price: originalTotalPrice });
         }
 
         function calculateUnitPrice() {
@@ -629,12 +643,11 @@
             // Update total_purchase_price
             document.getElementById('total_purchase_price').value = adjustedTotalPrice;
 
-            // Dispatch ke Livewire
+            // Dispatch to Livewire
             window.Livewire.dispatch('set', { 
                 stok: unitStock > 0 ? Math.floor(unitStock) : '', 
                 harga_pokok: unitBasePrice > 0 ? unitBasePrice : '',
-                total_purchase_price: adjustedTotalPrice,
-                original_total_price: originalTotalPrice // Pastikan original_total_price tetap terkirim
+                total_purchase_price: adjustedTotalPrice
             });
         }
 
@@ -646,7 +659,6 @@
             }
         }
 
-        // Trigger calculation on input changes
         document.getElementById('pack_amount').addEventListener('input', calculateUnitPrice);
         document.getElementById('items_per_pack').addEventListener('input', calculateUnitPrice);
         document.getElementById('total_purchase_price').addEventListener('input', () => {

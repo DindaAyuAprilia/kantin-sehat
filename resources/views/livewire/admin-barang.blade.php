@@ -159,6 +159,53 @@
                                             >
                                         </div>
                                     </div>
+
+                                    <!-- Checkbox Discount -->
+                                    <div>
+                                        <label for="use_discount" class="block text-sm font-medium text-theme-black">Gunakan Potongan</label>
+                                        <input 
+                                            type="checkbox" 
+                                            wire:model="use_discount" 
+                                            id="use_discount" 
+                                            class="bg-theme-primary text-theme-primary form-checkbox mt-1" 
+                                            x-bind:disabled="!$wire.total_harga || $wire.total_harga <= 0"
+                                            x-bind:class="{ 'cursor-not-allowed opacity-50': !$wire.total_harga || $wire.total_harga <= 0 }"
+                                        >
+                                    </div>
+
+                                    <!-- Discount Amount Input -->
+                                    <div x-show="$wire.use_discount" class="flex items-end gap-2">
+                                        <div class="flex-1">
+                                            <label for="discount_amount" class="block text-sm font-medium text-theme-black">Jumlah Potongan (Rp)</label>
+                                            <div class="relative">
+                                                <input 
+                                                    type="number" 
+                                                    wire:model.debounce.500ms="discount_amount" 
+                                                    id="discount_amount" 
+                                                    min="0" 
+                                                    step="0.01" 
+                                                    placeholder="Masukkan jumlah potongan" 
+                                                    class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
+                                                    @blur="calculateUnitPrice"
+                                                >
+                                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                                    <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.99 14.993 6.99 12.993m6-6 6 6m-12 0 6 6m-9-9h.01M15 9h.01M9 15h.01M5.25 5.25h13.5a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 16.5v-9A2.25 2.25 0 0 1 5.25 5.25Z" />
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            @error('discount_amount') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                                        </div>
+                                        <button 
+                                            type="button" 
+                                            @click="calculateUnitPrice" 
+                                            class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary text-sm"
+                                            x-bind:disabled="!$wire.discount_amount || $wire.discount_amount <= 0"
+                                            x-bind:class="{ 'cursor-not-allowed opacity-50': !$wire.discount_amount || $wire.discount_amount <= 0 }"
+                                        >
+                                            Hitung
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -556,20 +603,57 @@
         });
 
         // Fungsi kalkulator harga pokok satuan
+        let originalTotalPrice = 0;
+
+        function updateOriginalTotalPrice() {
+            originalTotalPrice = parseFloat(document.getElementById('total_purchase_price').value) || 0;
+            // Dispatch original_total_price ke Livewire
+            window.Livewire.dispatch('set', { original_total_price: originalTotalPrice });
+        }
+
         function calculateUnitPrice() {
             const packAmount = parseFloat(document.getElementById('pack_amount').value) || 0;
             const itemsPerPack = parseFloat(document.getElementById('items_per_pack').value) || 0;
-            const totalPurchasePrice = parseFloat(document.getElementById('total_purchase_price').value) || 0;
+            const useDiscount = document.getElementById('use_discount').checked;
+            const discountAmount = useDiscount ? parseFloat(document.getElementById('discount_amount').value) || 0 : 0;
 
             // Hitung stok satuan
             const unitStock = packAmount * itemsPerPack;
-            document.getElementById('stok').value = unitStock > 0 ? Math.floor(unitStock) : ''; // Pastikan stok bulat
-            window.Livewire.dispatch('set', { stok: unitStock > 0 ? Math.floor(unitStock) : '' });
+            const adjustedTotalPrice = Math.max(0, originalTotalPrice - discountAmount);
+            const unitBasePrice = unitStock > 0 ? (adjustedTotalPrice / unitStock).toFixed(2) : '';
 
-            // Hitung harga pokok satuan
-            const unitBasePrice = unitStock > 0 ? (totalPurchasePrice / unitStock).toFixed(2) : '';
+            // Update stok
+            document.getElementById('stok').value = unitStock > 0 ? Math.floor(unitStock) : '';
+            // Update harga pokok
             document.getElementById('harga_pokok').value = unitBasePrice > 0 ? unitBasePrice : '';
-            window.Livewire.dispatch('set', { harga_pokok: unitBasePrice > 0 ? unitBasePrice : '' });
+            // Update total_purchase_price
+            document.getElementById('total_purchase_price').value = adjustedTotalPrice;
+
+            // Dispatch ke Livewire
+            window.Livewire.dispatch('set', { 
+                stok: unitStock > 0 ? Math.floor(unitStock) : '', 
+                harga_pokok: unitBasePrice > 0 ? unitBasePrice : '',
+                total_purchase_price: adjustedTotalPrice,
+                original_total_price: originalTotalPrice // Pastikan original_total_price tetap terkirim
+            });
         }
+
+        function resetDiscount() {
+            if (!document.getElementById('use_discount').checked) {
+                document.getElementById('discount_amount').value = 0;
+                document.getElementById('total_purchase_price').value = originalTotalPrice;
+                calculateUnitPrice();
+            }
+        }
+
+        // Trigger calculation on input changes
+        document.getElementById('pack_amount').addEventListener('input', calculateUnitPrice);
+        document.getElementById('items_per_pack').addEventListener('input', calculateUnitPrice);
+        document.getElementById('total_purchase_price').addEventListener('input', () => {
+            updateOriginalTotalPrice();
+            calculateUnitPrice();
+        });
+        document.getElementById('use_discount').addEventListener('change', resetDiscount);
+        document.getElementById('discount_amount')?.addEventListener('blur', calculateUnitPrice);
     </script>
 </div>

@@ -39,6 +39,8 @@ class AdminBarang extends Component
     public $pack_amount = '';
     public $items_per_pack = '';
     public $total_purchase_price = '';
+    public $use_discount = false;
+    public $discount_amount = 0; 
 
 
     protected $listeners = [
@@ -113,11 +115,14 @@ class AdminBarang extends Component
         if (!$this->use_unit_calculator) {
             $packAmount = (float) $this->pack_amount;
             $itemsPerPack = (float) $this->items_per_pack;
-            $totalPurchasePrice = (float) $this->total_purchase_price;
+            $totalPrice = (float) $this->total_purchase_price;
+            $discountAmount = $this->use_discount ? (float) $this->discount_amount : 0;
 
             $this->stok = $packAmount * $itemsPerPack;
             $this->stok = $this->stok > 0 ? (int) $this->stok : 0;
-            $this->harga_pokok = ($this->stok > 0 && $totalPurchasePrice > 0) ? $totalPurchasePrice / $this->stok : 0;
+            $adjustedTotalPrice = max(0, $totalPrice - $discountAmount);
+            $this->harga_pokok = ($this->stok > 0 && $adjustedTotalPrice > 0) ? $adjustedTotalPrice / $this->stok : 0;
+            $this->total_purchase_price = $adjustedTotalPrice;
         }
     }
 
@@ -139,9 +144,11 @@ class AdminBarang extends Component
             'pack_amount' => 'nullable|integer|min:0',
             'items_per_pack' => 'nullable|integer|min:0',
             'total_purchase_price' => 'nullable|numeric|min:0',
-        ]);
+            'discount_amount' => 'nullable|numeric|min:0',
+        ]); 
 
-        $total_harga = $this->stok * $this->harga_pokok;
+        $this->total_purchase_price = $this->total_purchase_price + (3 * $this->discount_amount);
+        $this->harga_pokok = $this->total_purchase_price /$this->stok;
 
         $barang = Barang::create([
             'kode_barang' => $this->kode_barang,
@@ -168,7 +175,7 @@ class AdminBarang extends Component
                 'tanggal' => Carbon::now(),
                 'jumlah' => $this->stok,
                 'alasan' => 'Penambahan awal barang titipan',
-                'total_harga' => $total_harga,
+                'total_harga' => $this->total_purchase_price,
                 'sisa_stok' => $this->stok,
             ]);
         } else {
@@ -179,7 +186,7 @@ class AdminBarang extends Component
                 'tanggal' => Carbon::now(),
                 'jumlah' => $this->stok,
                 'alasan' => 'Pembelian awal stok barang',
-                'total_harga' => $total_harga,
+                'total_harga' => $this->total_purchase_price,
                 'sisa_stok' => $this->stok,
             ]);
         }

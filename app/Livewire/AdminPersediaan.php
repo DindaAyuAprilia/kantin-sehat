@@ -35,6 +35,8 @@ class AdminPersediaan extends Component
     public $use_calculator = false;
     public $pack_amount = '';
     public $items_per_pack = '';
+    public $use_discount = false;
+    public $discount_amount = 0;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -97,7 +99,7 @@ class AdminPersediaan extends Component
         }
     }
 
-   public function updatedJumlah($value)
+    public function updatedJumlah($value)
     {
         if (!$this->use_calculator) {
             $this->calculateTotalHarga();
@@ -162,13 +164,32 @@ class AdminPersediaan extends Component
         }
     }
 
-    public function setValues($values)
+    public function updatedDiscountAmount()
     {
-        if (isset($values['jumlah'])) {
-            $this->jumlah = $values['jumlah'];
+        if ($this->use_calculator && $this->use_discount) {
+            $this->calculateUnitValues();
         }
-        if (isset($values['harga_beli'])) {
-            $this->harga_beli = $values['harga_beli'];
+    }
+
+    public function updatedUseDiscount($value)
+    {
+        if ($this->use_calculator) {
+            if (!$value) {
+                $this->discount_amount = 0;
+            }
+        }
+    }
+
+    public function set($data)
+    {
+        if (isset($data['jumlah'])) {
+            $this->jumlah = $data['jumlah'];
+        }
+        if (isset($data['harga_beli'])) {
+            $this->harga_beli = $data['harga_beli'];
+        }
+        if (isset($data['total_harga'])) {
+            $this->total_harga = $data['total_harga'];
         }
     }
 
@@ -187,10 +208,13 @@ class AdminPersediaan extends Component
             $packAmount = (float) $this->pack_amount;
             $itemsPerPack = (float) $this->items_per_pack;
             $totalPrice = (float) $this->total_harga;
+            $discountAmount = $this->use_discount ? (float) $this->discount_amount : 0;
 
             $totalStock = $packAmount * $itemsPerPack;
+            $adjustedTotalPrice = max(0, $totalPrice - $discountAmount);
             $this->jumlah = $totalStock > 0 ? (int) $totalStock : 0;
-            $this->harga_beli = ($this->jumlah > 0 && $totalPrice > 0) ? round($totalPrice / $this->jumlah, 2) : 0;
+            $this->harga_beli = ($this->jumlah > 0 && $adjustedTotalPrice > 0) ? round($adjustedTotalPrice / $this->jumlah, 2) : 0;
+            $this->total_harga = $adjustedTotalPrice;
         }
     }
 
@@ -221,6 +245,9 @@ class AdminPersediaan extends Component
 
         $barang = Barang::find($this->barang_id);
         $kasTitipan = KasTitipan::where('barang_id', $barang->id)->first();
+        $this->total_harga = $this->total_harga + $this->discount_amount;
+        $this->harga_beli = $this->total_harga/$this->jumlah;
+    
 
         if (in_array($this->tipe, ['penghapusan', 'pengambilan_titipan'])) {
             if ($this->jumlah > $barang->stok) {
@@ -232,7 +259,7 @@ class AdminPersediaan extends Component
 
         if ($this->tipe === 'pembelian') {
             $barang->stok += $this->jumlah;
-            $barang->harga_pokok = $this->harga_beli; // Update harga_pokok
+            $barang->harga_pokok = $this->harga_beli;
             StokMasuk::create([
                 'barang_id' => $barang->id,
                 'jumlah_masuk' => $this->jumlah,
@@ -247,7 +274,7 @@ class AdminPersediaan extends Component
             }
         } elseif ($this->tipe === 'penambahan_titipan') {
             $barang->stok += $this->jumlah;
-            $barang->harga_pokok = $this->harga_beli; // Update harga_pokok
+            $barang->harga_pokok = $this->harga_beli;
             if (!$kasTitipan) {
                 KasTitipan::create([
                     'barang_id' => $barang->id,
@@ -370,7 +397,7 @@ class AdminPersediaan extends Component
 
             if ($this->tipe === 'pembelian') {
                 $barang->stok += $this->jumlah;
-                $barang->harga_pokok = $this->harga_beli; // Update harga_pokok
+                $barang->harga_pokok = $this->harga_beli;
                 $stokMasuk = StokMasuk::where('barang_id', $barang->id)
                     ->where('tanggal_masuk', $persediaan->tanggal)
                     ->first();
@@ -396,7 +423,7 @@ class AdminPersediaan extends Component
                 }
             } elseif ($this->tipe === 'penambahan_titipan') {
                 $barang->stok += $this->jumlah;
-                $barang->harga_pokok = $this->harga_beli; // Update harga_pokok
+                $barang->harga_pokok = $this->harga_beli;
                 if (!$kasTitipan) {
                     KasTitipan::create([
                         'barang_id' => $barang->id,

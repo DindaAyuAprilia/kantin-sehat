@@ -129,8 +129,8 @@
                                     <div class="relative">
                                         <input type="number" wire:model="pack_amount" id="pack_amount" min="0" step="1" placeholder="Masukkan jumlah pack/dus" @input="calculate" class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base">
                                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z"  />
+                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
                                             </svg>
                                         </span>
                                     </div>
@@ -142,34 +142,96 @@
                                     <div class="relative">
                                         <input type="number" wire:model="items_per_pack" id="items_per_pack" min="0" step="1" placeholder="Masukkan satuan per pack" @input="calculate" class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base">
                                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3"  />
+                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 22" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />
                                             </svg>
                                         </span>
                                     </div>
                                     @error('items_per_pack') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                                 </div>
+                               
                                 <!-- Total Harga -->
                                 <div>
                                     <label for="total_harga" class="block text-sm font-medium text-theme-black">Total Harga Pembelian (Rp)</label>
                                     <div class="relative">
-                                        <input type="number" wire:model="total_harga" id="total_harga" min="0" step="0.01" placeholder="Masukkan total harga pembelian" @input="calculate" class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base">
+                                        <input 
+                                            type="number" 
+                                            wire:model.blur="total_harga" 
+                                            id="total_harga" 
+                                            min="0" 
+                                            step="0.01" 
+                                            placeholder="Masukkan total harga pembelian" 
+                                            @blur="updateOriginalTotalPrice"
+                                            class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
+                                        >
                                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"  />
+                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.99 14.993 6-6m6 3.001c0 1.268-.627 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                             </svg>
                                         </span>
                                     </div>
                                     @error('total_harga') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                                 </div>
+                                <!-- Gunakan Potongan -->
+                                <div>
+                                    <label for="use_discount" class="block text-sm font-medium text-theme-black">Gunakan Potongan</label>
+                                    <input 
+                                        type="checkbox" 
+                                        wire:model="use_discount" 
+                                        id="use_discount" 
+                                        class="bg-theme-primary text-theme-primary form-checkbox mt-1" 
+                                        x-bind:disabled="!$wire.total_harga || $wire.total_harga <= 0"
+                                        x-bind:class="{ 'cursor-not-allowed opacity-50': !$wire.total_harga || $wire.total_harga <= 0 }"
+                                    >
+                                </div>
+                                <!-- Jumlah Potongan -->
+                                <div x-show="$wire.use_discount" class="flex items-end gap-2">
+                                    <div class="flex-1">
+                                        <label for="discount_amount" class="block text-sm font-medium text-theme-black">Jumlah Potongan (Rp)</label>
+                                        <div class="relative">
+                                            <input 
+                                                type="number" 
+                                                wire:model.blur="discount_amount" 
+                                                id="discount_amount" 
+                                                min="0" 
+                                                step="0.01" 
+                                                placeholder="Masukkan jumlah potongan" 
+                                                @blur="applyDiscount" 
+                                                class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
+                                            >
+                                            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.99 14.993 6.99 12.993m6-6 6 6m-12 0 6 6m-9-9h.01M15 9h.01M9 15h.01M5.25 5.25h13.5a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 16.5v-9A2.25 2.25 0 0 1 5.25 5.25Z" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        @error('discount_amount') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                                    </div>
+                                    <button 
+                                        type="button" 
+                                        @click="applyDiscount" 
+                                        class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary text-sm"
+                                        x-bind:disabled="!$wire.discount_amount || $wire.discount_amount <= 0"
+                                        x-bind:class="{ 'cursor-not-allowed opacity-50': !$wire.discount_amount || $wire.discount_amount <= 0 }"
+                                    >
+                                        Hitung
+                                    </button>
+                                </div>
+
                                 <!-- Harga Beli (Readonly) -->
                                 <div>
                                     <label for="harga_beli_calc" class="block text-sm font-medium text-theme-black">Harga Pokok per Unit (Rp)</label>
                                     <div class="relative">
-                                        <input type="number" wire:model="harga_beli" id="harga_beli_calc" readonly class="mt-1 block w-full rounded-md border-theme-black bg-gray-100 shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base">
+                                        <input 
+                                            type="number" 
+                                            wire:model="harga_beli" 
+                                            id="harga_beli_calc" 
+                                            readonly 
+                                            class="mt-1 block w-full rounded-md border-theme-black bg-gray-100 shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
+                                        >
                                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"  d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z"  />
+                                            <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.75 2.994v2.25m10.5-2.25v2.25m-14.252 13.5V7.491a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v11.251m-18 0a2.25 2.25 0 0 0 2.25 2.25h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5a2.25 2.25 0 0 1 2.25-2.25h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5m-6.75-6h2.25m-9 2.25h4.5m.002-2.25h.005v.006H12v-.006Zm-.001 4.5h.006v.006h-.006v-.005Zm-2.25.001h.005v.006H9.75v-.006Zm-2.25 0h.005v.005h-.006v-.005Zm6.75-2.247h.005v.005h-.005v-.005Zm0 2.247h.006v.006h-.006v-.006Zm2.25-2.248h.006V15H16.5v-.005Z" />
                                             </svg>
                                         </span>
                                     </div>
@@ -539,18 +601,50 @@
                 });
             });
         });
-       function calculate() {
-            const packAmount = parseFloat(document.getElementById('pack_amount').value) || 0;
-            const itemsPerPack = parseFloat(document.getElementById('items_per_pack').value) || 0;
+
+        let originalTotalPrice = 0;
+
+        function updateOriginalTotalPrice() {
+            originalTotalPrice = parseFloat(document.getElementById('total_harga').value) || 0;
+        }
+
+        function calculate() {
+            const packAmount = parseInt(document.getElementById('pack_amount').value) || 0;
+            const itemsPerPack = parseInt(document.getElementById('items_per_pack').value) || 0;
             const totalPrice = parseFloat(document.getElementById('total_harga').value) || 0;
+            const useDiscount = document.getElementById('use_discount').checked;
+            const discountAmount = useDiscount ? parseFloat(document.getElementById('discount_amount').value) || 0 : 0;
 
             const totalStock = packAmount * itemsPerPack;
-            const unitPrice = totalStock > 0 ? (totalPrice / totalStock).toFixed(2) : 0;
+            const adjustedTotalPrice = max(0, totalPrice - discountAmount); // Hitung total harga setelah diskon
+            const unitPrice = totalStock > 0 ? (adjustedTotalPrice / totalStock).toFixed(2) : 0;
 
             document.getElementById('jumlah').value = totalStock;
             document.getElementById('harga_beli_calc').value = unitPrice;
+            document.getElementById('total_harga').value = adjustedTotalPrice; // Update input total_harga dengan nilai setelah diskon
 
-            Livewire.dispatch('set', { jumlah: totalStock, harga_beli: unitPrice });
+            // Kirim nilai yang sudah dikurangi diskon ke server
+            Livewire.dispatch('set', { 
+                jumlah: totalStock,
+                harga_beli: unitPrice,
+                total_harga: adjustedTotalPrice
+            });
+        }
+
+        function applyDiscount() {
+            calculate(); // Panggil calculate untuk menerapkan diskon
+        }
+
+        document.addEventListener('change', (e) => {
+            if (e.target.id === 'use_discount' && !e.target.checked) {
+                document.getElementById('discount_amount').value = 0;
+                document.getElementById('total_harga').value = originalTotalPrice; // Kembalikan total_harga ke nilai asli
+                calculate();
+            }
+        });
+
+        function max(a, b) {
+            return a > b ? a : b;
         }
     </script>
 </div>

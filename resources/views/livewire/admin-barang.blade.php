@@ -24,7 +24,7 @@
     />
 
     <!-- Tab Content -->
-    <div class="space-y-6" x-data="{ statusTitipan: {{ $status_titipan ? 'true' : 'false' }} }">
+    <div class="space-y-6" x-data="{ statusTitipan: {{ $status_titipan ? 'true' : 'false' }}, packAmount: '', itemsPerPack: '', totalPurchasePrice: '', formSubmitted: false }">
 
         <!-- Barang Tab -->
         @if ($activeTab === 'barang')
@@ -36,7 +36,7 @@
                         title="{{ $isEditing ? 'Edit Barang' : 'Tambah Barang' }}" 
                         icon="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" 
                     />
-                    <form wire:submit.prevent="{{ $isEditing ? 'confirmUpdate' : 'save' }}" x-data="{ formSubmitted: false }">
+                    <form wire:submit.prevent="{{ $isEditing ? 'confirmUpdate' : 'save' }}">
                         <div class="space-y-4 px-6">
 
                             <!-- Input Kode Barang -->
@@ -53,7 +53,7 @@
                                         class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                                         x-on:change="formSubmitted = false" required readonly>
                                 </div>
-                                <div x-show="$wire.get('errors').has('kode_barang')" x-text="$wire.get('errors').first('kode_barang')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.kode_barang" x-text="$wire.errors.kode_barang" class="text-red-500 text-sm mt-1"></div>
                             </div>
                             
                             <!-- Input Nama Barang -->
@@ -69,7 +69,97 @@
                                         class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                                         x-on:change="formSubmitted = false" required>
                                 </div>
-                                <div x-show="$wire.get('errors').has('nama')" x-text="$wire.get('errors').first('nama')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.nama" x-text="$wire.errors.nama" class="text-red-500 text-sm mt-1"></div>
+                            </div>
+
+                            <!-- Input Pilihan Input Satuan -->
+                            <div>
+                                <label class="block text-sm font-medium text-theme-black">Input Satuan Manual</label>
+                                <div class="mt-1 space-x-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" wire:model="use_unit_calculator" value="1" id="use_unit_calculator_yes" class="form-radio text-theme-primary border border-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
+                                            x-on:change="statusTitipan ? null : $wire.set('use_unit_calculator', 1); $wire.set('stok', ''); $wire.set('harga_pokok', ''); packAmount = ''; itemsPerPack = ''; totalPurchasePrice = '';" {{ $isEditing ? 'disabled' : '' }}>
+                                        <span class="ml-2 text-sm text-theme-black">Ya</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" wire:model="use_unit_calculator" value="0" id="use_unit_calculator_no" class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
+                                            x-on:change="statusTitipan ? null : $wire.set('use_unit_calculator', 0);" {{ $isEditing ? 'disabled' : '' }}>
+                                        <span class="ml-2 text-sm text-theme-black">Tidak</span>
+                                    </label>
+                                </div>
+                                <div x-show="$wire.errors.use_unit_calculator" x-text="$wire.errors.use_unit_calculator" class="text-red-500 text-sm mt-1"></div>
+                            </div>
+
+                            <!-- Kalkulator Harga Pokok Satuan -->
+                            <div x-show="!$wire.use_unit_calculator">
+                                <div class="space-y-4">
+                                    <!-- Jumlah Pack/Dus -->
+                                    <div>
+                                        <label for="pack_amount" class="block text-sm font-medium text-theme-black">Jumlah Pack/Dus</label>
+                                        <div class="relative rounded-md shadow-sm border border-gray-300">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3"></path>
+                                                </svg>
+                                            </div>
+                                            <input 
+                                                x-model="packAmount" 
+                                                wire:model.debounce.500ms="pack_amount"
+                                                id="pack_amount" 
+                                                type="number" 
+                                                min="0" 
+                                                step="1" 
+                                                placeholder="Masukkan jumlah pack/dus" 
+                                                class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
+                                                @input="calculateUnitPrice"
+                                            >
+                                        </div>
+                                    </div>
+                                    <!-- Satuan per Pack -->
+                                    <div>
+                                        <label for="items_per_pack" class="block text-sm font-medium text-theme-black">Satuan per Pack</label>
+                                        <div class="relative rounded-md shadow-sm border border-gray-300">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"></path>
+                                                </svg>
+                                            </div>
+                                            <input 
+                                                x-model="itemsPerPack" 
+                                                wire:model.debounce.500ms="items_per_pack"
+                                                id="items_per_pack" 
+                                                type="number" 
+                                                min="0" 
+                                                step="1" 
+                                                placeholder="Masukkan jumlah item per pack" 
+                                                class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
+                                                @input="calculateUnitPrice"
+                                            >
+                                        </div>
+                                    </div>
+                                    <!-- Total Harga Pembelian -->
+                                    <div>
+                                        <label for="total_purchase_price" class="block text-sm font-medium text-theme-black">Total Harga Pembelian (Rp)</label>
+                                        <div class="relative rounded-md shadow-sm border border-gray-300">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"></path>
+                                                </svg>
+                                            </div>
+                                            <input 
+                                                x-model="totalPurchasePrice" 
+                                                wire:model.debounce.500ms="total_purchase_price"
+                                                id="total_purchase_price" 
+                                                type="number" 
+                                                min="0" 
+                                                step="0.01" 
+                                                placeholder="Masukkan total harga pembelian" 
+                                                class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
+                                                @input="calculateUnitPrice"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Input Harga Pokok Barang -->
@@ -81,11 +171,20 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"></path>
                                         </svg>
                                     </div>
-                                    <input wire:model.debounce.500ms="harga_pokok" id="harga_pokok" type="number" step="0.01" placeholder="Masukkan harga pokok"
-                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
-                                        x-on:change="formSubmitted = false" required>
+                                    <input 
+                                        wire:model.debounce.500ms="harga_pokok" 
+                                        id="harga_pokok" 
+                                        type="number" 
+                                        step="0.01" 
+                                        placeholder="Masukkan harga pokok"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
+                                        x-bind:disabled="!$wire.use_unit_calculator"
+                                        x-bind:class="{ 'bg-gray-200 cursor-not-allowed': !$wire.use_unit_calculator }"
+                                        x-on:change="formSubmitted = false" 
+                                        required
+                                    >
                                 </div>
-                                <div x-show="$wire.get('errors').has('harga_pokok')" x-text="$wire.get('errors').first('harga_pokok')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.harga_pokok" x-text="$wire.errors.harga_pokok" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
                             <!-- Input Harga Jual Barang -->
@@ -101,7 +200,7 @@
                                         class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
                                         x-on:change="formSubmitted = false" required>
                                 </div>
-                                <div x-show="$wire.get('errors').has('harga_jual')" x-text="$wire.get('errors').first('harga_jual')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.harga_jual" x-text="$wire.errors.harga_jual" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
                             <!-- Input Stok Barang -->
@@ -113,14 +212,24 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                                         </svg>
                                     </div>
-                                    <input wire:model.debounce.500ms="stok" id="stok" type="number" min="0" placeholder="Masukkan stok"
-                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} text-sm"
-                                        x-on:change="formSubmitted = false" required {{ $isEditing ? 'readonly' : '' }}>
+                                    <input 
+                                        wire:model.debounce.500ms="stok" 
+                                        id="stok" 
+                                        type="number" 
+                                        min="0" 
+                                        placeholder="Masukkan stok"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }}"
+                                        x-bind:disabled="!$wire.use_unit_calculator || {{ $isEditing ? 'true' : 'false' }}"
+                                        x-bind:class="{ 'bg-gray-200 cursor-not-allowed': !$wire.use_unit_calculator || {{ $isEditing ? 'true' : 'false' }} }"
+                                        x-on:change="formSubmitted = false" 
+                                        required 
+                                        {{ $isEditing ? 'disabled' : '' }}
+                                    >
                                 </div>
-                                <div x-show="$wire.get('errors').has('stok')" x-text="$wire.get('errors').first('stok')" class="text-red-500 text-sm mt-1"></div>
+                                <div x-show="$wire.errors.stok" x-text="$wire.errors.stok" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
-                            <!-- Input Satus Barang -->
+                            <!-- Input Status Barang -->
                             <div>
                                 <label class="block text-sm font-medium text-theme-black">Status Titipan</label>
                                 <div class="mt-1 space-x-6">
@@ -132,7 +241,7 @@
                                     </label>
                                     <label class="inline-flex items-center">
                                         <input type="radio" wire:model="status_titipan" value="0" class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }} "
-                                            x-on:change="statusTitipan = false; formSubmitted = false; $wire.set('tipe_barang', 'lainya');"
+                                            x-on:change="statusTitipan = false; formSubmitted = false; $wire.set('tipe_barang', 'lainnya');"
                                             {{ $isEditing ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Tidak</span>
                                     </label>
@@ -140,7 +249,7 @@
                                 <div x-show="$wire.errors.status_titipan" x-text="$wire.errors.status_titipan" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
-                            <!-- Input Tpe Titipan Barang -->
+                            <!-- Input Tipe Hasil Bagi -->
                             <div x-show="statusTitipan">
                                 <label for="hasil_bagi_id" class="block text-sm font-medium text-theme-black">Tipe Hasil Bagi</label>
                                 <div class="relative rounded-md shadow-sm border border-gray-300">
@@ -184,7 +293,7 @@
                         <div class="mt-4 flex justify-end space-x-2 px-6">
                             <button type="button" 
                                     wire:click="resetForm" 
-                                    @click="$refs.barangForm.reset(); formSubmitted = false; statusTitipan = false; $wire.set('status_titipan', false); $wire.set('hasil_bagi_id', null); $wire.set('tipe_barang', 'lainnya')"
+                                    @click="$refs.barangForm.reset(); formSubmitted = false; statusTitipan = false; $wire.set('status_titipan', false); $wire.set('hasil_bagi_id', null); $wire.set('tipe_barang', 'lainnya'); $wire.set('stok', 0);"
                                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">
                                 Reset
                             </button>
@@ -261,7 +370,6 @@
                             per-page="25"
                             table-id="barangTable"
                         />
-
                     </div>
                     
                     <!-- Cetak Barcode -->
@@ -299,7 +407,7 @@
                                 <input wire:model.debounce.500ms="tipe_hasil_bagi" id="tipe_hasil_bagi" type="number" step="100" min="100" placeholder="Masukkan tipe hasil bagi (contoh: 500)"
                                     class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10">
                             </div>
-                            <div x-show="$wire.get('errors').has('tipe_hasil_bagi')" x-text="$wire.get('errors').first('tipe_hasil_bagi')" class="text-red-500 text-sm mt-1"></div>
+                            <div x-show="$wire.errors.tipe_hasil_bagi" x-text="$wire.errors.tipe_hasil_bagi" class="text-red-500 text-sm mt-1"></div>
                         </div>
                         <div class="mt-4 flex justify-end space-x-2 px-6">
                             <button type="button" 
@@ -446,5 +554,22 @@
                 confirmButtonText: 'OK'
             });
         });
+
+        // Fungsi kalkulator harga pokok satuan
+        function calculateUnitPrice() {
+            const packAmount = parseFloat(document.getElementById('pack_amount').value) || 0;
+            const itemsPerPack = parseFloat(document.getElementById('items_per_pack').value) || 0;
+            const totalPurchasePrice = parseFloat(document.getElementById('total_purchase_price').value) || 0;
+
+            // Hitung stok satuan
+            const unitStock = packAmount * itemsPerPack;
+            document.getElementById('stok').value = unitStock > 0 ? Math.floor(unitStock) : ''; // Pastikan stok bulat
+            window.Livewire.dispatch('set', { stok: unitStock > 0 ? Math.floor(unitStock) : '' });
+
+            // Hitung harga pokok satuan
+            const unitBasePrice = unitStock > 0 ? (totalPurchasePrice / unitStock).toFixed(2) : '';
+            document.getElementById('harga_pokok').value = unitBasePrice > 0 ? unitBasePrice : '';
+            window.Livewire.dispatch('set', { harga_pokok: unitBasePrice > 0 ? unitBasePrice : '' });
+        }
     </script>
 </div>

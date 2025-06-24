@@ -35,6 +35,11 @@ class AdminBarang extends Component
     public $activeTab = 'barang';
     public $search = '';
     public $filter_tipe_barang = '';
+    public $use_unit_calculator = 1;
+    public $pack_amount = '';
+    public $items_per_pack = '';
+    public $total_purchase_price = '';
+
 
     protected $listeners = [
         'proceedUpdateBarang' => 'proceedUpdateBarang',
@@ -48,6 +53,7 @@ class AdminBarang extends Component
         $this->hasilBagis = HasilBagi::all();
         $this->kode_barang = $this->generateUniqueBarcode();
         $this->isLoading = false;
+        $this->use_unit_calculator = 1;
     }
 
     public function generateUniqueBarcode($length = 9)
@@ -87,9 +93,40 @@ class AdminBarang extends Component
         $this->isLoading = false;
     }
 
+    public function updatedPackAmount()
+    {
+        $this->calculateUnitValues();
+    }
+
+    public function updatedItemsPerPack()
+    {
+        $this->calculateUnitValues();
+    }
+
+    public function updatedTotalPurchasePrice()
+    {
+        $this->calculateUnitValues();
+    }
+
+    protected function calculateUnitValues()
+    {
+        if (!$this->use_unit_calculator) {
+            $packAmount = (float) $this->pack_amount;
+            $itemsPerPack = (float) $this->items_per_pack;
+            $totalPurchasePrice = (float) $this->total_purchase_price;
+
+            $this->stok = $packAmount * $itemsPerPack;
+            $this->stok = $this->stok > 0 ? (int) $this->stok : 0;
+            $this->harga_pokok = ($this->stok > 0 && $totalPurchasePrice > 0) ? $totalPurchasePrice / $this->stok : 0;
+        }
+    }
+
     public function save()
     {
         $this->isLoading = true;
+
+        $this->calculateUnitValues();
+
         $this->validate([
             'kode_barang' => 'required|unique:barangs,kode_barang' . ($this->isEditing ? ',' . $this->selectedId : ''),
             'nama' => 'required|string|max:255',
@@ -99,6 +136,9 @@ class AdminBarang extends Component
             'status_titipan' => 'boolean',
             'tipe_barang' => 'required|in:snack,minuman,kebutuhan,lainnya,titipan',
             'hasil_bagi_id' => 'required_if:status_titipan,1|nullable|exists:hasil_bagis,id',
+            'pack_amount' => 'nullable|integer|min:0',
+            'items_per_pack' => 'nullable|integer|min:0',
+            'total_purchase_price' => 'nullable|numeric|min:0',
         ]);
 
         $total_harga = $this->stok * $this->harga_pokok;
@@ -129,7 +169,7 @@ class AdminBarang extends Component
                 'jumlah' => $this->stok,
                 'alasan' => 'Penambahan awal barang titipan',
                 'total_harga' => $total_harga,
-                'sisa_stok' => $this->stok, // Set sisa_stok sama dengan jumlah
+                'sisa_stok' => $this->stok,
             ]);
         } else {
             Persediaan::create([
@@ -140,7 +180,7 @@ class AdminBarang extends Component
                 'jumlah' => $this->stok,
                 'alasan' => 'Pembelian awal stok barang',
                 'total_harga' => $total_harga,
-                'sisa_stok' => $this->stok, // Set sisa_stok sama dengan jumlah
+                'sisa_stok' => $this->stok,
             ]);
         }
 
@@ -480,11 +520,15 @@ HTML;
 
     public function resetForm()
     {
-        $this->reset(['kode_barang', 'nama', 'harga_pokok', 'harga_jual', 'stok', 'is_active', 'status_titipan', 'tipe_barang', 'hasil_bagi_id', 'isEditing', 'selectedId']);
+        $this->reset(['kode_barang', 'nama', 'harga_pokok', 'harga_jual', 'stok', 'is_active', 'status_titipan', 'tipe_barang', 'hasil_bagi_id', 'isEditing', 'selectedId', 'use_unit_calculator', 'pack_amount', 'items_per_pack', 'total_purchase_price',]);
         $this->kode_barang = $this->generateUniqueBarcode();
         $this->tipe_barang = 'lainnya';
         $this->status_titipan = 0; // Set status_titipan ke 'Tidak'
         $this->is_active = true;
+        $this->use_unit_calculator = 1;
+        $this->pack_amount = 0;
+        $this->items_per_pack = 0;
+        $this->total_purchase_price = 0;
         $this->dispatch('resetForm');
     }
 

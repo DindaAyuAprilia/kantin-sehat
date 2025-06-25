@@ -90,7 +90,7 @@
                 />
                 
                 <!-- Input Bulan dan Pencarian -->
-                <div class="mb-4 flex space-x-4 px-6">
+                <div class="mb-4 flex space-x-4 px-6 ">
                     <div class="flex-1">
                         <label for="selectedMonth" class="block text-sm font-medium text-theme-black mb-1">Pilih Bulan</label>
                         <div class="relative rounded-md shadow-sm border border-gray-300">
@@ -117,9 +117,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="overflow-x-auto px-6">
+                <div class="overflow-x-auto max-h-[calc(100vh-40vh)] overflow-y-auto mx-6">
                     <table class="w-full table-auto border-collapse">
-                        <thead>
+                        <thead class="sticky -top-2 z-10">
                             <tr class="bg-theme-primary text-white">
                                 <th class="px-4 py-2 border border-theme-primary">Nama Barang</th>
                                 <th class="px-4 py-2 border border-theme-primary">Kuantitas Awal</th>

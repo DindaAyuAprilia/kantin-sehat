@@ -141,7 +141,6 @@
                                             >
                                         </div>
                                     </div>
-                                    <!-- Total Harga Pembelian -->
                                     <div x-data="{ totalPurchasePrice: '' }">
                                         <label for="total_purchase_price" class="block text-sm font-medium text-theme-black">Total Harga Pembelian (Rp)</label>
                                         <div class="relative rounded-md shadow-sm border border-gray-300">
@@ -159,7 +158,9 @@
                                                 step="0.01" 
                                                 placeholder="Masukkan total harga pembelian" 
                                                 class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
-                                                @input="calculateUnitPrice"
+                                                x-bind:disabled="$wire.use_discount"
+                                                x-bind:class="{ 'bg-gray-200 cursor-not-allowed': $wire.use_discount }"
+                                                @input="updateOriginalTotalPrice(); calculateUnitPrice()"
                                             >
                                         </div>
                                         <p class="mt-1 text-sm text-gray-600" x-text="totalPurchasePrice ? 'Rp ' + parseFloat(totalPurchasePrice).toLocaleString('id-ID') : 'Rp 0'"></p>
@@ -518,6 +519,26 @@
             });
         });
 
+        // Validasi harga jual dan harga pokok sebelum submit
+        const form = document.querySelector('form[wire\\:submit\\.prevent]');
+        form.addEventListener('submit', function (event) {
+            const hargaPokok = parseFloat(document.getElementById('harga_pokok').value) || 0;
+            const hargaJual = parseFloat(document.getElementById('harga_jual').value) || 0;
+
+            if (hargaJual <= hargaPokok) {
+                event.preventDefault();
+                event.stopImmediatePropagation(); // Hentikan semua event submit
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Harga jual tidak boleh kurang dari atau sama dengan harga pokok!',
+                    icon: 'error',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                });
+                return false; // Pastikan form tidak disubmit
+            }
+        });
+
         document.addEventListener('livewire:load', function () {
             Livewire.on('resetForm', () => {
                 const namaInput = document.getElementById('nama');
@@ -580,6 +601,7 @@
             });
         });
 
+        // SweetAlert2 event listeners untuk sukses
         window.addEventListener('swal:success', event => {
             Swal.fire({
                 title: 'Berhasil!',
@@ -587,6 +609,8 @@
                 icon: 'success',
                 confirmButtonColor: '#007022',
                 confirmButtonText: 'OK'
+            }).then(() => {
+                resetCalculatorFields();
             });
         });
 
@@ -652,13 +676,57 @@
             });
         }
 
+        function resetCalculatorFields() {
+            document.getElementById('pack_amount').value = '';
+            document.getElementById('items_per_pack').value = '';
+            document.getElementById('total_purchase_price').value = '';
+            document.getElementById('harga_pokok').value = '';
+            document.getElementById('stok').value = '';
+            document.getElementById('use_discount').checked = false;
+            document.getElementById('discount_amount').value = '';
+            originalTotalPrice = 0;
+
+            // Dispatch to Livewire
+            window.Livewire.dispatch('set', { 
+                pack_amount: '', 
+                items_per_pack: '', 
+                total_purchase_price: '', 
+                harga_pokok: '', 
+                stok: '', 
+                use_discount: false, 
+                discount_amount: ''
+            });
+        }
+
         function resetDiscount() {
             if (!document.getElementById('use_discount').checked) {
-                document.getElementById('discount_amount').value = 0;
-                document.getElementById('total_purchase_price').value = originalTotalPrice;
+                document.getElementById('discount_amount').value = '';
+                document.getElementById('total_purchase_price').value = '';
+                document.getElementById('harga_pokok').value = '';
+                document.getElementById('stok').value = '';
+                originalTotalPrice = 0;
+
+                // Dispatch to Livewire
+                window.Livewire.dispatch('set', { 
+                    discount_amount: '', 
+                    total_purchase_price: '', 
+                    harga_pokok: '', 
+                    stok: ''
+                });
                 calculateUnitPrice();
             }
         }
+
+        // Event listener untuk reset form
+        document.addEventListener('livewire:load', function () {
+            Livewire.on('resetForm', () => {
+                const namaInput = document.getElementById('nama');
+                if (namaInput) {
+                    namaInput.focus();
+                }
+                resetCalculatorFields();
+            });
+        });
 
         document.getElementById('pack_amount').addEventListener('input', calculateUnitPrice);
         document.getElementById('items_per_pack').addEventListener('input', calculateUnitPrice);

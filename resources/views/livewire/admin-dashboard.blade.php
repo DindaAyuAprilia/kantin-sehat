@@ -127,7 +127,7 @@
     </div>
 
     <!-- Charts -->
-    <div class="space-y-6">
+    <div class="space-y-6 overflow-x-auto max-h-[calc(100vh)] overflow-y-auto ">
         <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
             <x-card-header 
                 title="Penjualan vs Pembelian (Line)" 

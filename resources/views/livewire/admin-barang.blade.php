@@ -31,7 +31,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 <!-- Card Form Barang -->
-                <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                <div class="max-h-[calc(100vh-0.5vh)] overflow-y-auto bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
                     <x-card-header 
                         title="{{ $isEditing ? 'Edit Barang' : 'Tambah Barang' }}" 
                         icon="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" 
@@ -97,7 +97,7 @@
                             <!-- Kalkulator Harga Pokok Satuan -->
                             <div x-show="!$wire.use_unit_calculator">
                                 <div class="space-y-4">
-                                    <!-- Jumlah Pack/Dus -->
+                                    <!-- Jumlah Pack/Box -->
                                     <div>
                                         <label for="pack_amount" class="block text-sm font-medium text-theme-black">Jumlah Pack/Dus</label>
                                         <div class="relative rounded-md shadow-sm border border-gray-300">
@@ -142,7 +142,7 @@
                                         </div>
                                     </div>
                                     <!-- Total Harga Pembelian -->
-                                    <div>
+                                    <div x-data="{ totalPurchasePrice: '' }">
                                         <label for="total_purchase_price" class="block text-sm font-medium text-theme-black">Total Harga Pembelian (Rp)</label>
                                         <div class="relative rounded-md shadow-sm border border-gray-300">
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -162,6 +162,7 @@
                                                 @input="calculateUnitPrice"
                                             >
                                         </div>
+                                        <p class="mt-1 text-sm text-gray-600" x-text="totalPurchasePrice ? 'Rp ' + parseFloat(totalPurchasePrice).toLocaleString('id-ID') : 'Rp 0'"></p>
                                     </div>
 
                                     <!-- Checkbox Discount -->
@@ -434,7 +435,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 <!-- Card Form Hasil Bagi -->
-                <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                <div class="max-h-[calc(100vh-0.5vh)] overflow-y-auto bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
                     <x-card-header 
                         title="{{ $isEditingHasilBagi ? 'Edit Hasil Bagi' : 'Tambah Hasil Bagi' }}" 
                         icon="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"

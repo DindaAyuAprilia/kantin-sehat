@@ -285,6 +285,26 @@
         </div>
     </div>
 
+    <style>
+    [x-cloak] {
+        display: none !important;
+    }
+    .scrollbar-thin {
+        scrollbar-width: thin;
+    }
+    .scrollbar-thumb-theme-primary {
+        scrollbar-color: #007022 #f1f5f9;
+    }
+    .scrollbar-track-theme-surface {
+        background: rgb(249, 243, 241);
+    }
+    thead.sticky th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+</style>
+
     <!-- Hidden div to pass data to JavaScript -->
     <div id="chart-data" style="display: none;" 
             data-labels="{{ json_encode($labels) }}" 

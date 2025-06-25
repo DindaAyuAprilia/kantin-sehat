@@ -28,7 +28,7 @@
         @if ($activeTab === 'shift')
             <div class="grid grid-cols-1 lg:grid-cols-3 pb-4">
                 <!-- Form Shift -->
-                <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                <div class="max-h-[calc(100vh-0.5vh)] overflow-y-auto bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
                     <x-card-header 
                         title="{{ $isEditing ? 'Edit Shift' : 'Tambah Shift' }}"
                         icon="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" 
@@ -139,7 +139,7 @@
         @if ($activeTab === 'transaksi')
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Filter Tanggal dan Shift -->
-                <div class="bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
+                <div class="max-h-[calc(100vh-0.5vh)] overflow-y-auto bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
                     <x-card-header 
                         title="Filter Transaksi"
                         icon="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" 

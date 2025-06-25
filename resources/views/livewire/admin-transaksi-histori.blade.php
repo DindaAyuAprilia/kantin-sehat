@@ -56,9 +56,9 @@
         <!-- Daftar Keranjang -->
         <div class="mb-6 px-6">
             <h3 class="text-lg font-semibold mb-2 text-theme-black">Keranjang</h3>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto max-h-[calc(100vh-40vh)] overflow-y-auto ">
                 <table class="min-w-full text-sm border-collapse border-2 border-theme-primary">
-                    <thead class="bg-theme-primary text-theme-white">
+                    <thead class="sticky top-0 bg-theme-primary text-theme-white">
                         <tr class="border-b-2 border-theme-primary">
                             <th class="px-4 py-2 border-r-2 border-theme-primary">Barcode</th>
                             <th class="px-4 py-2 border-r-2 border-theme-primary">Nama Produk</th>

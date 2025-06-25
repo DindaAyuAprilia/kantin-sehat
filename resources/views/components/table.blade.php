@@ -7,15 +7,15 @@
 ])
 
 
-<div class="relative rounded-s shadow-lg overflow-y-auto max-h-[calc(100vh-400px)] scrollbar-thin scrollbar-thumb-theme-primary scrollbar-track-theme-surface border border-theme-primary">
+<div class="relative rounded-s shadow-lg overflow-y-auto max-h-[calc(100vh-40vh)] scrollbar-thin scrollbar-thumb-theme-primary scrollbar-track-theme-surface border border-theme-primary">
     <table class="w-full table-auto border-collapse text-xs">
-        <thead class="sticky top-0 bg-theme-primary text-white z-10">
+        <thead class="sticky -top-2 bg-theme-primary text-white z-10">
             <tr>
                 @foreach ($headers as $header)
-                    <th class="px-2 py-2 border border-theme-dark {{ $header['align'] ?? 'text-center' }}">{{ $header['label'] }}</th>
+                    <th class="px-2 py-3 border border-theme-dark {{ $header['align'] ?? 'text-center' }}">{{ $header['label'] }}</th>
                 @endforeach
                 @if (!empty($actions))
-                    <th class="px-2 py-2 border border-theme-dark text-center">Aksi</th>
+                    <th class="px-2 py-3 border border-theme-dark text-center">Aksi</th>
                 @endif
             </tr>
         </thead>

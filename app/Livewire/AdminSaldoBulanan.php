@@ -206,11 +206,25 @@ class AdminSaldoBulanan extends Component
                 ->where('barang_id', $barang->id)
                 ->sum('jumlah') ?? 0;
 
-                $nilaiPenjualan = DetailTransaksi::whereHas('transaksi', function ($query) use ($startDate, $endDate) {
-                    $query->whereBetween('tanggal', [$startDate, $endDate]);
-                })
-                ->where('barang_id', $barang->id)
-                ->sum('subtotal') ?? 0;
+                $nilaiPenjualan = 0;
+                if ($penjualan > 0) {
+                    $persediaans = Persediaan::where('barang_id', $barang->id)
+                        ->whereIn('tipe', ['pembelian'])
+                        ->where('tanggal', '<=', $endDate)
+                        ->where('sisa_stok', '>', 0)
+                        ->orderBy('tanggal', 'asc')
+                        ->orderBy('id', 'asc')
+                        ->get();
+
+                    $quantityNeeded = $penjualan;
+                    foreach ($persediaans as $persediaan) {
+                        if ($quantityNeeded <= 0) break;
+                        $available = min($persediaan->sisa_stok, $quantityNeeded);
+                        $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
+                        $nilaiPenjualan += $available * $biayaPokokPerUnit;
+                        $quantityNeeded -= $available;
+                    }
+                }
 
                 // Hitung penghapusan
                 $penghapusan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
@@ -218,10 +232,25 @@ class AdminSaldoBulanan extends Component
                     ->where('tipe', 'penghapusan')
                     ->sum('jumlah') ?? 0;
 
-                $nilaiPenghapusan = Persediaan::whereBetween('tanggal', [$startDate, $endDate])
-                    ->where('barang_id', $barang->id)
-                    ->where('tipe', 'penghapusan')
-                    ->sum('total_harga') ?? 0;
+                $nilaiPenghapusan = 0;
+                if ($penghapusan > 0) {
+                    $persediaans = Persediaan::where('barang_id', $barang->id)
+                        ->whereIn('tipe', ['pembelian'])
+                        ->where('tanggal', '<=', $endDate)
+                        ->where('sisa_stok', '>', 0)
+                        ->orderBy('tanggal', 'asc')
+                        ->orderBy('id', 'asc')
+                        ->get();
+
+                    $quantityNeeded = $penghapusan;
+                    foreach ($persediaans as $persediaan) {
+                        if ($quantityNeeded <= 0) break;
+                        $available = min($persediaan->sisa_stok, $quantityNeeded);
+                        $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
+                        $nilaiPenghapusan += $available * $biayaPokokPerUnit;
+                        $quantityNeeded -= $available;
+                    }
+                }
 
                 // Hitung kuantitas dan nilai akhir
                 $kuantitasAkhir = max(0, $kuantitasAwal + $pembelian - $penjualan - $penghapusan);

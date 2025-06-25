@@ -99,9 +99,9 @@
             </div>
         </div>
         <div class="px-6">
-            <div class="overflow-x-auto scrollbar-track-theme-surface scrollbar-thin scrollbar-thumb-theme-primary">
+            <div class="overflow-x-auto overflow-y-auto max-h-[calc(100vh-40vh)] scrollbar-track-theme-surface scrollbar-thin scrollbar-thumb-theme-primary">
                 <table class="w-full table-auto border-collapse">
-                    <thead>
+                    <thead class="sticky -top-1 z-10">
                         <tr class="bg-theme-primary text-white">
                             <th class="px-4 py-2 border border-theme-primary">Barcode</th>
                             <th class="px-4 py-2 border border-theme-primary">Nama Barang</th>

@@ -4,7 +4,7 @@
         <div class="absolute inset-0 bg-theme-primary bg-opacity-30 z-10"></div>
 
         <!-- Form Container -->
-        <div class="relative z-20 w-full max-w-md p-6 bg-theme-surface border border-theme-primary rounded-lg shadow-md">
+        <div class="relative z-20 w-full max-w-md m-6 p-6 bg-theme-surface border border-theme-primary rounded-lg shadow-md">
             <div class="flex justify-center mb-6">
                 <x-application-logo class="h-12 w-auto fill-current text-theme-black" />
             </div>

@@ -24,7 +24,16 @@
     />
 
     <!-- Tab Content -->
-    <div class="space-y-6" x-data="{ statusTitipan: {{ $status_titipan ? 'true' : 'false' }}, packAmount: '', itemsPerPack: '', totalPurchasePrice: '', formSubmitted: false }">
+    <div class="space-y-6" x-data="{ 
+        statusTitipan: {{ $status_titipan ? 'true' : 'false' }}, 
+        packAmount: '', 
+        itemsPerPack: '', 
+        totalPurchasePrice: '', 
+        discountAmount: '', 
+        hargaPokok: '', 
+        hargaJual: '', 
+        formSubmitted: false 
+    }">
 
         <!-- Barang Tab -->
         @if ($activeTab === 'barang')
@@ -32,10 +41,12 @@
                 
                 <!-- Card Form Barang -->
                 <div class="max-h-[calc(100vh-0.5vh)] overflow-y-auto bg-theme-surface pb-6 rounded-lg shadow-lg border-2 border-theme-primary">
-                    <x-card-header 
-                        title="{{ $isEditing ? 'Edit Barang' : 'Tambah Barang' }}" 
-                        icon="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" 
-                    />
+                    <h3 class="mb-6 top-0 sticky z-10 p-3 text-xl font-[500] text-white bg-theme-primary rounded-t-lg flex items-center border-b border-theme-primary">
+                        <svg class="w-6 h-6 p-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"/>
+                        </svg>
+                        <span class="px-3">{{ $isEditing ? 'Edit Barang' : 'Tambah Barang' }}</span>
+                    </h3>
                     <form wire:submit.prevent="{{ $isEditing ? 'confirmUpdate' : 'save' }}">
                         <div class="space-y-4 px-6">
 
@@ -181,25 +192,27 @@
 
                                     <!-- Discount Amount Input -->
                                     <div x-show="$wire.use_discount" class="flex items-end gap-2">
-                                        <div class="flex-1">
+                                        <div class="flex-1" x-data="{ discountAmount: '' }">
                                             <label for="discount_amount" class="block text-sm font-medium text-theme-black">Jumlah Potongan (Rp)</label>
                                             <div class="relative">
                                                 <input 
-                                                    type="number" 
+                                                    x-model="discountAmount" 
                                                     wire:model.debounce.500ms="discount_amount" 
                                                     id="discount_amount" 
+                                                    type="number" 
                                                     min="0" 
                                                     step="0.01" 
                                                     placeholder="Masukkan jumlah potongan" 
-                                                    class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
+                                                    class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
                                                     @blur="calculateUnitPrice"
                                                 >
                                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                                     <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.99 14.993 6.99 12.993m6-6 6 6m-12 0 6 6m-9-9h.01M15 9h.01M9 15h.01M5.25 5.25h13.5a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 16.5v-9A2.25 2.25 0 0 1 5.25 5.25Z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                                     </svg>
                                                 </span>
                                             </div>
+                                            <p class="mt-1 text-sm text-gray-600" x-text="discountAmount ? 'Rp ' + parseFloat(discountAmount).toLocaleString('id-ID') : 'Rp 0'"></p>
                                             @error('discount_amount') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                                         </div>
                                     </div>
@@ -207,7 +220,7 @@
                             </div>
 
                             <!-- Input Harga Pokok Barang -->
-                            <div>
+                            <div x-data="{ hargaPokok: '' }">
                                 <label for="harga_pokok" class="block text-sm font-medium text-theme-black">Harga Pokok</label>
                                 <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -216,6 +229,7 @@
                                         </svg>
                                     </div>
                                     <input 
+                                        x-model="hargaPokok"
                                         wire:model.debounce.500ms="harga_pokok" 
                                         id="harga_pokok" 
                                         type="number" 
@@ -228,11 +242,12 @@
                                         required
                                     >
                                 </div>
+                                <p class="mt-1 text-sm text-gray-600" x-text="hargaPokok ? 'Rp ' + parseFloat(hargaPokok).toLocaleString('id-ID') : 'Rp 0'"></p>
                                 <div x-show="$wire.errors.harga_pokok" x-text="$wire.errors.harga_pokok" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
                             <!-- Input Harga Jual Barang -->
-                            <div>
+                            <div x-data="{ hargaJual: '' }">
                                 <label for="harga_jual" class="block text-sm font-medium text-theme-black">Harga Jual</label>
                                 <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -240,10 +255,19 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"></path>
                                         </svg>
                                     </div>
-                                    <input wire:model.debounce.500ms="harga_jual" id="harga_jual" type="number" step="0.01" placeholder="Masukkan harga jual"
-                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10"
-                                        x-on:change="formSubmitted = false" required>
+                                    <input 
+                                        x-model="hargaJual"
+                                        wire:model.debounce.500ms="harga_jual" 
+                                        id="harga_jual" 
+                                        type="number" 
+                                        step="0.01" 
+                                        placeholder="Masukkan harga jual"
+                                        class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
+                                        x-on:change="formSubmitted = false" 
+                                        required
+                                    >
                                 </div>
+                                <p class="mt-1 text-sm text-gray-600" x-text="hargaJual ? 'Rp ' + parseFloat(hargaJual).toLocaleString('id-ID') : 'Rp 0'"></p>
                                 <div x-show="$wire.errors.harga_jual" x-text="$wire.errors.harga_jual" class="text-red-500 text-sm mt-1"></div>
                             </div>
 

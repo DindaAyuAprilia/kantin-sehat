@@ -8,6 +8,7 @@ use App\Models\Barang;
 use App\Models\KasTitipan;
 use App\Models\Persediaan;
 use App\Models\HasilBagi;
+use App\Models\StokMasuk;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -147,8 +148,14 @@ class AdminBarang extends Component
             'discount_amount' => 'nullable|numeric|min:0',
         ]); 
 
-        $this->total_purchase_price = $this->total_purchase_price + (3 * $this->discount_amount);
-        $this->harga_pokok = $this->total_purchase_price /$this->stok;
+        // Hitung nilai untuk mode kalkulator otomatis
+        if (!$this->use_unit_calculator) {
+            $this->calculateUnitValues();
+        } else {
+            $totalPurchasePrice = (float) $this->total_purchase_price;
+            $discountAmount = $this->use_discount ? (float) $this->discount_amount : 0;
+            $this->total_purchase_price = $totalPurchasePrice + (3 * $discountAmount);
+        }
 
         $barang = Barang::create([
             'kode_barang' => $this->kode_barang,
@@ -160,6 +167,15 @@ class AdminBarang extends Component
             'status_titipan' => $this->status_titipan,
             'tipe_barang' => $this->status_titipan ? 'titipan' : $this->tipe_barang,
             'hasil_bagi_id' => $this->status_titipan ? $this->hasil_bagi_id : null,
+        ]);
+
+        // Simpan stok masuk
+        StokMasuk::create([
+            'barang_id' => $barang->id,
+            'jumlah_masuk' => $this->stok,
+            'harga_beli' => $this->harga_pokok, 
+            'sisa_stok' => $this->stok,
+            'tanggal_masuk' => Carbon::now(),
         ]);
 
         if ($this->status_titipan) {

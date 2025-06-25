@@ -1,5 +1,4 @@
-
-<div class="space-y-6 p-4 sm:p-[2%] overflow-y-auto max-h-screen">
+<div class="space-y-6 min-h-screen flex flex-col p-4 sm:p-6 overflow-hidden">
 
     <!-- Alert -->
     <x-alert 
@@ -36,18 +35,18 @@
     </div>
 
     <!-- Saldo Kas Titipan -->
-    <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
+    <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary pb-6">
         <x-card-header 
             title="Saldo Kas Titipan" 
             icon="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
         />
-        <div class="p-6 rounded-b-lg">
+        <div class="p-6 rounded-b-lg overflow-y-auto max-h-[calc(100vh-40vh)]">
             @if($kasTitipans->isEmpty())
                 <p class="text-center text-gray-500">Tidak ada barang titipan.</p>
             @else
                 <table class="w-full table-auto border-collapse">
                     <thead>
-                        <tr class="bg-theme-light">
+                        <tr class="bg-theme-light sticky -top-8 z-10">
                             <th class="px-4 py-2 text-theme-black border border-theme-primary">Nama Barang</th>
                             <th class="px-4 py-2 text-theme-black border border-theme-primary">Kode Barang</th>
                             <th class="px-4 py-2 text-theme-black border border-theme-primary">Saldo Kas</th>
@@ -127,7 +126,7 @@
     </div>
 
     <!-- Charts -->
-    <div class="space-y-6 overflow-x-auto max-h-[calc(100vh)] overflow-y-auto ">
+    <div class="space-y-6 overflow-x-auto overflow-y-auto ">
         <div class="bg-theme-surface rounded-lg shadow-lg border border-theme-primary">
             <x-card-header 
                 title="Penjualan vs Pembelian (Line)" 

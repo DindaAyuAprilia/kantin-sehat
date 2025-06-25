@@ -272,6 +272,34 @@ class AdminPersediaan extends Component
             if ($barang->stok < 0) {
                 $barang->stok = 0;
             }
+            // Hitung total_harga dengan FIFO
+            $totalHargaPenghapusan = 0;
+            $quantityNeeded = $this->jumlah;
+            $persediaans = Persediaan::where('barang_id', $barang->id)
+                ->whereIn('tipe', ['pembelian', 'penambahan_titipan'])
+                ->where('sisa_stok', '>', 0)
+                ->orderBy('tanggal', 'asc')
+                ->orderBy('id', 'asc')
+                ->get();
+
+            foreach ($persediaans as $persediaan) {
+                if ($quantityNeeded <= 0) break;
+                $available = min($persediaan->sisa_stok, $quantityNeeded);
+                $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
+                $totalHargaPenghapusan += $available * $biayaPokokPerUnit;
+                $persediaan->sisa_stok -= $available;
+                $persediaan->save();
+                $quantityNeeded -= $available;
+            }
+
+            if ($quantityNeeded > 0) {
+                $this->isLoading = false;
+                $this->dispatch('swal:error', message: 'Stok tidak cukup untuk penghapusan menggunakan FIFO.');
+                return;
+            }
+
+            $this->total_harga = $totalHargaPenghapusan;
+
         } elseif ($this->tipe === 'penambahan_titipan') {
             $barang->stok += $this->jumlah;
             $barang->harga_pokok = $this->harga_beli;
@@ -421,6 +449,55 @@ class AdminPersediaan extends Component
                 if ($barang->stok < 0) {
                     $barang->stok = 0;
                 }
+
+                // Hitung total_harga dengan FIFO untuk penghapusan baru
+                $totalHargaPenghapusan = 0;
+                $quantityNeeded = $this->jumlah;
+                $persediaans = Persediaan::where('barang_id', $barang->id)
+                    ->whereIn('tipe', ['pembelian', 'penambahan_titipan'])
+                    ->where('sisa_stok', '>', 0)
+                    ->orderBy('tanggal', 'asc')
+                    ->orderBy('id', 'asc')
+                    ->get();
+
+                // Kembalikan sisa_stok dari entri lama
+                if ($persediaan->tipe === 'penghapusan') {
+                    $oldQuantity = $persediaan->jumlah;
+                    $oldPersediaans = Persediaan::where('barang_id', $barang->id)
+                        ->whereIn('tipe', ['pembelian', 'penambahan_titipan'])
+                        ->where('tanggal', '<=', $persediaan->tanggal)
+                        ->orderBy('tanggal', 'asc')
+                        ->orderBy('id', 'asc')
+                        ->get();
+
+                    foreach ($oldPersediaans as $oldPersediaan) {
+                        if ($oldQuantity <= 0) break;
+                        $available = min($oldPersediaan->jumlah - $oldPersediaan->sisa_stok, $oldQuantity);
+                        $oldPersediaan->sisa_stok += $available;
+                        $oldPersediaan->save();
+                        $oldQuantity -= $available;
+                    }
+                }
+
+                // Alokasikan penghapusan baru dengan FIFO
+                foreach ($persediaans as $persediaanItem) {
+                    if ($quantityNeeded <= 0) break;
+                    $available = min($persediaanItem->sisa_stok, $quantityNeeded);
+                    $biayaPokokPerUnit = $persediaanItem->total_harga / $persediaanItem->jumlah;
+                    $totalHargaPenghapusan += $available * $biayaPokokPerUnit;
+                    $persediaanItem->sisa_stok -= $available;
+                    $persediaanItem->save();
+                    $quantityNeeded -= $available;
+                }
+
+                if ($quantityNeeded > 0) {
+                    $this->isLoading = false;
+                    $this->dispatch('swal:error', message: 'Stok tidak cukup untuk penghapusan menggunakan FIFO.');
+                    $barang->save();
+                    return;
+                }
+
+                $this->total_harga = $totalHargaPenghapusan;
             } elseif ($this->tipe === 'penambahan_titipan') {
                 $barang->stok += $this->jumlah;
                 $barang->harga_pokok = $this->harga_beli;

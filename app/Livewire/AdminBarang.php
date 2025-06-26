@@ -394,112 +394,119 @@ class AdminBarang extends Component
     private function generateBarcodeHtml($barangs)
     {
         $html = <<<HTML
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Barcode Barang</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 10mm;
-            background-color: #fff;
-        }
-        .container {
-            max-width: 210mm;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-            color: #007022;
-            font-size: 18px;
-            margin-bottom: 10mm;
-        }
-        .barcode-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5mm;
-            page-break-after: always;
-        }
-        .barcode-item {
-            background-color: #fff;
-            border: 1px solid #007022;
-            border-radius: 3mm;
-            padding: 3mm;
-            text-align: center;
-            height: 40mm;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-sizing: border-box;
-        }
-        .barcode-item p {
-            margin: 2mm 0;
-            font-size: 10px;
-            color: #1f2937;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .barcode-item p strong {
-            color: #007022;
-        }
-        .barcode-item svg {
-            width: 100%;
-            height: 20mm;
-        }
-        .print-button {
-            display: block;
-            width: 150px;
-            margin: 10mm auto 0;
-            padding: 5mm 10mm;
-            background-color: #007022;
-            color: #fff;
-            border: none;
-            border-radius: 3mm;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .print-button:hover {
-            background-color: #005b1a;
-        }
-        @media print {
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cetak Barcode Barang</title>
+        <style>
             body {
+                font-family: 'Arial', sans-serif;
                 margin: 0;
-                padding: 0;
+                padding: 5mm;
+                background-color: #fff;
             }
             .container {
-                padding: 5mm;
+                max-width: 210mm;
+                margin: 0 auto;
+            }
+            h1 {
+                text-align: center;
+                color: #007022;
+                font-size: 16px;
+                margin-bottom: 5mm;
             }
             .barcode-grid {
-                gap: 3mm;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2mm;
+                page-break-after: always;
             }
             .barcode-item {
-                page-break-inside: avoid;
-                box-shadow: none;
+                background-color: #fff;
+                border: 1px solid #007022;
+                border-radius: 2mm;
+                padding: 2mm;
+                text-align: center;
+                height: 35mm;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                box-sizing: border-box;
+            }
+            .barcode-item p {
+                margin: 1mm 0;
+                font-size: 8px;
+                color: #1f2937;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .barcode-item p strong {
+                color: #007022;
+            }
+            .barcode-item svg {
+                width: 100%;
+                height: 18mm;
             }
             .print-button {
-                display: none;
+                display: block;
+                width: 120px;
+                margin: 5mm auto 0;
+                padding: 3mm 8mm;
+                background-color: #007022;
+                color: #fff;
+                border: none;
+                border-radius: 2mm;
+                font-size: 12px;
+                cursor: pointer;
             }
-            @page {
-                size: A4;
-                margin: 10mm;
+            .print-button:hover {
+                background-color: #005b1a;
             }
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <h1>Daftar Barcode Barang</h1>
-HTML;
+            @media print {
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    padding: 3mm;
+                }
+                .barcode-grid {
+                    gap: 1mm;
+                }
+                .barcode-item {
+                    page-break-inside: avoid;
+                    box-shadow: none;
+                }
+                .print-button {
+                    display: none;
+                }
+                @page {
+                    size: A4;
+                    margin: 5mm;
+                }
+                /* Support for F4 paper */
+                @media print and (min-height: 330mm) {
+                    @page {
+                        size: 210mm 330mm;
+                        margin: 5mm;
+                    }
+                }
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Daftar Barcode Barang</h1>
+    HTML;
 
         if ($barangs->isEmpty()) {
             $html .= '<p style="text-align: center; color: #1f2937;">Tidak ada data barang untuk ditampilkan.</p>';
         } else {
-            $itemsPerPage = 30;
+            $itemsPerPage = 24; // 4x6 grid
             $chunks = $barangs->chunk($itemsPerPage);
 
             foreach ($chunks as $index => $chunk) {
@@ -509,34 +516,34 @@ HTML;
                 $html .= '<div class="barcode-grid">';
                 foreach ($chunk as $barang) {
                     $html .= <<<HTML
-            <div class="barcode-item">
-                <p><strong>{$barang->nama}</strong></p>
-                <p>Kode: {$barang->kode_barang}</p>
-                <svg id="barcode-{$barang->id}"></svg>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        JsBarcode("#barcode-{$barang->id}", "{$barang->kode_barang}", {
-                            format: "CODE128",
-                            width: 1.5,
-                            height: 50,
-                            displayValue: true,
-                            fontSize: 10
+                <div class="barcode-item">
+                    <p><strong>{$barang->nama}</strong></p>
+                    <p>Kode: {$barang->kode_barang}</p>
+                    <svg id="barcode-{$barang->id}"></svg>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            JsBarcode("#barcode-{$barang->id}", "{$barang->kode_barang}", {
+                                format: "CODE128",
+                                width: 1.2,
+                                height: 40,
+                                displayValue: true,
+                                fontSize: 8
+                            });
                         });
-                    });
-                </script>
-            </div>
-HTML;
+                    </script>
+                </div>
+    HTML;
                 }
                 $html .= '</div>';
             }
         }
 
         $html .= <<<HTML
-        <button class="print-button" onclick="window.print()">Cetak Barcode</button>
-    </div>
-</body>
-</html>
-HTML;
+            <button class="print-button" onclick="window.print()">Cetak Barcode</button>
+        </div>
+    </body>
+    </html>
+    HTML;
 
         return $html;
     }

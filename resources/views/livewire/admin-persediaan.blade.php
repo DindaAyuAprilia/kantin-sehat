@@ -29,7 +29,7 @@
                     icon="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" 
                 />
 
-                <form wire:submit.prevent="{{ $isEditing ? 'confirmUpdate' : 'save' }}">
+                <form wire:submit.prevent="{{ $isEditing ? 'confirmUpdate' : 'save' }}" x-ref="persediaanForm">
                     <div class="space-y-4 px-6">
 
                         <!-- Input Barang -->
@@ -151,12 +151,13 @@
                                 </div>
                                
                                 <!-- Total Harga -->
-                                <div>
+                                <div x-data="{ totalHargaPembelian: '' }">
                                     <label for="total_harga" class="block text-sm font-medium text-theme-black">Total Harga Pembelian (Rp)</label>
                                     <div class="relative">
                                         <input 
                                             type="number" 
                                             wire:model.blur="total_harga" 
+                                            x-model="totalHargaPembelian"
                                             id="total_harga" 
                                             min="0" 
                                             step="0.01" 
@@ -170,6 +171,7 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <p class="mt-1 text-sm text-gray-600" x-text="totalHargaPembelian ? 'Rp ' + parseFloat(totalHargaPembelian).toLocaleString('id-ID') : 'Rp 0'"></p>
                                     @error('total_harga') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                                 </div>
                                 <!-- Gunakan Potongan -->
@@ -185,13 +187,14 @@
                                     >
                                 </div>
                                 <!-- Jumlah Potongan -->
-                                <div x-show="$wire.use_discount" class="flex items-end gap-2">
+                                <div x-show="$wire.use_discount" class="flex items-end gap-2" x-data="{ totalPotongan: '' }">
                                     <div class="flex-1">
-                                        <label for="discount_amount" class="block text-sm font-medium text-theme-black">Jumlah Potongan (Rp)</label>
+                                        <label for="discount_amount" class="block text-sm font-medium text-theme-black">Total Potongan (Rp)</label>
                                         <div class="relative">
                                             <input 
                                                 type="number" 
                                                 wire:model.blur="discount_amount" 
+                                                x-model="totalPotongan"
                                                 id="discount_amount" 
                                                 min="0" 
                                                 step="0.01" 
@@ -205,6 +208,7 @@
                                                 </svg>
                                             </span>
                                         </div>
+                                        <p class="mt-1 text-sm text-gray-600" x-text="totalPotongan ? 'Rp ' + parseFloat(totalPotongan).toLocaleString('id-ID') : 'Rp 0'"></p>
                                         @error('discount_amount') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
@@ -215,7 +219,7 @@
                                     <div class="relative">
                                         <input 
                                             type="number" 
-                                            wire:model="harga_beli" 
+                                            wire:model="harga_beli"
                                             id="harga_beli_calc" 
                                             readonly 
                                             class="mt-1 block w-full rounded-md border-theme-black bg-gray-100 shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base"
@@ -232,7 +236,7 @@
 
                         <!-- Input Jumlah -->
                         <div>
-                            <label for="jumlah" class="block text-sm font-medium text-theme-black">Jumlah</label>
+                            <label for="jumlah" class="block text-sm font-medium text-theme-black">Jumlah Satuan Barang</label>
                             <div class="relative">
                                 <input wire:model.live="jumlah" id="jumlah" type="number" min="1" 
                                        @if($barang_id && in_array($tipe, ['penghapusan', 'pengambilan_titipan'])) 
@@ -255,11 +259,12 @@
                         </div>
 
                         <!-- Input Harga Beli (Non-Calculator) -->
-                        <div x-show="!($wire.use_calculator && ['pembelian', 'penambahan_titipan'].includes('{{ $tipe }}'))">
+                        <div x-data="{ hargaPokok: '' }" x-show="!($wire.use_calculator && ['pembelian', 'penambahan_titipan'].includes('{{ $tipe }}'))">
                             <label for="harga_beli" class="block text-sm font-medium text-theme-black">Harga Pokok</label>
                             <div class="relative">
                                 <input wire:model.live="harga_beli" id="harga_beli" type="number" step="0.01" min="0" 
                                        placeholder="Masukkan harga beli" 
+                                        x-model="hargaPokok"
                                        class="mt-1 block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-base">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                                     <svg class="h-5 w-5 text-theme-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">>
@@ -267,6 +272,7 @@
                                     </svg>
                                 </span>
                             </div>
+                            <p class="mt-1 text-sm text-gray-600" x-text="hargaPokok ? 'Rp ' + parseFloat(hargaPokok).toLocaleString('id-ID') : 'Rp 0'"></p>
                             @error('harga_beli') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                         </div>
 
@@ -287,7 +293,12 @@
 
                     <!-- Tombol Submit -->
                     <div class="mt-4 flex justify-end space-x-2 px-6">
-                        <button type="button" wire:click="resetForm" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">Reset</button>
+                        <button type="button" 
+                                wire:click="resetForm" 
+                                @click="$refs.persediaanForm.reset(); searchOpen = false; $wire.set('search_query_form', ''); $wire.set('barang_id', null); $wire.set('tipe', ''); $wire.set('tanggal', ''); $wire.set('jumlah', ''); $wire.set('harga_beli', ''); $wire.set('alasan', ''); $wire.set('use_calculator', false); $wire.set('pack_amount', ''); $wire.set('items_per_pack', ''); $wire.set('total_harga', ''); $wire.set('use_discount', false); $wire.set('discount_amount', ''); resetCalculatorFields();"
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 text-sm">
+                            Reset
+                        </button>
                         <button type="submit" class="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-theme-secondary flex items-center space-x-2 text-sm w-full sm:w-auto">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -579,6 +590,26 @@
                     icon: 'success',
                     confirmButtonColor: '#007022',
                     confirmButtonText: 'OK'
+                }).then(() => {
+                    // Reset form setelah sukses
+                    document.querySelector('[x-ref="persediaanForm"]').reset();
+                    resetCalculatorFields();
+                    Livewire.dispatch('set', { 
+                        search_query_form: '',
+                        barang_id: null,
+                        tipe: '',
+                        tanggal: '',
+                        jumlah: '',
+                        harga_beli: '',
+                        alasan: '',
+                        use_calculator: false,
+                        pack_amount: '',
+                        items_per_pack: '',
+                        total_harga: '',
+                        use_discount: false,
+                        discount_amount: ''
+                    });
+                    document.getElementById('search_barang').focus();
                 });
             });
 
@@ -590,6 +621,27 @@
                     confirmButtonColor: '#d33',
                     confirmButtonText: 'OK'
                 });
+            });
+
+            Livewire.on('resetForm', () => {
+                document.querySelector('[x-ref="persediaanForm"]').reset();
+                resetCalculatorFields();
+                Livewire.dispatch('set', { 
+                    search_query_form: '',
+                    barang_id: null,
+                    tipe: '',
+                    tanggal: '',
+                    jumlah: '',
+                    harga_beli: '',
+                    alasan: '',
+                    use_calculator: false,
+                    pack_amount: '',
+                    items_per_pack: '',
+                    total_harga: '',
+                    use_discount: false,
+                    discount_amount: ''
+                });
+                document.getElementById('search_barang').focus();
             });
         });
 

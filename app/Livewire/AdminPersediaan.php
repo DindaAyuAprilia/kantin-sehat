@@ -624,7 +624,7 @@ class AdminPersediaan extends Component
 
     public function resetForm()
     {
-        $this->reset(['barang_id', 'search_query_form', 'search_results', 'tipe', 'tanggal', 'jumlah', 'alasan', 'isEditing', 'selectedId', 'total_harga', 'harga_beli', 'isDataChanged', 'use_calculator', 'pack_amount', 'items_per_pack']);
+        $this->reset(['barang_id', 'search_query_form', 'search_results', 'tipe', 'tanggal', 'jumlah', 'alasan', 'isEditing', 'selectedId', 'total_harga', 'harga_beli', 'isDataChanged', 'use_calculator', 'pack_amount', 'items_per_pack', 'use_discount', 'discount_amount',]);
         $this->tanggal = date('Y-m-d');
         $this->tipe = '';
         $this->search_results = collect();

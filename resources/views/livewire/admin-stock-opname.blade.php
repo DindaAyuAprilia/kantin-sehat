@@ -41,10 +41,11 @@
                     @endforeach
                 </select>
             </div>
-            <div class="flex-1">
+            <div class="flex-1" x-data="{ uangFisik: '' }">
                 <label for="uang_fisik" class="block text-sm font-medium text-theme-black">Uang Fisik</label>
-                <input wire:model.live="uang_fisik" id="uang_fisik" type="number" step="0.01" placeholder="Masukkan jumlah uang fisik"
+                <input wire:model.blur="uang_fisik" x-model="uangFisik" id="uang_fisik" type="number" step="0.01" placeholder="Masukkan jumlah uang fisik"
                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring focus:ring-theme-primary focus:ring-opacity-50">
+                <p class="mt-1 text-sm text-gray-600" x-text="uangFisik ? 'Rp ' + parseFloat(uangFisik).toLocaleString('id-ID') : 'Rp 0'"></p>
             </div>
         </div>
         <div class="overflow-x-auto px-6 scrollbar-thin scrollbar-thumb-theme-primary scrollbar-track-theme-surface">

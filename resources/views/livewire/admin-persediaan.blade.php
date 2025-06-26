@@ -630,7 +630,7 @@
                     search_query_form: '',
                     barang_id: null,
                     tipe: '',
-                    tanggal: '',
+                    tanggal: new Date().toISOString().split('T')[0],
                     jumlah: '',
                     harga_beli: '',
                     alasan: '',

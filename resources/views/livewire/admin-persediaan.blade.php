@@ -630,7 +630,6 @@
                     search_query_form: '',
                     barang_id: null,
                     tipe: '',
-                    tanggal: '',
                     jumlah: '',
                     harga_beli: '',
                     alasan: '',

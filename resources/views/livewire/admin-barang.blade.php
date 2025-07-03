@@ -152,6 +152,8 @@
                                             >
                                         </div>
                                     </div>
+
+                                    <!-- Total Harga Pembelian -->
                                     <div x-data="{ totalPurchasePrice: '' }">
                                         <label for="total_purchase_price" class="block text-sm font-medium text-theme-black">Total Harga Pembelian (Rp)</label>
                                         <div class="relative rounded-md shadow-sm border border-gray-300">
@@ -169,8 +171,6 @@
                                                 step="0.01" 
                                                 placeholder="Masukkan total harga pembelian" 
                                                 class="block w-full rounded-md border-theme-black shadow-sm focus:border-theme-primary focus:ring-theme-secondary pl-10 text-sm"
-                                                x-bind:disabled="$wire.use_discount"
-                                                x-bind:class="{ 'bg-gray-200 cursor-not-allowed': $wire.use_discount }"
                                                 @input="updateOriginalTotalPrice(); calculateUnitPrice()"
                                             >
                                         </div>
@@ -187,11 +187,12 @@
                                             class="bg-theme-primary text-theme-primary form-checkbox mt-1" 
                                             x-bind:disabled="!$wire.total_harga || $wire.total_harga <= 0"
                                             x-bind:class="{ 'cursor-not-allowed opacity-50': !$wire.total_harga || $wire.total_harga <= 0 }"
+                                            @change="resetDiscount"
                                         >
                                     </div>
 
                                     <!-- Discount Amount Input -->
-                                    <div x-show="$wire.use_discount" class="flex items-end gap-2">
+                                    <div x-show="$wire.use_discount && !formSubmitted" class="flex items-end gap-2">
                                         <div class="flex-1" x-data="{ discountAmount: '' }">
                                             <label for="discount_amount" class="block text-sm font-medium text-theme-black">Jumlah Potongan (Rp)</label>
                                             <div class="relative">
@@ -297,21 +298,21 @@
                                 <div x-show="$wire.errors.stok" x-text="$wire.errors.stok" class="text-red-500 text-sm mt-1"></div>
                             </div>
 
-                            <!-- Input status titipan -->
+                             <!-- Input Status Titipan -->
                             <div>
                                 <label class="block text-sm font-medium text-theme-black">Status Titipan</label>
                                 <div class="mt-1 space-x-6">
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="status_titipan" value="1" id="status_titipan_1"
+                                        <input type="radio" wire:model.live="status_titipan" value="1" id="status_titipan_1"
                                             class="form-radio text-theme-primary border border-theme-primary focus:ring-theme-secondary {{ $isEditing || !$use_unit_calculator ? 'bg-gray-200 cursor-not-allowed' : '' }}"
-                                            x-on:change="document.getElementById('use_unit_calculator_no').checked ? null : ($wire.set('use_unit_calculator', 1), $wire.set('tipe_barang', 'titipan'), formSubmitted = false);"
+                                            x-on:change="$wire.set('use_unit_calculator', 1); $wire.set('tipe_barang', 'titipan'); statusTitipan = true; formSubmitted = false;"
                                             {{ $isEditing || !$use_unit_calculator ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Ya</span>
                                     </label>
                                     <label class="inline-flex items-center">
-                                        <input type="radio" wire:model="status_titipan" value="0" id="status_titipan_0"
+                                        <input type="radio" wire:model.live="status_titipan" value="0" id="status_titipan_0"
                                             class="form-radio text-theme-primary focus:ring-theme-secondary {{ $isEditing ? 'bg-gray-200 cursor-not-allowed' : '' }}"
-                                            x-on:change="$wire.set('tipe_barang', 'lainnya'); formSubmitted = false;"
+                                            x-on:change="$wire.set('tipe_barang', 'lainnya'); $wire.set('hasil_bagi_id', null); statusTitipan = false; formSubmitted = false;"
                                             {{ $isEditing ? 'disabled' : '' }}>
                                         <span class="ml-2 text-sm text-theme-black">Tidak</span>
                                     </label>
@@ -320,7 +321,7 @@
                             </div>
 
                             <!-- Input Tipe Hasil Bagi -->
-                            <div x-show="statusTitipan">
+                            <div x-show="statusTitipan" x-cloak>
                                 <label for="hasil_bagi_id" class="block text-sm font-medium text-theme-black">Tipe Hasil Bagi</label>
                                 <div class="relative rounded-md shadow-sm border border-gray-300">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -328,7 +329,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="hasil_bagi_id" id="hasil_bagi_id" class="focus:ring-opacity-30 border-theme-primary pl-10 block w-full rounded-md shadow-sm focus:border-theme-primary focus:ring-theme-primary text-sm">
+                                    <select wire:model.live="hasil_bagi_id" id="hasil_bagi_id" class="focus:ring-opacity-30 border-theme-primary pl-10 block w-full rounded-md shadow-sm focus:border-theme-primary focus:ring-theme-primary text-sm">
                                         <option value="">Pilih Tipe Hasil Bagi</option>
                                         @foreach($hasilBagis as $hasilBagi)
                                             <option value="{{ $hasilBagi->id }}">{{ $hasilBagi->tipe }}</option>
@@ -347,17 +348,17 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="tipe_barang" id="tipe_barang" class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring-theme-primary focus:ring-opacity-30 border-theme-primary text-sm"
-                                        x-bind:disabled="statusTitipan" x-bind:class="{ 'bg-gray-200 cursor-not-allowed': statusTitipan }">
-                                        <option value="snack" x-show="!statusTitipan">Snack</option>
-                                        <option value="minuman" x-show="!statusTitipan">Minuman</option>
-                                        <option value="kebutuhan" x-show="!statusTitipan">Kebutuhan</option>
-                                        <option value="lainnya" x-show="!statusTitipan">Lainnya</option>
-                                        <option value="titipan" x-show="statusTitipan" selected>Titipan</option>
+                                    <select wire:model.live="tipe_barang" id="tipe_barang" class="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-theme-primary focus:ring-theme-primary focus:ring-opacity-30 border-theme-primary text-sm">
+                                        <option value="snack">Snack</option>
+                                        <option value="minuman">Minuman</option>
+                                        <option value="kebutuhan">Kebutuhan</option>
+                                        <option value="lainnya">Lainnya</option>
+                                        <option value="titipan" x-show="statusTitipan">Titipan</option>
                                     </select>
                                 </div>
                                 <div x-show="$wire.errors.tipe_barang" x-text="$wire.errors.tipe_barang" class="text-red-500 text-sm mt-1"></div>
                             </div>
+
                         </div>
 
                         <div class="mt-4 flex justify-end space-x-2 px-6">
@@ -663,7 +664,23 @@
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'OK'
                     });
+                    return;
                 }
+
+                // Set formSubmitted to true to hide discount input
+                Alpine.store('formData').formSubmitted = true;
+            });
+
+            // Reset formSubmitted on reset
+            document.querySelector('button[wire\\:click="resetForm"]').addEventListener('click', () => {
+                Alpine.store('formData').formSubmitted = false;
+            });
+        });
+
+        // Initialize Alpine store for form data
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('formData', {
+                formSubmitted: false
             });
         });
 

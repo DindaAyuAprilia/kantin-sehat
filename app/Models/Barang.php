@@ -89,9 +89,22 @@ class Barang extends Model
                 break;
             }
 
-            $available = $persediaan->jumlah; // Gunakan jumlah asli, bukan sisa_stok
+            // $available = $persediaan->jumlah; // Gunakan jumlah asli, bukan sisa_stok
+            // $used = min($available, $quantityNeeded - $quantityAllocated);
+            // $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
+            // $totalBiayaPokok += $used * $biayaPokokPerUnit;
+            // $quantityAllocated += $used;
+
+            $available = $persediaan->jumlah; 
             $used = min($available, $quantityNeeded - $quantityAllocated);
-            $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
+            
+            if($persediaan->jumlah !=0){
+                $biayaPokokPerUnit = $persediaan->total_harga / $persediaan->jumlah;
+            }
+            else {
+                $biayaPokokPerUnit = 0;
+            }
+            
             $totalBiayaPokok += $used * $biayaPokokPerUnit;
             $quantityAllocated += $used;
         }

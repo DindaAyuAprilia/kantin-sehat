@@ -207,6 +207,9 @@ class AdminBarang extends Component
             ]);
         }
 
+        $this->use_discount = false;
+        $this->discount_amount = 0;
+
         $this->resetForm();
         $this->dispatch('swal:success', message: 'Barang berhasil ditambahkan.');
         $this->isLoading = false;
@@ -559,6 +562,8 @@ class AdminBarang extends Component
         $this->pack_amount = 0;
         $this->items_per_pack = 0;
         $this->total_purchase_price = 0;
+        $this->use_discount = false;
+        $this->discount_amount = 0;
         $this->dispatch('resetForm');
     }
 

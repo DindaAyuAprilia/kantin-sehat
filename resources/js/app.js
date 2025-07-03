@@ -241,62 +241,21 @@ document.addEventListener('livewire:init', function () {
     // __________________________________________________________________ //
     // 5. Halaman Dashboard Kas (Admin)
     // __________________________________________________________________ //
-    let lineChart, dualLineChart, topLeastBarChart, profitBarChart;
+    let dualLineChart, topLeastBarChart, profitBarChart;
 
     function renderCharts(labels, penjualanData, pembelianData, topSellingLabels, topSellingData, highestProfitLabels, highestProfitData) {
         console.log('Rendering Charts:', { labels, penjualanData, pembelianData, topSellingLabels, topSellingData, highestProfitLabels, highestProfitData });
-        if (lineChart) lineChart.destroy();
         if (dualLineChart) dualLineChart.destroy();
         if (topLeastBarChart) topLeastBarChart.destroy();
         if (profitBarChart) profitBarChart.destroy();
 
         const safeLabels = labels && labels.length ? labels : ['No Data'];
         const safePenjualanData = penjualanData && penjualanData.length ? penjualanData : [0];
-        const safePembelianData = pembelianData && penjualanData.length ? pembelianData : [0];
+        const safePembelianData = pembelianData && pembelianData.length ? pembelianData : [0];
         const safeTopSellingLabels = topSellingLabels && topSellingLabels.length ? topSellingLabels : ['No Data'];
         const safeTopSellingData = topSellingData && topSellingData.length ? topSellingData : [0];
         const safeHighestProfitLabels = highestProfitLabels && highestProfitLabels.length ? highestProfitLabels : ['No Data'];
         const safeHighestProfitData = highestProfitData && highestProfitData.length ? highestProfitData : [0];
-
-        if (safePenjualanData.some(val => val > 0)) {
-            lineChart = new Chart(document.getElementById('lineChart'), {
-                type: 'line',
-                data: {
-                    labels: safeLabels,
-                    datasets: [{
-                        label: 'Penjualan',
-                        data: safePenjualanData,
-                        borderColor: '#36A2EB',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: { display: true, text: 'Jumlah (Rp)', font: { size: 14 } },
-                            ticks: { callback: value => 'Rp ' + value.toLocaleString('id-ID'), font: { size: 12 } }
-                        },
-                        x: { title: { display: true, text: 'Tanggal', font: { size: 14 } }, ticks: { font: { size: 12 } } }
-                    },
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { size: 14 } } },
-                        tooltip: {
-                            callbacks: { label: context => `${context.dataset.label}: Rp ${context.parsed.y.toLocaleString('id-ID')}` },
-                            titleFont: { size: 14 },
-                            bodyFont: { size: 12 }
-                        }
-                    }
-                }
-            });
-        }
 
         if (safePenjualanData.some(val => val > 0) || safePembelianData.some(val => val > 0)) {
             dualLineChart = new Chart(document.getElementById('dualLineChart'), {

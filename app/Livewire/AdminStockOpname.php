@@ -26,7 +26,8 @@ class AdminStockOpname extends Component
     public $uang_fisik = 0;
     public $physicalStocks = [];
     public $selectedDate;
-    public $selectedCashDate; // Tambah properti untuk tanggal kas
+    public $selectedCashDate;
+    public $selectedDateWithoutTransaction;
     public $isLoading = false;
     public $months = [];
     public $years = [];
@@ -42,6 +43,7 @@ class AdminStockOpname extends Component
         $this->month = Carbon::now()->month;
         $this->year = Carbon::now()->year;
         $this->selectedDate = Carbon::now()->format('Y-m-d');
+        $this->selectedDateWithoutTransaction = Carbon::now()->format('Y-m-d');
         $this->selectedCashDate = Carbon::now()->format('Y-m-d'); // Inisialisasi tanggal kas
 
         // Menyiapkan daftar bulan
@@ -203,8 +205,8 @@ class AdminStockOpname extends Component
         $physicalStock = $stock;
 
         $barang = Barang::find($barangId);
-        if (!$barang) {
-            $this->dispatch('swal:error', message: 'Barang tidak ditemukan.');
+        if (!$barang || !isset($this->selectedDateWithoutTransaction)) {
+            $this->dispatch('swal:error', message: 'Barang atau tanggal tidak valid.');
             $this->isLoading = false;
             return;
         }
@@ -212,12 +214,13 @@ class AdminStockOpname extends Component
         $selisih = $barang->stok - $physicalStock;
         $tipe = $physicalStock > $barang->stok ? 'pembelian' : 'penghapusan';
         $keterangan = $physicalStock > $barang->stok ? 'Penambahan selisih stok opname' : 'Penghapusan selisih stok opname';
+        $successMessage = $physicalStock > $barang->stok ? 'Stok berhasil ditambahkan.' : 'Stok berhasil dihapus.';
 
         Persediaan::create([
             'barang_id' => $barang->id,
             'kelola_id' => Auth::id(),
             'tipe' => $tipe,
-            'tanggal' => Carbon::now(),
+            'tanggal' => $this->selectedDateWithoutTransaction,
             'jumlah' => abs($selisih),
             'alasan' => $keterangan,
             'total_harga' => abs($selisih) * $barang->harga_pokok,
@@ -227,9 +230,10 @@ class AdminStockOpname extends Component
         $barang->update(['stok' => $physicalStock]);
 
         $this->physicalStocks[$barangId] = null;
-        $this->dispatch('swal:success', message: 'Stok berhasil disesuaikan.');
+        $this->dispatch('swal:success', message: $successMessage);
         $this->isLoading = false;
     }
+
 
     public function adjustCash()
     {
@@ -280,7 +284,7 @@ class AdminStockOpname extends Component
         $barangs = Barang::when($this->search, function ($query) {
             $query->where('kode_barang', 'like', '%' . $this->search . '%')
                 ->orWhere('nama', 'like', '%' . $this->search . '%');
-        })->paginate(25);
+        })->where('status_titipan', false)->paginate(25);
 
         return view('livewire.admin-stock-opname', [
             'barangs' => $barangs,

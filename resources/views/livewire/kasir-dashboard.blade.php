@@ -1,11 +1,5 @@
 <div>
     <div class="p-6">
-        <!-- Main Header -->
-        <x-header 
-            title="Transaksi Kasir" 
-            icon="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-        />
-
         <!-- Alert -->
         <x-alert 
             type="success" 
@@ -15,6 +9,12 @@
         <x-alert 
             type="error" 
             :message="session('error')"
+        />
+
+        <!-- Main Header -->
+        <x-header 
+            title="Transaksi Kasir" 
+            icon="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
         />
 
         <section class="min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row gap-8 justify-center transition-all duration-500" data-page="transaksi-kasir">
@@ -63,39 +63,39 @@
                 @endif
 
                 <!-- Daftar Keranjang -->
-                <div class="mb-6 px-6">
+                <div class="mb-6 px-4 sm:px-6">
                     <h3 class="text-lg font-semibold mb-2 text-theme-black">Keranjang</h3>
-                    <div class="overflow-x-auto max-h-[calc(100vh-0.5vh)] overflow-y-auto ">
-                        <table class="min-w-full text-sm border-collapse border-2 border-theme-primary">
+                    <div class="overflow-x-auto max-h-[calc(100vh-0.5vh)]">
+                        <table class="min-w-full text-xs sm:text-sm border-collapse border-2 border-theme-primary">
                             <thead class="sticky top-0 bg-theme-primary text-theme-white">
                                 <tr class="border-b-2 border-theme-primary">
-                                    <th class="px-4 py-2 border-r-2 border-theme-primary">Barcode</th>
-                                    <th class="px-4 py-2 border-r-2 border-theme-primary">Nama Produk</th>
-                                    <th class="px-4 py-2 border-r-2 border-theme-primary">Harga Satuan</th>
-                                    <th class="px-4 py-2 border-r-2 border-theme-primary">Jumlah</th>
-                                    <th class="px-4 py-2 border-r-2 border-theme-primary">Subtotal</th>
-                                    <th class="px-4 py-2">Aksi</th>
+                                    <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Barcode</th>
+                                    <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Nama Produk</th>
+                                    <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Harga Satuan</th>
+                                    <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-center text-xs sm:text-sm">Jumlah</th>
+                                    <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Subtotal</th>
+                                    <th class="px-2 py-1 sm:px-4 sm:py-2 text-center text-xs sm:text-sm">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($cart as $index => $item)
                                     <tr class="border-b border-theme-primary">
-                                        <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $item['barcode'] }}</td>
-                                        <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $item['name'] }}</td>
-                                        <td class="px-4 py-2 text-theme-black border-r border-theme-primary">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
-                                        <td class="px-4 py-2 text-theme-black border-r border-theme-primary">
-                                            <div class="flex items-center space-x-2">
-                                                <button wire:click="decrementQuantity({{ $index }})" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">-</button>
+                                        <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">{{ $item['barcode'] }}</td>
+                                        <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">{{ $item['name'] }}</td>
+                                        <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
+                                        <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-center">
+                                            <div class="flex items-center justify-center space-x-1 sm:space-x-2">
+                                                <button wire:click="decrementQuantity({{ $index }})" class="px-1 py-0.5 sm:px-2 sm:py-1 bg-gray-200 rounded hover:bg-gray-300 text-xs sm:text-sm">-</button>
                                                 <input wire:model.live="cart.{{ $index }}.quantity" type="number" min="1"
-                                                       class="w-16 text-center border rounded py-1"
-                                                       wire:change="updateQuantity({{ $index }}, $event.target.value)">
-                                                <button wire:click="incrementQuantity({{ $index }})" class="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300">+</button>
+                                                    class="w-12 sm:w-16 text-center border rounded py-0.5 sm:py-1 text-xs sm:text-sm"
+                                                    wire:change="updateQuantity({{ $index }}, $event.target.value)">
+                                                <button wire:click="incrementQuantity({{ $index }})" class="px-1 py-0.5 sm:px-2 sm:py-1 bg-gray-200 rounded hover:bg-gray-300 text-xs sm:text-sm">+</button>
                                             </div>
                                         </td>
-                                        <td class="px-4 py-2 text-theme-black border-r border-theme-primary">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
-                                        <td class="px-4 py-2 text-theme-black">
+                                        <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
+                                        <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black text-center">
                                             <button wire:click="removeFromCart({{ $index }})" class="text-red-600 hover:text-red-800">
-                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <svg class="h-4 w-4 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
                                             </button>
@@ -103,74 +103,69 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="px-4 py-2 text-theme-black text-center">Keranjang kosong.</td>
+                                        <td colspan="6" class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black text-center text-xs sm:text-sm">Keranjang kosong.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                             <tfoot>
                                 <tr class="border-t-2 border-theme-primary">
-                                    <td colspan="4" class="px-4 py-2 text-theme-black font-semibold">Total Harga</td>
-                                    <td class="px-4 py-2 text-theme-black">Rp {{ number_format($totalHarga, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-2"></td>
+                                    <td colspan="4" class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black font-semibold text-xs sm:text-sm">Total Harga</td>
+                                    <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black text-xs sm:text-sm">Rp {{ number_format($totalHarga, 0, ',', '.') }}</td>
+                                    <td class="px-2 py-1 sm:px-4 sm:py-2"></td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                     @if(!empty($cart))
-                        <div class="mt-4">
-                            <label class="block text-sm font-medium text-theme-black mb-2">Metode Pembayaran</label>
+                        <div class="mt-4 px-4 sm:px-6">
+                            <label class="block text-xs sm:text-sm font-medium text-theme-black mb-2">Metode Pembayaran</label>
                             <div class="flex items-center space-x-4">
                                 <label class="inline-flex items-center">
                                     <input type="radio" wire:model="paymentMethod" value="tunai" class="form-radio text-theme-primary focus:ring-theme-secondary">
-                                    <span class="ml-2 text-theme-black">Tunai</span>
+                                    <span class="ml-2 text-theme-black text-xs sm:text-sm">Tunai</span>
                                 </label>
                                 <label class="inline-flex items-center">
                                     <input type="radio" wire:model="paymentMethod" value="transfer" class="form-radio text-theme-primary focus:ring-theme-secondary">
-                                    <span class="ml-2 text-theme-black">Transfer</span>
+                                    <span class="ml-2 text-theme-black text-xs sm:text-sm">Transfer</span>
                                 </label>
                             </div>
-                            <button wire:click="checkout" class="mt-4 px-4 py-2 bg-theme-primary text-theme-white rounded-md hover:bg-theme-secondary focus:outline-none focus:ring-2 focus:ring-theme-secondary">
+                            <button wire:click="checkout" class="mt-4 px-3 py-1 sm:px-4 sm:py-2 bg-theme-primary text-theme-white rounded-md hover:bg-theme-secondary focus:outline-none focus:ring-2 focus:ring-theme-secondary text-xs sm:text-sm">
                                 Checkout
                             </button>
                         </div>
                     @endif
                 </div>
+
             </div>
 
             <!-- Riwayat Transaksi -->
-            <div class="w-full lg:w-1/2 max-w-2xl pb-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
+            <div class="w-full pb-6 bg-theme-surface rounded-lg shadow-lg border-2 border-theme-primary" style="border-color: #007022;">
                 <x-card-header 
                     title="Riwayat Transaksi"
                     icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" 
                 />
-                <div class="flex justify-between items-center mb-4 px-6">
-                    <button wire:click="previousDay" class="px-4 py-2 bg-theme-primary text-theme-white rounded-md hover:bg-theme-secondary">
-                        ← Sebelumnya
-                    </button>
-                    <input type="date" wire:model.live="selectedDate" class="form-input rounded-md shadow-sm" />
-                    <button wire:click="nextDay" class="px-4 py-2 bg-theme-primary text-theme-white rounded-md hover:bg-theme-secondary">
-                        Berikutnya →
-                    </button>
+                <div class="flex justify-between items-center mb-4 px-4 sm:px-6">
+                    <input type="date" wire:model.live="selectedDate" class="form-input rounded-md shadow-sm w-full sm:w-auto text-xs sm:text-sm" />
                 </div>
-                <div class="overflow-y-auto max-h-[calc(100vh-20rem)] px-6">
-                    <table class="min-w-full text-sm border-collapse border-2 border-theme-primary">
+                <div class="overflow-x-auto overflow-y-auto max-h-[calc(100vh-20rem)] px-4 sm:px-6">
+                    <table class="w-full text-xs sm:text-sm border-collapse border-2 border-theme-primary">
                         <thead class="bg-theme-primary text-theme-white sticky top-0">
                             <tr class="border-b-2 border-theme-primary">
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Unix ID</th>
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Jam</th>
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Total Harga</th>
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Metode</th>
-                                <th class="px-4 py-2 border-r-2 border-theme-primary">Detail</th>
+                                <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Unix ID</th>
+                                <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Jam</th>
+                                <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Total Harga</th>
+                                <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Metode</th>
+                                <th class="px-2 py-1 sm:px-4 sm:py-2 border-r-2 border-theme-primary text-left text-xs sm:text-sm">Detail</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($transactions as $transaction)
                                 <tr class="border-b border-theme-primary">
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ $transaction->unix_id }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ \Carbon\Carbon::parse($transaction->created_at)->translatedFormat('H:i:s') }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">Rp {{ number_format($transaction->total_harga, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">{{ ucfirst($transaction->metode_pembayaran) }}</td>
-                                    <td class="px-4 py-2 text-theme-black border-r border-theme-primary">
+                                    <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">{{ $transaction->unix_id }}</td>
+                                    <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">{{ \Carbon\Carbon::parse($transaction->created_at)->translatedFormat('H:i:s') }}</td>
+                                    <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">Rp {{ number_format($transaction->total_harga, 0, ',', '.') }}</td>
+                                    <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">{{ ucfirst($transaction->metode_pembayaran) }}</td>
+                                    <td class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black border-r border-theme-primary text-xs sm:text-sm">
                                         <ul class="list-disc pl-4">
                                             @foreach($transaction->details as $detail)
                                                 <li>{{ $detail->barang->nama }} ({{ $detail->jumlah }} x Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }})</li>
@@ -180,13 +175,14 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-4 py-2 text-theme-black text-center border-r border-theme-primary">Tidak ada transaksi pada tanggal ini.</td>
+                                    <td colspan="5" class="px-2 py-1 sm:px-4 sm:py-2 text-theme-black text-center border-r border-theme-primary text-xs sm:text-sm">Tidak ada transaksi pada tanggal ini.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </section>
     </div>
 

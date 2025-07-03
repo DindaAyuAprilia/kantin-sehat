@@ -150,13 +150,21 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
-                                                    class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                    <span>Sesuaikan Tanpa Transaksi</span>
-                                                </button>
+                                                <div class="relative" x-data="{ showDatePickerWithoutTransaction: false }">
+                                                    <button x-on:click="showDatePickerWithoutTransaction = !showDatePickerWithoutTransaction" class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        <span>Sesuaikan Tanpa Transaksi</span>
+                                                    </button>
+                                                    <div x-show="showDatePickerWithoutTransaction" class="absolute z-10 mt-2 bg-white border rounded shadow-lg p-4">
+                                                        <input wire:model="selectedDateWithoutTransaction" type="date" class="mb-2 rounded-md border-gray-300 shadow-sm">
+                                                        <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
+                                                            class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+                                                            <span>Konfirmasi</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         @else
                                             <div class="flex justify-center space-x-2">
@@ -166,17 +174,26 @@
                                                     </svg>
                                                     <span>Histori Transaksi</span>
                                                 </a>
-                                                <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
-                                                    class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                    <span>Sesuaikan Stok</span>
-                                                </button>
+                                                <div class="relative" x-data="{ showDatePickerWithoutTransaction: false }">
+                                                    <button x-on:click="showDatePickerWithoutTransaction = !showDatePickerWithoutTransaction" class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        <span>Sesuaikan Stok</span>
+                                                    </button>
+                                                    <div x-show="showDatePickerWithoutTransaction" class="absolute z-10 mt-2 bg-white border rounded shadow-lg p-4">
+                                                        <input wire:model="selectedDateWithoutTransaction" type="date" class="mb-2 rounded-md border-gray-300 shadow-sm">
+                                                        <button wire:click="$dispatch('confirmAdjustStockWithoutTransaction', @js(['id' => $barang->id, 'stock' => $physicalStocks[$barang->id] ?? 0]))"
+                                                            class="bg-green-400 hover:bg-green-500 text-white py-1.5 px-4 rounded flex items-center space-x-1">
+                                                            <span>Konfirmasi</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         @endif
                                     @endif
                                 </td>
+
                             </tr>
                         @empty
                             <tr>

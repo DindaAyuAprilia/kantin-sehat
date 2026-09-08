@@ -1,61 +1,252 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kantin Sehat
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Kantin Sehat** adalah sistem informasi berbasis web untuk membantu digitalisasi operasional kantin, mulai dari transaksi kasir, pengelolaan barang dan persediaan, stock opname, data karyawan, hingga rekap dan pelaporan keuangan.
 
-## About Laravel
+Proyek ini dikembangkan sebagai bagian dari kegiatan magang di **UPT Pelayanan Kesehatan, Badan Pengelola Islamic Center Provinsi Kalimantan Timur**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tujuan Proyek
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Sistem ini dibuat untuk membantu proses operasional kantin agar pencatatan transaksi dan data persediaan dapat dilakukan secara lebih terstruktur, mengurangi pencatatan manual, serta memudahkan pemantauan stok dan penyusunan laporan.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Fitur Utama
 
-## Learning Laravel
+### Admin
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Dashboard statistik penjualan dan pembelian berdasarkan periode.
+- Statistik barang terlaris, barang dengan laba tertinggi, dan barang dengan penjualan rendah.
+- Manajemen data barang, kategori barang, harga pokok, harga jual, dan status aktif barang.
+- Pembuatan kode/barcode barang secara otomatis serta fitur cetak barcode.
+- Pengelolaan barang biasa dan barang titipan beserta skema hasil bagi.
+- Pengelolaan persediaan, pembelian, penambahan barang titipan, pengembalian/penghapusan, serta histori perubahan data.
+- Pencatatan stok masuk dan perhitungan biaya persediaan menggunakan pendekatan FIFO.
+- Stock opname untuk membandingkan stok sistem dengan stok fisik serta melakukan penyesuaian stok dan kas.
+- Manajemen data karyawan dengan role **Admin** dan **Kasir**.
+- Pencatatan pembayaran gaji karyawan.
+- Pencatatan pengeluaran operasional.
+- Manajemen shift kasir dan laporan transaksi berdasarkan shift.
+- Histori transaksi dengan fitur tambah, ubah, hapus, pencarian, dan filter metode pembayaran.
+- Rekap saldo kas dan saldo barang bulanan.
+- Activity log untuk membantu melacak perubahan data transaksi dan persediaan.
+- Pelaporan periodik berupa:
+  - Ringkasan Penerimaan & Pembayaran
+  - Ringkasan Nilai Persediaan
+  - Ringkasan Kuantitas Persediaan
+  - Margin Laba Persediaan Barang
+  - Laporan Laba Rugi
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Kasir
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Login dan pembatasan akses berdasarkan role.
+- Pencarian produk berdasarkan nama atau barcode.
+- Keranjang transaksi dengan validasi ketersediaan stok.
+- Transaksi dengan metode pembayaran tunai dan transfer/non-tunai.
+- Perhitungan uang diterima dan kembalian pada transaksi tunai.
+- Pencatatan transaksi dan detail barang secara otomatis.
+- Pengurangan stok setelah transaksi berhasil.
+- Histori transaksi harian.
+- Akses informasi persediaan barang.
 
-## Laravel Sponsors
+## Teknologi yang Digunakan
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Teknologi | Kegunaan |
+| --- | --- |
+| PHP 8.2+ | Bahasa pemrograman backend |
+| Laravel 12 | Framework aplikasi web |
+| Laravel Livewire 3 | Interaksi antarmuka secara dinamis |
+| Blade | Template antarmuka Laravel |
+| Tailwind CSS | Styling antarmuka |
+| Flowbite | Komponen UI |
+| JavaScript | Interaksi frontend |
+| Vite | Build tool frontend |
+| MySQL / MariaDB | Basis data relasional |
+| Eloquent ORM | Pengelolaan dan relasi data |
+| Spatie Laravel Activitylog | Pencatatan perubahan data |
+| Chart.js | Visualisasi data dashboard |
+| SweetAlert2 | Notifikasi dan dialog konfirmasi |
+| Git & GitHub | Version control |
 
-### Premium Partners
+## Gambaran Arsitektur
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+```text
+Pengguna (Admin / Kasir)
+          |
+          v
+Blade + Tailwind CSS + Livewire
+          |
+          v
+      Laravel 12
+          |
+          v
+     Eloquent ORM
+          |
+          v
+   MySQL / MariaDB
+```
 
-## Contributing
+Aplikasi menggunakan pemisahan hak akses antara **Admin** dan **Kasir**. Data utama dikelola melalui model dan relasi Eloquent, sedangkan Livewire digunakan untuk menangani interaksi seperti pencarian barang, transaksi, filter data, validasi form, dan pembaruan tampilan.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Entitas Data Utama
 
-## Code of Conduct
+Beberapa data yang dikelola aplikasi:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- User/Karyawan
+- Barang
+- Persediaan
+- Stok Masuk
+- Transaksi Kasir
+- Detail Transaksi
+- Shift
+- Gaji Karyawan
+- Pengeluaran
+- Kas dan Kas Kembalian
+- Kas Barang Titipan
+- Saldo Kas Bulanan
+- Saldo Barang Bulanan
+- Data Kerugian dan Keuntungan
 
-## Security Vulnerabilities
+## Instalasi Lokal
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Clone Repository
 
-## License
+```bash
+git clone https://github.com/DindaAyuAprilia/kantin-sehat.git
+cd kantin-sehat
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Install Dependency PHP
+
+```bash
+composer install
+```
+
+### 3. Install Dependency Frontend
+
+```bash
+npm install
+```
+
+### 4. Buat File Environment
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### 5. Konfigurasi Database
+
+Buat database baru bernama `kantin_sehat`, kemudian sesuaikan `.env`:
+
+```env
+APP_NAME="Kantin Sehat"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=kantin_sehat
+DB_USERNAME=root
+DB_PASSWORD=
+
+SESSION_DRIVER=database
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+```
+
+### 6. Jalankan Migration
+
+```bash
+php artisan migrate
+```
+
+### 7. Buat Akun Admin
+
+Jalankan:
+
+```bash
+php artisan tinker
+```
+
+Kemudian:
+
+```php
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+User::create([
+    'nama' => 'Admin',
+    'email' => 'admin@example.com',
+    'password' => Hash::make('password'),
+    'role' => 'admin',
+    'status' => 'aktif',
+]);
+```
+
+Keluar dengan:
+
+```text
+exit
+```
+
+> Ganti email dan password contoh sebelum aplikasi digunakan pada lingkungan selain lokal.
+
+### 8. Jalankan Aplikasi
+
+Terminal pertama:
+
+```bash
+php artisan serve
+```
+
+Terminal kedua:
+
+```bash
+npm run dev
+```
+
+Buka:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Struktur Folder Utama
+
+```text
+app/
+├── Http/Controllers/       # Controller dan autentikasi
+├── Livewire/               # Logika fitur interaktif
+├── Models/                 # Model dan relasi database
+└── Jobs/                   # Proses pembaruan data
+
+database/
+├── migrations/             # Struktur database
+└── seeders/                # Seeder aplikasi
+
+resources/
+├── css/                    # Styling
+├── js/                     # JavaScript frontend
+└── views/                  # Blade dan Livewire views
+
+routes/
+├── auth.php                # Route autentikasi
+└── web.php                 # Route utama aplikasi
+```
+
+## Konteks Pengembangan
+
+Proyek ini merupakan bagian dari pengalaman magang dan digunakan sebagai sarana penerapan pengembangan aplikasi web untuk kebutuhan operasional.
+
+Pengembangan mencakup perancangan fitur, implementasi antarmuka dan backend, pengelolaan basis data, validasi data, debugging, serta pengembangan modul transaksi, persediaan, dan pelaporan.
+
+## Pengembang
+
+**Dinda Ayu Aprilia**  
+S1 Informatika — Universitas Mulawarman
+
+GitHub: [DindaAyuAprilia](https://github.com/DindaAyuAprilia)
+
+## Catatan
+
+Repository ini ditujukan sebagai dokumentasi proyek dan portofolio pengembangan aplikasi web. Data akun, database operasional, credential, file `.env`, dan informasi sensitif tidak disertakan di dalam repository publik.
